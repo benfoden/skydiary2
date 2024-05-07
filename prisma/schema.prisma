@@ -15,15 +15,35 @@ datasource db {
 }
 
 model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
+    id        String   @id @default(cuid())
+    title     String? 
+    content   String // @db.Text
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
+    tag      Tag[]
+    comments  Comment[]
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
 
-    @@index([name])
+    @@index([title])
+}
+
+model Tag {
+    id        String   @id @default(cuid())
+    content   String
+    isSentiment Boolean @default(false)
+    createdAt DateTime @default(now())
+    post     Post[]
+    @@index([content])
+}
+
+model Comment {
+    id        String   @id @default(cuid())
+    content   String // @db.Text
+    isAI      Boolean  @default(true)
+    createdAt DateTime @default(now())
+    postId    String
+    post      Post     @relation(fields: [postId], references: [id])
 }
 
 // Necessary for Next auth
@@ -62,6 +82,8 @@ model User {
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    isAdmin       Boolean   @default(false)
+    isSpecial     Boolean   @default(false)
 }
 
 model VerificationToken {
