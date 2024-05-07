@@ -5,7 +5,7 @@ import { createClient } from "@libsql/client";
 import { env } from "~/env";
 
 
-const libsql = createClient({url: process.env.DATABASE_URL ?? '', authToken: process.env.DATABASE_AUTH_TOKEN});
+const libsql = createClient({url: env.DATABASE_URL ?? '', authToken: env.DATABASE_AUTH_TOKEN});
 
 const adapter = new PrismaLibSQL(libsql);
 
