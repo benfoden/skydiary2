@@ -5,10 +5,9 @@ import { PrismaClient } from "@prisma/client";
 import { env } from "~/env";
 
 export const libsql = createClient({
-  url: "file:./dev.db" ?? "",
-  authToken: env.DATABASE_AUTH_TOKEN,
+  url: env.DATABASE_URL ?? "file:./dev.db",
   syncUrl: env.DATABASE_URL,
-  encryptionKey: env.DATABASE_ENCRYPTION_KEY ?? "",
+  authToken: env.DATABASE_AUTH_TOKEN,
   syncInterval: 60,
 });
 
