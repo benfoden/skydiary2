@@ -1,0 +1,29 @@
+{
+  "editor.renderControlCharacters": false,
+  "editor.tabSize": 2,
+  "terminal.integrated.tabs.enabled": true,
+  "explorer.confirmDelete": false,
+  "editor.fontFamily": "Hack, Fira code, monospace",
+  "editor.fontLigatures": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "git.enableSmartCommit": true,
+  "editor.inlineSuggest.enabled": true,
+  "editor.fontSize": 14,
+  "terminal.integrated.fontSize": 14,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "prettier.enable": true,
+  "workbench.editor.empty.hint": "hidden",
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
