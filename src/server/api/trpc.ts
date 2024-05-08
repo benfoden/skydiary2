@@ -61,7 +61,6 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
     session,
   });
 };
-
 /**
  * 2. INITIALIZATION
  *
