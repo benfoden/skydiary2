@@ -7,7 +7,6 @@
   "editor.fontLigatures": true,
   "typescript.updateImportsOnFileMove.enabled": "always",
   "javascript.updateImportsOnFileMove.enabled": "always",
-  "workbench.colorTheme": "Anysphere",
   "git.enableSmartCommit": true,
   "editor.inlineSuggest.enabled": true,
   "editor.fontSize": 14,
@@ -25,5 +24,6 @@
     "typescriptreact"
   ],
   "prettier.enable": true,
-  "workbench.editor.empty.hint": "hidden"
+  "workbench.editor.empty.hint": "hidden",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
