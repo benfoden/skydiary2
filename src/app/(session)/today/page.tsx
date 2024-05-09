@@ -6,7 +6,7 @@ export default async function Today() {
   return (
     <>
       <SessionNav>
-        <NavChevronLeft targetPathname={"/home"} />
+        <NavChevronLeft targetPathname={"/home"} label="home" />
         <div>{formattedDate}</div>
         <div className="flex items-center gap-2">
           <button className="rounded-full border border-white/40 bg-white/30 px-4 py-2 no-underline transition hover:bg-white/60">
@@ -20,10 +20,11 @@ export default async function Today() {
           </button>
         </div>
       </SessionNav>
-
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-        yo post goes here
-      </div>
+      <main className="flex min-h-screen flex-col items-center">
+        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
+          yo post goes here
+        </div>
+      </main>
     </>
   );
 }
