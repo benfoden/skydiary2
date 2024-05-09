@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { CardPost } from "~/app/_components/CardPost";
+import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
+import { SessionNav } from "~/app/_components/SessionNav";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import { formattedDate } from "~/utils/text";
-import { CardPost } from "../_components/card-post";
 
 export default async function Home() {
   return (
@@ -21,7 +23,21 @@ async function CrudShowcase() {
   const latestPost = await api.post.getLatest();
 
   return (
-    <div className="w-full max-w-xs">
+    <>
+      <SessionNav>
+        <div className="flex items-center gap-2">
+          <NavChevronLeft targetPathname={"/topics"} />
+        </div>
+        <div className="flex items-center gap-2">
+          <p>{session && <span>user: {session.user?.name}</span>}</p>
+          <Link
+            href={session ? "/api/auth/signout" : "/api/auth/signin"}
+            className="rounded-full border border-white/40 bg-white/30 px-4 py-2 no-underline transition hover:bg-white/60"
+          >
+            {session ? "sign out" : "sign in"}
+          </Link>
+        </div>
+      </SessionNav>
       {latestPost ? (
         <div className="flex flex-col items-start justify-center gap-4">
           <CardPost>
@@ -35,6 +51,6 @@ async function CrudShowcase() {
       ) : (
         <p>You have no posts yet.</p>
       )}
-    </div>
+    </>
   );
 }

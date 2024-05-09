@@ -1,4 +1,4 @@
-export function determinePath(pathname: string): string {
+export function pathHelper(pathname: string): string {
   switch (pathname) {
     case "/":
       return "/home";

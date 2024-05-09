@@ -1,8 +1,9 @@
 import Link from "next/link";
+import { CardPost } from "~/app/_components/CardPost";
+import { SessionNav } from "~/app/_components/SessionNav";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import { formattedDate } from "~/utils/text";
-import { CardPost } from "../_components/card-post";
 
 export default async function Topics() {
   return (
@@ -22,7 +23,11 @@ async function CrudShowcase() {
   const latestPost = await api.post.getLatest();
 
   return (
-    <div className="w-full max-w-xs">
+    <>
+      <SessionNav>
+        <div />
+        <div>Topics</div>
+      </SessionNav>
       {latestPost ? (
         <div className="flex flex-col items-start justify-center gap-4">
           <CardPost>
@@ -36,6 +41,6 @@ async function CrudShowcase() {
       ) : (
         <p>You have no posts yet.</p>
       )}
-    </div>
+    </>
   );
 }

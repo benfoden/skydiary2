@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "skyary",
+  title: "skydiary",
   description: "it's your diary in the sky",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
