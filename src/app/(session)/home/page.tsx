@@ -1,10 +1,41 @@
+import { type Post } from "@prisma/client";
 import Link from "next/link";
-import { CardPost } from "~/app/_components/CardPost";
+import { Card } from "~/app/_components/Card";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-import { formattedDate } from "~/utils/text";
+
+const filterPostsByDateRange = (
+  daysMin: number,
+  daysMax: number,
+  userPosts: Post[],
+) => {
+  const today = new Date();
+  const oneDay = 24 * 60 * 60 * 1000;
+  return userPosts.filter((post) => {
+    const postDate = new Date(post.createdAt);
+    const timeDiff = today.getTime() - postDate.getTime();
+    return timeDiff > daysMin * oneDay && timeDiff <= daysMax * oneDay;
+  });
+};
+
+function PostCard({ post }: { post: Post }) {
+  return (
+    <Card>
+      <div className="flex flex-col items-start justify-between gap-2 py-2">
+        <div>
+          {post.createdAt.toLocaleDateString("en-US", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+          })}
+        </div>
+        {post.content && <div>{post.content}</div>}
+      </div>
+    </Card>
+  );
+}
 
 export default async function Home() {
   const session = await getServerAuthSession();
@@ -19,7 +50,7 @@ export default async function Home() {
           <p>{session.user?.name}</p>
           <Link
             href={"/api/auth/signout"}
-            className="rounded-full border border-white/40 bg-white/30 px-4 py-2 no-underline transition hover:bg-white/60"
+            className="rounded-full bg-white/30 px-4 py-2 no-underline transition hover:bg-white/60"
           >
             user
           </Link>
@@ -36,19 +67,34 @@ export default async function Home() {
 }
 
 async function CrudShowcase() {
-  const latestPost = await api.post.getLatest();
+  const userPosts = await api.post.getByUser();
 
   return (
     <>
-      {latestPost ? (
+      {userPosts?.length > 0 ? (
         <div className="flex flex-col items-start justify-center gap-4">
-          <CardPost>
-            <Link href="/today">{formattedDate}</Link>
-          </CardPost>
-          Last 7 days
-          <p className="truncate">{latestPost.content}</p>
-          Last 30 days
-          <p className="truncate">{latestPost.content}</p>
+          Today
+          {filterPostsByDateRange(0, 1, userPosts).map((post) => (
+            <Link key={post.id} href="/today">
+              <PostCard key={post.id} post={post} />
+            </Link>
+          ))}
+          {filterPostsByDateRange(1, 7, userPosts).length > 0 && (
+            <>
+              Last 7 days
+              {filterPostsByDateRange(1, 7, userPosts).map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </>
+          )}
+          {filterPostsByDateRange(8, 30, userPosts).length > 0 && (
+            <>
+              Last 30 days
+              {filterPostsByDateRange(8, 30, userPosts).map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </>
+          )}
         </div>
       ) : (
         <p>You have no posts yet.</p>

@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Button from "~/app/_components/Button";
+import { Card } from "~/app/_components/Card";
 import { SessionNav } from "~/app/_components/SessionNav";
 import { getServerAuthSession } from "~/server/auth";
 
@@ -14,18 +16,26 @@ export default async function Topics() {
         </div>
         <div className="flex items-center gap-2">
           <p>{session.user?.name}</p>
-          <Link
-            href={"/api/auth/signout"}
-            className="rounded-full border border-white/40 bg-white/30 px-4 py-2 no-underline transition hover:bg-white/60"
-          >
-            user
+          <Link href={"/api/auth/signout"}>
+            <Button>user</Button>
           </Link>
         </div>
       </SessionNav>
       <main className="flex min-h-screen w-full flex-col items-center justify-start">
         <div className="container flex flex-col items-center justify-start gap-12 px-4 py-16 ">
           <div className="flex flex-col items-start justify-center gap-4">
-            <Link href="/home">All</Link>
+            <Link href="/home">
+              <Card>
+                <p>All</p>
+                <p>17</p>
+              </Card>
+            </Link>
+            <Link href="/home">
+              <Card>
+                <p>Health</p>
+                <p>11</p>
+              </Card>
+            </Link>
           </div>
         </div>
       </main>
