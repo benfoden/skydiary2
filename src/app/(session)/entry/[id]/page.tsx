@@ -4,18 +4,8 @@ import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import { api } from "~/trpc/server";
 
-export default async function Today() {
-  const today = new Date().toISOString().slice(0, 10);
-  let post = await api.post.getLatest();
-  const postDate = post?.createdAt.toISOString().slice(0, 10);
-
-  console.log("today", today);
-  console.log("postDate", postDate);
-
-  if (postDate !== today) {
-    await api.post.create({ content: "" });
-    post = await api.post.getLatest(); // Re-fetch the latest post after creation
-  }
+export default async function Entry({ params }: { params: { id: string } }) {
+  const post = await api.post.getByPostId({ postId: params.id });
 
   return (
     <>

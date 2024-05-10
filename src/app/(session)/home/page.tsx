@@ -13,10 +13,18 @@ const filterPostsByDateRange = (
 ) => {
   const today = new Date();
   const oneDay = 24 * 60 * 60 * 1000;
+  const startOfToday = new Date(today.setHours(0, 0, 0, 0));
+
   return userPosts.filter((post) => {
     const postDate = new Date(post.createdAt);
+    const startOfPostDate = new Date(postDate.setHours(0, 0, 0, 0));
     const timeDiff = today.getTime() - postDate.getTime();
-    return timeDiff > daysMin * oneDay && timeDiff <= daysMax * oneDay;
+
+    return (
+      timeDiff > daysMin * oneDay &&
+      timeDiff <= daysMax * oneDay &&
+      startOfPostDate < startOfToday
+    );
   });
 };
 
@@ -59,14 +67,14 @@ export default async function Home() {
 
       <main className="flex min-h-screen flex-col items-center">
         <div className="container flex flex-col items-center justify-start gap-12 px-4 py-16 ">
-          <CrudShowcase />
+          <PostsList />
         </div>
       </main>
     </>
   );
 }
 
-async function CrudShowcase() {
+async function PostsList() {
   const userPosts = await api.post.getByUser();
 
   return (
@@ -74,16 +82,16 @@ async function CrudShowcase() {
       {userPosts?.length > 0 ? (
         <div className="flex flex-col items-start justify-center gap-4">
           Today
-          {filterPostsByDateRange(0, 1, userPosts).map((post) => (
-            <Link key={post.id} href="/today">
-              <PostCard key={post.id} post={post} />
-            </Link>
-          ))}
-          {filterPostsByDateRange(1, 7, userPosts).length > 0 && (
+          <Link key={userPosts[0]?.id} href={`/entry/${userPosts[0]?.id}`}>
+            <PostCard key={userPosts[0]?.id} post={userPosts[0]!} />
+          </Link>
+          {filterPostsByDateRange(0, 6, userPosts).length > 0 && (
             <>
               Last 7 days
-              {filterPostsByDateRange(1, 7, userPosts).map((post) => (
-                <PostCard key={post.id} post={post} />
+              {filterPostsByDateRange(0, 6, userPosts).map((post) => (
+                <Link key={post.id} href={`/entry/${post.id}`}>
+                  <PostCard key={post.id} post={post} />
+                </Link>
               ))}
             </>
           )}
@@ -91,7 +99,9 @@ async function CrudShowcase() {
             <>
               Last 30 days
               {filterPostsByDateRange(8, 30, userPosts).map((post) => (
-                <PostCard key={post.id} post={post} />
+                <Link key={post.id} href={`/entry/${post.id}`}>
+                  <PostCard key={post.id} post={post} />
+                </Link>
               ))}
             </>
           )}
