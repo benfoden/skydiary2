@@ -1,4 +1,4 @@
-export function generatePrompt(variant = "insight"): string {
+export function generateCommentPrompt(variant = "insight"): string {
   const details =
     "Do not start your reply with hi, hey, hello, etc. " +
     "If you use an emoji or exclamation point, only use one. " +
@@ -29,3 +29,23 @@ export function generatePrompt(variant = "insight"): string {
   }
   return getVariant(variant) + details + " ";
 }
+
+export const tags = [
+  "work",
+  "diet",
+  "exercise",
+  "family",
+  "dating",
+  "friends",
+  "mental health",
+  "learning",
+];
+export const generateTagsPrompt =
+  "Please provide some tags for the following diary entry. " +
+  "The tags should be short and concise. " +
+  "Do not include any punctuation or special characters. " +
+  "Select a maximum of three tags from this list: " +
+  tags.join(", ") +
+  ". " +
+  "Only respond with tags that are strongly relevant to the diary entry. " +
+  "Respond with a list of strings separated by commas and spaces.";

@@ -3,7 +3,7 @@ import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import { getResponse } from "~/server/api/ai";
 import { api } from "~/trpc/server";
-import { generatePrompt } from "~/utils/prompts";
+import { generateCommentPrompt, generateTagsPrompt } from "~/utils/prompts";
 import { analyzeSentiment } from "~/utils/text";
 
 export default async function Entry({ params }: { params: { id: string } }) {
@@ -30,14 +30,21 @@ export default async function Entry({ params }: { params: { id: string } }) {
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <div>
             {await getResponse(
-              generatePrompt("criticism") + post?.content ?? "",
+              generateCommentPrompt("criticism") + post?.content ?? "",
             )}
           </div>
           <div>
-            {await getResponse(generatePrompt("insight") + post?.content ?? "")}
+            {await getResponse(
+              generateCommentPrompt("insight") + post?.content ?? "",
+            )}
           </div>
           <div>
-            {await getResponse(generatePrompt("boost") + post?.content ?? "")}
+            {await getResponse(
+              generateCommentPrompt("boost") + post?.content ?? "",
+            )}
+          </div>
+          <div>
+            {await getResponse(generateTagsPrompt + post?.content ?? "")}
           </div>
           {post ? <EditPost initialPost={post} /> : <div>Loading...</div>}
         </div>
