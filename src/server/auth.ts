@@ -1,4 +1,5 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import { randomBytes, randomUUID } from "crypto";
 import {
   getServerSession,
   type DefaultSession,
@@ -43,6 +44,9 @@ export const authOptions: NextAuthOptions = {
       user: {
         ...session.user,
         id: user.id,
+      },
+      generateSessionToken: () => {
+        return randomUUID?.() ?? randomBytes(32).toString("hex");
       },
     }),
   },

@@ -7,7 +7,7 @@
     "build": "next build",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start"
@@ -17,6 +17,7 @@
     "@libsql/client": "^0.6.0",
     "@prisma/adapter-libsql": "^5.13.0",
     "@prisma/client": "^5.10.2",
+    "@radix-ui/react-icons": "^1.3.0",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-query": "^5.25.0",
     "@trpc/client": "next",
