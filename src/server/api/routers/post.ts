@@ -65,4 +65,12 @@ export const postRouter = createTRPCRouter({
       orderBy: { createdAt: "desc" },
     });
   }),
+
+  getByPostId: protectedProcedure
+    .input(z.object({ postId: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.post.findFirst({
+        where: { id: input.postId },
+      });
+    }),
 });
