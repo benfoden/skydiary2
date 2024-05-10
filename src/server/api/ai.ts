@@ -1,6 +1,7 @@
 import OpenAI from "openai";
+import { env } from "~/env";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
 
 // TODO: generate a message sequence based on the user's input and the message type selected.
 // generate four messages to be sent over time.
