@@ -39,7 +39,13 @@ function PostCard({ post }: { post: Post }) {
             year: "numeric",
           })}
         </div>
-        {post.content && <div>{post.content}</div>}
+        {post.content && (
+          <div>
+            {post.content.length > 280
+              ? post.content.slice(0, 280) + "..."
+              : post.content}
+          </div>
+        )}
       </div>
     </Card>
   );
