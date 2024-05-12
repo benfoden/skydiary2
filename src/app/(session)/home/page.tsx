@@ -1,5 +1,6 @@
 import { type Post } from "@prisma/client";
 import Link from "next/link";
+import Button from "~/app/_components/Button";
 import { Card } from "~/app/_components/Card";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
@@ -39,7 +40,13 @@ function PostCard({ post }: { post: Post }) {
             year: "numeric",
           })}
         </div>
-        {post.content && <div>{post.content}</div>}
+        {post.content && (
+          <div>
+            {post.content.length > 280
+              ? post.content.slice(0, 280) + "..."
+              : post.content}
+          </div>
+        )}
       </div>
     </Card>
   );
@@ -76,15 +83,22 @@ export default async function Home() {
 
 async function PostsList() {
   const userPosts = await api.post.getByUser();
+  const today = new Date();
 
   return (
     <>
       {userPosts?.length > 0 ? (
         <div className="flex flex-col items-start justify-center gap-4">
           Today
-          <Link key={userPosts[0]?.id} href={`/entry/${userPosts[0]?.id}`}>
-            <PostCard key={userPosts[0]?.id} post={userPosts[0]!} />
-          </Link>
+          {userPosts[0]?.createdAt.toDateString() !== today.toDateString() ? (
+            <Link href="/today">
+              <Button>Whats on your mind?</Button>
+            </Link>
+          ) : (
+            <Link key={userPosts[0]?.id} href={`/entry/${userPosts[0]?.id}`}>
+              <PostCard key={userPosts[0]?.id} post={userPosts[0]} />
+            </Link>
+          )}
           {filterPostsByDateRange(0, 6, userPosts).length > 0 && (
             <>
               Last 7 days
