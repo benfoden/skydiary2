@@ -6,6 +6,15 @@ export const formattedDate = new Date().toLocaleDateString("en-US", {
   year: "numeric",
 });
 
+export const formattedTimeStampToDate = (timestamp: Date) => {
+  const date = new Date(timestamp);
+  return date.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+};
+
 export const textToCleanArray = (text: string): string[] => {
   return text
     .toLowerCase()

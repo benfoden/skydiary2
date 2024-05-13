@@ -10,6 +10,7 @@ export default function DeleteButton({
 }: {
   postId: string;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  if (!postId) return null;
   return (
     <form
       action={async () => {
