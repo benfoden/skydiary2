@@ -2,6 +2,7 @@ import Link from "next/link";
 import Button from "~/app/_components/Button";
 import { Card } from "~/app/_components/Card";
 import DropDownMenu from "~/app/_components/DropDown";
+import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import { getServerAuthSession } from "~/server/auth";
 
@@ -11,10 +12,10 @@ export default async function Topics() {
   return (
     <>
       <SessionNav>
-        <div />
-        <div>
-          <h1 className="text-xl">Topics</h1>
+        <div className="flex items-center gap-2">
+          <NavChevronLeft targetPathname={"/home"} label={"home"} />
         </div>
+        <h1>Topics</h1>
 
         <DropDownMenu>
           <Link href={"/api/auth/signout"}>

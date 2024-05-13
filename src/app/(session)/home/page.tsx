@@ -62,6 +62,7 @@ export default async function Home() {
         <div className="flex items-center gap-2">
           <NavChevronLeft targetPathname={"/topics"} label={"topics"} />
         </div>
+        <h1>Home</h1>
         <div className="flex items-center gap-2">
           <DropDownMenu>
             <Link href={"/api/auth/signout"}>
@@ -89,7 +90,7 @@ async function PostsList() {
   return (
     <>
       {userPosts?.length > 0 ? (
-        <div className="flex flex-col items-start justify-center gap-4">
+        <div className="flex flex-col items-start justify-center gap-4 sm:max-w-5xl">
           Today
           {userPosts[0]?.createdAt.toDateString() !== today.toDateString() ? (
             <Link href="/today">
