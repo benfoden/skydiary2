@@ -42,7 +42,7 @@ export function EditPost({ initialPost }: { initialPost: Post }) {
       <textarea
         value={content}
         onChange={handleContentChange}
-        className="h-screen w-full resize-none rounded-3xl border-none bg-white/20 px-8 py-4 text-lg leading-loose focus:outline-none sm:px-16 sm:py-12"
+        className="h-full w-full resize-none rounded-3xl border-none bg-white/20 px-8 py-4 text-lg leading-loose focus:outline-none sm:px-16 sm:py-12"
         autoFocus
       />
       <div className="absolute bottom-4 right-4 text-sm font-semibold text-gray-500">

@@ -20,7 +20,7 @@ export default function DeleteButton({
       }}
     >
       <Button variant="menuElement" type="submit">
-        <Cross1Icon className="h-5 w-5" />
+        Delete <Cross1Icon className="h-5 w-5" />
       </Button>
     </form>
   );
