@@ -12,6 +12,4 @@ export default async function Today() {
   }
 
   redirect("/entry/" + post?.id);
-
-  return <>Loading...</>;
 }

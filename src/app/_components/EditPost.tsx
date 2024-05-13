@@ -42,10 +42,12 @@ export function EditPost({ initialPost }: { initialPost: Post }) {
       <textarea
         value={content}
         onChange={handleContentChange}
-        className="h-screen w-full resize-none rounded-3xl border-none bg-white/20 px-8 py-4 text-lg leading-loose focus:outline-none sm:px-16 sm:py-12"
+        placeholder="Today..."
+        required
+        className="min-h-screen w-full resize-none rounded-3xl border-none bg-white/20 px-8 py-4 focus:outline-none sm:max-w-5xl sm:px-16 sm:py-12"
         autoFocus
       />
-      <div className="absolute bottom-4 right-4 text-sm font-semibold text-gray-500">
+      <div className="fixed bottom-4 right-4 text-sm font-semibold text-gray-500">
         {isSaving ? "Saving..." : "Saved"}
       </div>
     </>
