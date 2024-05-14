@@ -1,6 +1,11 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// To update the DB, run:
+// bun prisma migrate dev --name addcols
+// bun prisma migrate deploy --name addcols
+// turso db shell journel < ./prisma/migrations/20240514025841_addcols/migration.sql
+
 generator client {
     provider = "prisma-client-js"
     previewFeatures = ["driverAdapters"]
@@ -20,7 +25,7 @@ model Post {
     content   String // @db.Text
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    tag      Tag[]
+    tag      Tag[] @relation("PostTags")
     comments  Comment[]
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
@@ -30,14 +35,14 @@ model Post {
 }
 
 model Tag {
-    id        String   @id @default(cuid())
-    content   String
-    isSentiment Boolean @default(false)
-    createdAt DateTime @default(now())
-    post     Post[]
+    id          String   @id @default(cuid())
+    content     String
+    isSentiment Boolean  @default(false)
+    createdAt   DateTime @default(now())
+    post        Post[]   @relation("PostTags")
+    user        User[]   @relation("UserTags")
     @@index([content])
 }
-
 model Comment {
     id        String   @id @default(cuid())
     content   String // @db.Text
@@ -85,6 +90,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    tags          Tag[]   @relation("UserTags")
     isAdmin       Boolean   @default(false)
     isSpecial     Boolean   @default(false)
 }
