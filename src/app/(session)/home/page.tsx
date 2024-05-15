@@ -1,10 +1,12 @@
 import { type Post } from "@prisma/client";
 import Link from "next/link";
+import { Suspense } from "react";
 import Button from "~/app/_components/Button";
 import { Card } from "~/app/_components/Card";
 import DropDownMenu from "~/app/_components/DropDown";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
+import Spinner from "~/app/_components/Spinner";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
@@ -42,7 +44,7 @@ function PostCard({ post }: { post: Post }) {
           })}
         </div>
         {post.content && (
-          <div>
+          <div className="text-transparent hover:text-[#424245] focus:text-transparent">
             {post.content.length > 280
               ? post.content.slice(0, 280) + "..."
               : post.content}
@@ -52,7 +54,6 @@ function PostCard({ post }: { post: Post }) {
     </Card>
   );
 }
-
 export default async function Home() {
   const session = await getServerAuthSession();
   if (!session?.user) return null;
@@ -60,15 +61,19 @@ export default async function Home() {
     <>
       <SessionNav>
         <div className="flex items-center gap-2">
-          <NavChevronLeft targetPathname={"/topics"} label={"topics"} />
+          <Suspense fallback={<Spinner />}>
+            <NavChevronLeft targetPathname={"/topics"} label={"topics"} />
+          </Suspense>
         </div>
-        <h1>Home</h1>
+        <h1>home</h1>
         <div className="flex items-center gap-2">
           <DropDownMenu>
             <Link href={"/api/auth/signout"}>
-              <Button variant="menuElement">
-                Sign out {session.user?.name}
-              </Button>
+              <Suspense fallback={<Spinner />}>
+                <Button variant="menuElement">
+                  Sign out {session.user?.name}
+                </Button>
+              </Suspense>
             </Link>
           </DropDownMenu>
         </div>
@@ -76,7 +81,9 @@ export default async function Home() {
 
       <main className="flex min-h-screen flex-col items-center">
         <div className="container flex flex-col items-center justify-start gap-12 px-4 py-16 ">
-          <PostsList />
+          <Suspense fallback={<Spinner />}>
+            <PostsList />
+          </Suspense>
         </div>
       </main>
     </>

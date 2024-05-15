@@ -1,36 +1,20 @@
 import { redirect } from "next/navigation";
 import Button from "./Button";
 
+import { ChatBubbleIcon } from "@radix-ui/react-icons";
 import { revalidatePath } from "next/cache";
 import { getResponse } from "~/server/api/ai";
 import { api } from "~/trpc/server";
-import { generateCommentPrompt } from "~/utils/prompts";
+import { generateCoachPrompt, generateCommentPrompt } from "~/utils/prompts";
 
 export default function AdviceButton({
   postId,
   postContent,
-  coachVariant,
 }: {
   postId: string;
   postContent: string;
-  coachVariant: string;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   if (!postId) return null;
-
-  switch (coachVariant) {
-    case "criticism":
-      coachVariant;
-      break;
-    case "insight":
-      coachVariant = "insight";
-      break;
-    case "boost":
-      coachVariant = "boost";
-      break;
-    default:
-      coachVariant = "criticism";
-      break;
-  }
 
   return (
     <>
@@ -38,14 +22,17 @@ export default function AdviceButton({
         action={async () => {
           "use server";
           try {
-            const prompt = generateCommentPrompt(coachVariant) + postContent;
+            const coachVariant = await getResponse(
+              generateCoachPrompt + postContent,
+            );
+            const prompt = generateCommentPrompt(coachVariant!) + postContent;
             const response = await getResponse(prompt);
             if (response) {
               console.log("response", response);
               await api.comment.create({
                 content: response,
                 postId,
-                coachVariant,
+                coachVariant: coachVariant!,
               });
               revalidatePath("/entry/" + postId);
               redirect("/entry/" + postId);
@@ -57,7 +44,9 @@ export default function AdviceButton({
           }
         }}
       >
-        <Button type="submit">{coachVariant}</Button>
+        <Button type="submit">
+          <ChatBubbleIcon className="h-5 w-5" />
+        </Button>
       </form>
     </>
   );

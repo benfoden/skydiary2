@@ -1,5 +1,9 @@
 import { afinn165 } from "./afinn165";
 
+export const copyTextToClipboard = async (text: string) => {
+  await navigator.clipboard.writeText(text);
+};
+
 export const formattedDate = new Date().toLocaleDateString("en-US", {
   month: "long",
   day: "numeric",

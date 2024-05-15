@@ -1,7 +1,8 @@
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 
-export async function NavChevronLeft({
+// Start of Selection
+export function NavChevronLeft({
   targetPathname,
   label,
 }: {

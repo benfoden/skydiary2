@@ -1,7 +1,9 @@
+import { Suspense } from "react";
 import AdviceButton from "~/app/_components/AdviceButton";
 import DeleteButton from "~/app/_components/DeleteButton";
 import EntryBody from "~/app/_components/EntryBody";
 import EntryNav from "~/app/_components/EntryNav";
+import Spinner from "~/app/_components/Spinner";
 import { api } from "~/trpc/server";
 
 export default async function Entry({ params }: { params: { id: string } }) {
@@ -17,25 +19,13 @@ export default async function Entry({ params }: { params: { id: string } }) {
       <EntryNav post={post}>
         <DeleteButton postId={post?.id ?? ""} />
       </EntryNav>
-      <EntryBody post={post} comments={comments}>
-        <div className="flex flex-row gap-4">
-          <AdviceButton
-            postId={post?.id}
-            postContent={post?.content}
-            coachVariant="criticism"
-          />
-          <AdviceButton
-            postId={post?.id}
-            postContent={post?.content}
-            coachVariant="insight"
-          />
-          <AdviceButton
-            postId={post?.id}
-            postContent={post?.content}
-            coachVariant="boost"
-          />
-        </div>
-      </EntryBody>
+      <Suspense fallback={<Spinner />}>
+        <EntryBody post={post} comments={comments}>
+          <div className="flex flex-row gap-4">
+            <AdviceButton postId={post?.id} postContent={post?.content} />
+          </div>
+        </EntryBody>
+      </Suspense>
     </>
   );
 }
