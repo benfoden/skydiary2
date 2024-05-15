@@ -34,7 +34,7 @@ const DropDownMenu = ({ children }: { children: React.ReactNode }) => {
       className={`dropdown relative flex flex-col items-end ${open ? "open" : ""}`}
     >
       <button
-        className="rounded-full bg-white/30 p-2 transition hover:bg-white/60"
+        className="rounded-full p-2 transition hover:bg-white/30"
         onClick={toggleDropdown}
       >
         <DotsVerticalIcon className="h-5 w-5" />
