@@ -1,26 +1,34 @@
 import { Suspense } from "react";
 import AdviceButton from "~/app/_components/AdviceButton";
 import { Card } from "~/app/_components/Card";
+import CopyTextButton from "~/app/_components/CopyTextButton";
 import DeleteButton from "~/app/_components/DeleteButton";
+import DropDownMenu from "~/app/_components/DropDown";
+import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
+import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
 import { api } from "~/trpc/server";
 import { formattedTimeStampToDate } from "~/utils/text";
 import EntryBody from "./EntryBody";
-import EntryNav from "./EntryNav";
 
 export default async function Entry({ params }: { params: { id: string } }) {
   const post = await api.post.getByPostId({ postId: params.id });
   const comments = await api.comment.getCommentsByPostId({ postId: params.id });
-
-  console.log("comments", comments);
-
   if (!post) return <div>Loading...</div>;
 
   return (
     <>
-      <EntryNav post={post}>
-        <DeleteButton postId={post?.id ?? ""} />
-      </EntryNav>
+      <SessionNav>
+        <div className="flex items-center gap-2">
+          <NavChevronLeft targetPathname={"/home"} label={"home"} />
+        </div>
+        <h1>{formattedTimeStampToDate(post?.createdAt)}</h1>
+
+        <DropDownMenu>
+          <DeleteButton postId={post?.id} />
+          <CopyTextButton text={post?.content} />
+        </DropDownMenu>
+      </SessionNav>
       <Suspense fallback={<Spinner />}>
         <div className="flex h-full flex-col items-center gap-12 px-4 pb-4">
           {post && <EntryBody post={post} />}

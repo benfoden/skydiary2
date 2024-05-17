@@ -1,6 +1,5 @@
 import { type Post } from "@prisma/client";
 import Link from "next/link";
-import { Suspense } from "react";
 import Button from "~/app/_components/Button";
 import { Card } from "~/app/_components/Card";
 import DropDownMenu from "~/app/_components/DropDown";
@@ -40,7 +39,7 @@ export default async function Topics() {
   const userPosts = await api.post.getByUser();
 
   return (
-    <Suspense>
+    <>
       <SessionNav>
         <div className="flex items-center gap-2">
           <NavChevronLeft targetPathname={"/home"} label={"home"} />
@@ -67,6 +66,6 @@ export default async function Topics() {
           </div>
         </div>
       </main>
-    </Suspense>
+    </>
   );
 }
