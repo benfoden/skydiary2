@@ -49,7 +49,7 @@ export const postRouter = createTRPCRouter({
         where: {
           AND: [
             { createdBy: { id: ctx.session.user.id } },
-            { tag: { some: { content: input.tagContent } } },
+            { tags: { some: { content: input.tagContent } } },
           ],
         },
         orderBy: { createdAt: "desc" },

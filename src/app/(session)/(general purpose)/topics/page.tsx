@@ -1,4 +1,4 @@
-import { type Post } from "@prisma/client";
+import { type Post, type Tag } from "@prisma/client";
 import Link from "next/link";
 import Button from "~/app/_components/Button";
 import { Card } from "~/app/_components/Card";
@@ -8,7 +8,11 @@ import { SessionNav } from "~/app/_components/SessionNav";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
-async function TagsList({ userPosts }: { userPosts: Post[] }) {
+async function TagsList({
+  userPosts,
+}: {
+  userPosts: (Post & { tags: Tag[]; comments: Comment[] })[];
+}) {
   const userTags = await api.tag.getByUser();
 
   return (
@@ -21,7 +25,7 @@ async function TagsList({ userPosts }: { userPosts: Post[] }) {
               <p>
                 {
                   userPosts.filter((post) =>
-                    post.tag.some((t) => t.id === tag.id),
+                    post.tags.some((t) => t.id === tag.id),
                   ).length
                 }
               </p>
@@ -36,8 +40,10 @@ async function TagsList({ userPosts }: { userPosts: Post[] }) {
 export default async function Topics() {
   const session = await getServerAuthSession();
   if (!session?.user) return null;
-  const userPosts = await api.post.getByUser();
-
+  const userPosts = (await api.post.getByUser()) as (Post & {
+    tags: Tag[];
+    comments: Comment[];
+  })[];
   return (
     <>
       <SessionNav>

@@ -3,7 +3,7 @@
 
 // To update the DB, run:
 // bun prisma migrate dev --name addcols
-// bun prisma migrate deploy --name addcols
+// bun prisma migrate deploy addcols
 // turso db shell journel < ./prisma/migrations/20240514025841_addcols/migration.sql
 
 generator client {
@@ -16,7 +16,7 @@ datasource db {
     // Further reading:
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = "file:./dev.db"
+    url      = "file:../dev.db"
 }
 
 model Post {
@@ -25,7 +25,7 @@ model Post {
     content   String // @db.Text
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    tag      Tag[] @relation("PostTags")
+    tags      Tag[] @relation("PostTags")
     comments  Comment[]
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
