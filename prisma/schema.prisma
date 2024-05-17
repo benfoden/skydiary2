@@ -16,7 +16,7 @@ datasource db {
     // Further reading:
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url = "file:./dev.db"
+    url = "file:../dev.db"
 }
 
 model Post {
