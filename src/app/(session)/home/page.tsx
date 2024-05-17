@@ -85,42 +85,38 @@ async function PostsList() {
 
   return (
     <>
-      {userPosts?.length > 0 ? (
-        <div className="flex flex-col items-start justify-center gap-4 sm:max-w-5xl">
-          Today
-          {userPosts[0]?.createdAt.toDateString() !== today.toDateString() ? (
-            <Link href="/today">
-              <Button>Whats on your mind?</Button>
-            </Link>
-          ) : (
-            <Link key={userPosts[0]?.id} href={`/entry/${userPosts[0]?.id}`}>
-              <PostCard key={userPosts[0]?.id} post={userPosts[0]} />
-            </Link>
-          )}
-          {filterPostsByDateRange(0, 6, userPosts).length > 0 && (
-            <>
-              Last 7 days
-              {filterPostsByDateRange(0, 6, userPosts).map((post) => (
-                <Link key={post.id} href={`/entry/${post.id}`}>
-                  <PostCard key={post.id} post={post} />
-                </Link>
-              ))}
-            </>
-          )}
-          {filterPostsByDateRange(8, 30, userPosts).length > 0 && (
-            <>
-              Last 30 days
-              {filterPostsByDateRange(8, 30, userPosts).map((post) => (
-                <Link key={post.id} href={`/entry/${post.id}`}>
-                  <PostCard key={post.id} post={post} />
-                </Link>
-              ))}
-            </>
-          )}
-        </div>
-      ) : (
-        <p>You have no posts yet.</p>
-      )}
+      <div className="flex flex-col items-start justify-center gap-4 sm:max-w-5xl">
+        Today
+        {userPosts[0]?.createdAt.toDateString() !== today.toDateString() ? (
+          <Link href="/today">
+            <Button>Whats on your mind?</Button>
+          </Link>
+        ) : (
+          <Link key={userPosts[0]?.id} href={`/entry/${userPosts[0]?.id}`}>
+            <PostCard key={userPosts[0]?.id} post={userPosts[0]} />
+          </Link>
+        )}
+        {filterPostsByDateRange(0, 6, userPosts).length > 0 && (
+          <>
+            Last 7 days
+            {filterPostsByDateRange(0, 6, userPosts).map((post) => (
+              <Link key={post.id} href={`/entry/${post.id}`}>
+                <PostCard key={post.id} post={post} />
+              </Link>
+            ))}
+          </>
+        )}
+        {filterPostsByDateRange(8, 30, userPosts).length > 0 && (
+          <>
+            Last 30 days
+            {filterPostsByDateRange(8, 30, userPosts).map((post) => (
+              <Link key={post.id} href={`/entry/${post.id}`}>
+                <PostCard key={post.id} post={post} />
+              </Link>
+            ))}
+          </>
+        )}
+      </div>
     </>
   );
 }
