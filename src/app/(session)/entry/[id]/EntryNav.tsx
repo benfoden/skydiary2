@@ -1,10 +1,10 @@
 "use client";
 import { type Post } from "@prisma/client";
 import { copyTextToClipboard } from "~/utils/text";
-import Button from "./Button";
-import DropDownMenu from "./DropDown";
-import { NavChevronLeft } from "./NavChevronLeft";
-import { SessionNav } from "./SessionNav";
+import Button from "../../../_components/Button";
+import DropDownMenu from "../../../_components/DropDown";
+import { NavChevronLeft } from "../../../_components/NavChevronLeft";
+import { SessionNav } from "../../../_components/SessionNav";
 const handleCopyText = async (text: string) => {
   try {
     await copyTextToClipboard(text);

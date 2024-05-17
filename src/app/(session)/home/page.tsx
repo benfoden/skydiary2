@@ -36,20 +36,16 @@ function PostCard({ post }: { post: Post }) {
   return (
     <Card>
       <div className="flex flex-col items-start justify-between gap-2 py-2">
-        <div>
+        <div className="text-xs">
           {post.createdAt.toLocaleDateString("en-US", {
             month: "long",
             day: "numeric",
             year: "numeric",
           })}
         </div>
-        {post.content && (
-          <div className="text-transparent hover:text-[#424245] focus:text-transparent">
-            {post.content.length > 280
-              ? post.content.slice(0, 280) + "..."
-              : post.content}
-          </div>
-        )}
+        {post.content && post.content.length > 70
+          ? post.content.slice(0, 70) + "..."
+          : post.content}
       </div>
     </Card>
   );
