@@ -1,11 +1,36 @@
 "use client";
 import { type Post } from "@prisma/client";
-import { useState } from "react";
+import { useState, type SetStateAction } from "react";
+import { api } from "~/trpc/react";
 
 export default function EntryBody({ post }: { post: Post }) {
   const [content, setContent] = useState(post?.content);
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+
+  const updatePost = api.post.update.useMutation({
+    onMutate: () => {
+      setIsSaving(true);
+    },
+    onSuccess: () => {
+      setIsSaving(false);
+    },
+  });
+
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newContent = e.target.value;
+    setContent(newContent);
+
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout);
+    }
+
+    const newTimeout = setTimeout(() => {
+      updatePost.mutate({ content: newContent, postId: post?.id });
+    }, 1000);
+
+    setDebounceTimeout(newTimeout as unknown as SetStateAction<null>);
+  };
 
   return (
     <div className="flex h-full w-full flex-col items-center gap-12 px-4 pb-4">
