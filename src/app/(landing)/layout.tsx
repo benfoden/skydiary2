@@ -1,14 +1,10 @@
 import "~/styles/globals.css";
 
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { getServerAuthSession } from "~/server/auth";
 
 export async function Nav() {
   const session = await getServerAuthSession();
-  if (session) {
-    redirect("/home");
-  }
 
   return (
     <nav className="flex w-full items-center justify-between bg-transparent p-4 text-[#424245]">
@@ -31,17 +27,17 @@ export async function Nav() {
       </div>
       <div className="flex items-center gap-2">
         <Link
-          href={"/api/auth/signin"}
+          href={session ? "/home" : "/api/auth/signin"}
           className="rounded-full px-4 py-2 no-underline transition hover:bg-white/60"
         >
-          sign in
+          {session ? "see homepage" : "sign in"}
         </Link>
       </div>
     </nav>
   );
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;

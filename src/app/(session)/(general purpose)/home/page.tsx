@@ -36,50 +36,39 @@ function PostCard({ post }: { post: Post }) {
   return (
     <Card>
       <div className="flex flex-col items-start justify-between gap-2 py-2">
-        <div>
+        <div className="text-xs">
           {post.createdAt.toLocaleDateString("en-US", {
             month: "long",
             day: "numeric",
             year: "numeric",
           })}
         </div>
-        {post.content && (
-          <div className="text-transparent hover:text-[#424245] focus:text-transparent">
-            {post.content.length > 280
-              ? post.content.slice(0, 280) + "..."
-              : post.content}
-          </div>
-        )}
+        {post.content && post.content.length > 70
+          ? post.content.slice(0, 70) + "..."
+          : post.content}
       </div>
     </Card>
   );
 }
 export default async function Home() {
   const session = await getServerAuthSession();
-  if (!session?.user) return null;
   return (
     <>
       <SessionNav>
         <div className="flex items-center gap-2">
-          <Suspense fallback={<Spinner />}>
-            <NavChevronLeft targetPathname={"/topics"} label={"topics"} />
-          </Suspense>
+          <NavChevronLeft targetPathname={"/topics"} label={"topics"} />
         </div>
         <h1>home</h1>
-        <div className="flex items-center gap-2">
-          <DropDownMenu>
-            <Link href={"/api/auth/signout"}>
-              <Suspense fallback={<Spinner />}>
-                <Button variant="menuElement">
-                  Sign out {session.user?.name}
-                </Button>
-              </Suspense>
-            </Link>
-          </DropDownMenu>
-        </div>
-      </SessionNav>
 
-      <main className="flex min-h-screen flex-col items-center">
+        <DropDownMenu>
+          <Link href={"/api/auth/signout"}>
+            <Button variant="menuElement">
+              Sign out {session?.user?.name}
+            </Button>
+          </Link>
+        </DropDownMenu>
+      </SessionNav>
+      <main className="flex min-h-screen flex-col items-start">
         <div className="container flex flex-col items-center justify-start gap-12 px-4 py-16 ">
           <Suspense fallback={<Spinner />}>
             <PostsList />

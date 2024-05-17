@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getServerAuthSession } from "~/server/auth";
 
-export default async function RootLayout({
+export default async function SessionLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -10,6 +10,5 @@ export default async function RootLayout({
   if (!session) {
     redirect("/");
   }
-
   return <div className="container mx-auto min-h-screen">{children}</div>;
 }

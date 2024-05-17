@@ -1,23 +1,18 @@
 "use client";
-
 import { type Post } from "@prisma/client";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-
+import { useState, type SetStateAction } from "react";
 import { api } from "~/trpc/react";
 
-export function EditPost({ initialPost }: { initialPost: Post }) {
-  const router = useRouter();
-  const [content, setContent] = useState(initialPost?.content);
+export default function EntryBody({ post }: { post: Post }) {
+  const [content, setContent] = useState(post?.content);
   const [debounceTimeout, setDebounceTimeout] = useState(null);
-  const [isSaving, setIsSaving] = useState(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   const updatePost = api.post.update.useMutation({
     onMutate: () => {
       setIsSaving(true);
     },
     onSuccess: () => {
-      router.refresh();
       setIsSaving(false);
     },
   });
@@ -31,14 +26,14 @@ export function EditPost({ initialPost }: { initialPost: Post }) {
     }
 
     const newTimeout = setTimeout(() => {
-      updatePost.mutate({ content: newContent, postId: initialPost.id });
+      updatePost.mutate({ content: newContent, postId: post?.id });
     }, 1000);
 
-    setDebounceTimeout(newTimeout as never);
+    setDebounceTimeout(newTimeout as unknown as SetStateAction<null>);
   };
 
   return (
-    <>
+    <div className="flex h-full w-full flex-col items-center gap-12 px-4 pb-4">
       <textarea
         value={content}
         onChange={handleContentChange}
@@ -50,6 +45,6 @@ export function EditPost({ initialPost }: { initialPost: Post }) {
       <div className="fixed bottom-4 right-4 text-sm font-semibold text-gray-500">
         {isSaving ? "Saving..." : "Saved"}
       </div>
-    </>
+    </div>
   );
 }
