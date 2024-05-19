@@ -2,6 +2,7 @@ import "~/styles/globals.css";
 
 import Link from "next/link";
 import { getServerAuthSession } from "~/server/auth";
+import Button from "../_components/Button";
 
 export async function Nav() {
   const session = await getServerAuthSession();
@@ -13,7 +14,7 @@ export async function Nav() {
           <Link
             href="/"
             className=" rounded-full px-4 py-2 text-xl font-light no-underline"
-            aria-label="skyary home"
+            aria-label="skydiary logo"
           >
             skydiary
           </Link>
@@ -25,12 +26,18 @@ export async function Nav() {
           About
         </Link>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center">
         <Link
-          href={session ? "/home" : "/api/auth/signin"}
+          href={session ? "/home" : "/auth/login"}
           className="rounded-full px-4 py-2 no-underline transition hover:bg-white/60"
         >
-          {session ? "see homepage" : "sign in"}
+          log in
+        </Link>
+        <Link
+          href={session ? "/home" : "/auth/signup"}
+          className="rounded-full px-4 py-2 no-underline transition hover:bg-white/60"
+        >
+          <Button>{session ? "see homepage" : "sign up"}</Button>
         </Link>
       </div>
     </nav>
