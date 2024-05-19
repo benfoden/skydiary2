@@ -7,3 +7,4 @@
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 - [turso](https://turso.tech)
+- [vercel](https://vercel.com)
