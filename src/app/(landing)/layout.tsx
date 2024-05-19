@@ -14,7 +14,7 @@ export async function Nav() {
           <Link
             href="/"
             className=" rounded-full px-4 py-2 text-xl font-light no-underline"
-            aria-label="skyary home"
+            aria-label="skydiary logo"
           >
             skydiary
           </Link>
@@ -28,13 +28,13 @@ export async function Nav() {
       </div>
       <div className="flex items-center">
         <Link
-          href={session ? "/home" : "/api/auth/signin"}
+          href={session ? "/home" : "/auth/login"}
           className="rounded-full px-4 py-2 no-underline transition hover:bg-white/60"
         >
           log in
         </Link>
         <Link
-          href={session ? "/home" : "/api/auth/signin"}
+          href={session ? "/home" : "/auth/signup"}
           className="rounded-full px-4 py-2 no-underline transition hover:bg-white/60"
         >
           <Button>{session ? "see homepage" : "sign up"}</Button>
