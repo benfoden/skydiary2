@@ -1,6 +1,7 @@
+"use client";
 import { signIn } from "next-auth/react";
 
-export default async function SignInPage() {
+export default function SignInPage() {
   return (
     <div className="relative flex h-full w-full overflow-hidden">
       <div className="z-20 flex h-dvh w-full items-center justify-center md:ml-[15%] md:w-[22rem]">
@@ -12,10 +13,9 @@ export default async function SignInPage() {
             <form
               className="[&>div]:last-of-type:hidden"
               action={async (formData) => {
-                "use server";
-                await signIn("credentials", {
-                  redirectTo: "/",
-                  email: formData.get("email"),
+                await signIn("email", {
+                  email: formData.get("email") as string,
+                  callbackUrl: "/home",
                 });
               }}
             >
