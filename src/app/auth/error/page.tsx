@@ -91,7 +91,13 @@ const ErrorPageContent = () => {
 };
 
 const ErrorPage = () => (
-  <Suspense fallback={<div>Loading...</div>}>
+  <Suspense
+    fallback={
+      <div className="flex h-full w-full items-center justify-center font-light">
+        Loading...
+      </div>
+    }
+  >
     <ErrorPageContent />
   </Suspense>
 );

@@ -11,6 +11,7 @@ import GetAdviceButton from "~/app/_components/GetAdviceButton";
 import GetTagsButton from "~/app/_components/GetTagsButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
+import Spinner from "~/app/_components/Spinner";
 import { getResponse } from "~/server/api/ai";
 import { api } from "~/trpc/server";
 import {
@@ -29,7 +30,7 @@ export default async function Entry({ params }: { params: { id: string } }) {
     api.tag.getByPostId({ postId: params.id }),
   ]);
 
-  if (!post) return <div>Loading...</div>;
+  if (!post) return null;
 
   return (
     <>
@@ -88,7 +89,13 @@ export default async function Entry({ params }: { params: { id: string } }) {
           </form>
           <div className="flex w-full flex-row items-center justify-center gap-4">
             {tags && (
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense
+                fallback={
+                  <div className="flex h-full w-full items-center justify-center">
+                    <Spinner />
+                  </div>
+                }
+              >
                 {tags.map((tag) => (
                   <Link key={tag.id} href={`/topics/${tag.content}/${tag.id}`}>
                     <Button variant="chip">{tag.content}</Button>
@@ -129,7 +136,13 @@ export default async function Entry({ params }: { params: { id: string } }) {
               </form>
             </div>
             {comments && (
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense
+                fallback={
+                  <div className="flex h-full w-full items-center justify-center font-light">
+                    <Spinner />
+                  </div>
+                }
+              >
                 <ul>
                   {comments
                     .sort(

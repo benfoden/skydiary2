@@ -22,7 +22,7 @@ const NewUserPage: React.FC = async () => {
             </span>
           </h2>
           {!session ? (
-            <div className="m-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
+            <div className="m-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 font-light shadow-lg">
               <Spinner />
               Loading...
             </div>
