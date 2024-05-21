@@ -2,10 +2,10 @@
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useState } from "react";
+import { Suspense, useCallback, useState } from "react";
 import Button from "~/app/_components/Button";
 
-export default function SignoutPage() {
+function SignoutPageContent() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const searchParams = useSearchParams();
@@ -43,3 +43,11 @@ export default function SignoutPage() {
     </div>
   );
 }
+
+const SignOutPage = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <SignoutPageContent />
+  </Suspense>
+);
+
+export default SignOutPage;
