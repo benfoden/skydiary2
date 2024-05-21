@@ -1,4 +1,5 @@
 "use client";
+import { ClipboardIcon } from "@radix-ui/react-icons";
 import { copyTextToClipboard } from "~/utils/text";
 import Button from "./Button";
 
@@ -14,6 +15,7 @@ export default function CopyTextButton({ text }: { text: string }) {
   return (
     <Button variant="menuElement" onClick={() => handleCopyText(text)}>
       Copy all text
+      <ClipboardIcon className="h-5 w-5" />
     </Button>
   );
 }

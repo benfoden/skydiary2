@@ -4,7 +4,11 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const tagRouter = createTRPCRouter({
   create: protectedProcedure
-    .input(z.object({ content: z.string() }))
+    .input(
+      z.object({
+        content: z.string(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       return ctx.db.tag.create({
         data: {
@@ -13,33 +17,24 @@ export const tagRouter = createTRPCRouter({
       });
     }),
 
-  update: protectedProcedure
-    .input(z.object({ tagId: z.string(), content: z.string().min(1) }))
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.tag.update({
-        where: { id: input.tagId },
-        data: { content: input.content },
-      });
-    }),
-
-  getLatest: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.tag.findFirst({
+  getAll: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.tag.findMany({
       orderBy: { createdAt: "desc" },
     });
   }),
 
-  getByUser: protectedProcedure.query(({ ctx }) => {
+  getByUserId: protectedProcedure.query(({ ctx }) => {
     return ctx.db.tag.findMany({
       where: { user: { some: { id: ctx.session.user.id } } },
       orderBy: { createdAt: "desc" },
     });
   }),
 
-  getByTagId: protectedProcedure
-    .input(z.object({ tagId: z.string() }))
+  getByPostId: protectedProcedure
+    .input(z.object({ postId: z.string() }))
     .query(({ ctx, input }) => {
-      return ctx.db.tag.findFirst({
-        where: { id: input.tagId },
+      return ctx.db.tag.findMany({
+        where: { post: { some: { id: input.postId } } },
       });
     }),
 

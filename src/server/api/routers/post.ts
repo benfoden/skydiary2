@@ -26,6 +26,26 @@ export const postRouter = createTRPCRouter({
       });
     }),
 
+  addTags: protectedProcedure
+    .input(
+      z.object({
+        postId: z.string(),
+        tagIds: z.array(z.string()),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.post.update({
+        where: { id: input.postId },
+        data: {
+          tags: {
+            connect: input.tagIds.map((tagId: string) => ({
+              id: tagId,
+            })),
+          },
+        },
+      });
+    }),
+
   update: protectedProcedure
     .input(z.object({ postId: z.string(), content: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
@@ -42,14 +62,49 @@ export const postRouter = createTRPCRouter({
     });
   }),
 
-  getByUserAndTag: protectedProcedure
-    .input(z.object({ tagContent: z.string() }))
+  getTagsAndCounts: protectedProcedure.query(async ({ ctx }) => {
+    const posts = await ctx.db.post.findMany({
+      where: { createdBy: { id: ctx.session.user.id } },
+      select: {
+        tags: {
+          select: {
+            id: true,
+            content: true,
+          },
+        },
+      },
+    });
+
+    const tagCountMap: Record<
+      string,
+      { content: string; id: string; count: number }
+    > = {};
+
+    posts.forEach((post: { tags: { id: string; content: string }[] }) => {
+      post.tags.forEach((tag: { id: string; content: string }) => {
+        if (tagCountMap[tag.id]) {
+          tagCountMap[tag.id]!.count += 1;
+        } else {
+          tagCountMap[tag.id] = { content: tag.content, id: tag.id, count: 1 };
+        }
+      });
+    });
+
+    const tagsList = Object.values(tagCountMap).sort((a, b) =>
+      a.content.localeCompare(b.content),
+    );
+
+    return tagsList;
+  }),
+
+  getAllByUserAndTagId: protectedProcedure
+    .input(z.object({ tagId: z.string() }))
     .query(({ ctx, input }) => {
       return ctx.db.post.findMany({
         where: {
           AND: [
             { createdBy: { id: ctx.session.user.id } },
-            { tags: { some: { content: input.tagContent } } },
+            { tags: { some: { id: input.tagId } } },
           ],
         },
         orderBy: { createdAt: "desc" },

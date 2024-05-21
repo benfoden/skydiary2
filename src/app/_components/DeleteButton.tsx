@@ -1,28 +1,23 @@
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { api } from "~/trpc/server";
-import Button from "./Button";
-
+"use client";
 import { Cross1Icon } from "@radix-ui/react-icons";
+import { useFormStatus } from "react-dom";
+import Button from "./Button";
+import ButtonSpinner from "./ButtonSpinner";
 
-export default function DeleteButton({
-  postId,
-}: {
-  postId: string;
-} & React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  if (!postId) return null;
+export default function DeleteButton() {
+  const { pending }: { pending: boolean } = useFormStatus();
   return (
-    <form
-      action={async () => {
-        "use server";
-        await api.post.delete({ postId: postId });
-        revalidatePath("/home");
-        redirect("/home");
-      }}
-    >
-      <Button variant="menuElement" type="submit">
-        Delete <Cross1Icon className="h-5 w-5" />
-      </Button>
-    </form>
+    <Button variant="menuElement" type="submit" disabled={pending}>
+      {pending ? (
+        <>
+          deleting...
+          <ButtonSpinner />
+        </>
+      ) : (
+        <>
+          delete <Cross1Icon className="h-5 w-5" />
+        </>
+      )}
+    </Button>
   );
 }
