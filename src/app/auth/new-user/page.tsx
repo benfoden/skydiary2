@@ -1,77 +1,73 @@
-import MetaTags from "@components/MetaTags";
-import Spinner from "@components/Spinner";
-import { getServerAuthSession } from "@server/utils/auth";
-import { prisma } from "@utils/prisma";
-import type { GetServerSidePropsContext } from "next";
+import { redirect } from "next/navigation";
 import React from "react";
+import Spinner from "~/app/_components/Spinner";
+import { getServerAuthSession } from "~/server/auth";
+import { api } from "~/trpc/server";
 
 /**
  * This page is where new users logging in for the first time are
  * redirected to, by Next Auth. Here we will just create two welcome
  * notifications and redirect them back on their way.
  */
-const NewUserPage: React.FC = () => {
+const NewUserPage: React.FC = async () => {
+  const session = await getServerAuthSession();
+
   return (
-    <>
-      <MetaTags title="Loading..." />
-      <div className="flex h-[50vh] w-full items-center justify-center overflow-y-hidden">
-        <Spinner />
+    <div className="relative flex h-full w-full overflow-hidden">
+      <div className="z-20 flex h-dvh w-full items-center justify-center">
+        <div className="flex w-80 flex-col items-center justify-center text-xl">
+          <h2 className="flex items-center font-light text-[#424245]">
+            <span className="text-xl font-light text-[#424245]">
+              welcome to skydiary
+            </span>
+          </h2>
+          {!session ? (
+            <div className="m-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
+              <Spinner />
+              Loading...
+            </div>
+          ) : (
+            <div className="m-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
+              <form
+                className="[&>div]:last-of-type:hidden"
+                action={async (formData) => {
+                  "use server";
+                  const name: string = formData.get("name") as string;
+
+                  if (name) {
+                    try {
+                      await api.user.updateUser({ name });
+                    } catch (error) {
+                      console.error("Error updating user:", error);
+                    }
+                    redirect("/home");
+                  }
+                }}
+              >
+                <label className="text-base font-light" htmlFor="name">
+                  your name
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
+                    required
+                    placeholder={session.user.name ?? "your name"}
+                  />
+                </label>
+                <button
+                  type="submit"
+                  className="mt-2 flex h-12 w-full items-center justify-center space-x-2 rounded bg-white/70 px-4 text-base font-light transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-zinc-800 focus:ring-offset-2"
+                >
+                  save and continue
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
 export default NewUserPage;
-
-export async function getServerSideProps({
-  req,
-  res,
-  ...context
-}: GetServerSidePropsContext) {
-  const session = await getServerAuthSession({ req, res });
-
-  const callbackUrl = context.query.callbackUrl as string;
-
-  if (!session?.user) {
-    return { redirect: { destination: "/" } };
-  }
-
-  // Only create welcome notifications once.
-  const userHasAlreadyBeenWelcomed = await prisma.notification.findFirst({
-    where: {
-      type: "WELCOME",
-      notifiedId: session?.user.id,
-    },
-  });
-
-  if (!userHasAlreadyBeenWelcomed) {
-    const noAvatar = !session?.user?.image;
-    const noUsername = !session?.user?.name;
-
-    const createSystemNotification = (type: string) => {
-      return prisma.notification.create({
-        data: {
-          type,
-          notifierId: session?.user.id,
-          notifiedId: session?.user.id,
-        },
-      });
-    };
-
-    const welcomeNotification = createSystemNotification("WELCOME");
-    const firstPostNotification = createSystemNotification("FIRST-POST");
-    const noUsernameNotification = createSystemNotification("NO-USERNAME");
-    const noAvatarNotification = createSystemNotification("NO-AVATAR");
-
-    const promisesToAwait = [welcomeNotification, firstPostNotification];
-
-    // If the user does not have avatar or username, they will be alerted on first sign-in.
-    if (noAvatar) promisesToAwait.push(noAvatarNotification);
-    if (noUsername) promisesToAwait.push(noUsernameNotification);
-
-    // fetching in parallel to reduce wait.
-    await Promise.all(promisesToAwait);
-  }
-
-  return { redirect: { destination: callbackUrl || "/" } };
-}

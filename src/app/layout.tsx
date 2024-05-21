@@ -11,7 +11,8 @@ const inter = Inter({
 
 export const metadata = {
   title: "skydiary",
-  description: "it's your diary in the sky",
+  description:
+    "Write a daily entry and you're done. You get recaps and advice in total privacy with an AI friend, coach, and mentor.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 

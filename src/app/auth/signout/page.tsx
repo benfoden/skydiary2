@@ -1,17 +1,15 @@
-import Button from "@components/Button";
-import MetaTags from "@components/MetaTags";
-import { getServerAuthSession } from "@server/utils/auth";
-import type { GetServerSidePropsContext } from "next";
+"use client";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { useCallback, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useState } from "react";
+import Button from "~/app/_components/Button";
 
-const SignoutPage: React.FC = () => {
+export default function SignoutPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const router = useRouter();
-  const callbackUrl = router.query.callbackUrl as string;
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl")!;
 
   const handleSignout = useCallback(async () => {
     setIsLoading(true);
@@ -23,56 +21,25 @@ const SignoutPage: React.FC = () => {
   }, [callbackUrl]);
 
   return (
-    <>
-      <MetaTags title="Sign out" />
-      <div className="flex min-h-full items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
-        <div className="w-full max-w-md space-y-8">
-          <div>
-            <h1 className="mt-6 text-center text-xl font-bold tracking-tight text-gray-900 sm:text-2xl dark:text-white">
-              Are you sure you want to sign out?
+    <div className="relative flex h-full w-full overflow-hidden">
+      <div className="z-20 flex h-dvh w-full items-center justify-center">
+        <div className="flex w-80 flex-col items-center justify-center">
+          <div className="m-8 flex w-full flex-col items-center gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
+            <h1 className="mt-6 text-center text-xl font-light tracking-tight">
+              sure you want to sign out?
             </h1>
-            <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
-              Or{" "}
-              <Link
-                href="/"
-                className="font-medium text-emerald-600 underline hover:text-emerald-500 dark:text-emerald-500 dark:hover:text-emerald-400"
-              >
-                go back to home
+            <div className="mt-4 flex flex-col gap-3 text-center">
+              <Link href="/home">
+                <Button variant="cta">go home</Button>
               </Link>
-            </p>
-          </div>
-
-          <div>
-            <Button
-              loading={isLoading}
-              type="button"
-              variant="primary"
-              onClick={handleSignout}
-              className="flex h-[38px] w-full justify-center rounded-lg font-bold"
-            >
-              Sign out
+              <div className="text-sm">or</div>
+            </div>
+            <Button onClick={handleSignout}>
+              {isLoading ? "signing out..." : "sign out"}
             </Button>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
-};
-
-export default SignoutPage;
-
-export async function getServerSideProps({
-  req,
-  res,
-}: GetServerSidePropsContext) {
-  const session = await getServerAuthSession({ req, res });
-
-  // If the user is not logged in, redirect.
-  if (!session) {
-    return { redirect: { destination: "/" } };
-  }
-
-  return {
-    props: {},
-  };
 }

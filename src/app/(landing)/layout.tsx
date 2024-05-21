@@ -9,7 +9,7 @@ export async function Nav() {
 
   return (
     <nav className="flex w-full items-center justify-between bg-transparent p-4 text-[#424245]">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center">
         <h1>
           <Link
             href="/"
@@ -29,15 +29,16 @@ export async function Nav() {
       <div className="flex items-center">
         <Link
           href={session ? "/home" : "/auth/signin"}
-          className="rounded-full px-4 py-2 no-underline transition hover:bg-white/60"
+          className="text-nowrap rounded-full px-4 py-2 no-underline transition hover:bg-white/50"
         >
           log in
         </Link>
-        <Link
-          href={session ? "/home" : "/auth/signin"}
-          className="rounded-full px-4 py-2 no-underline transition hover:bg-white/60"
-        >
-          <Button>{session ? "see homepage" : "sign up"}</Button>
+        <Link href={session ? "/home" : "/auth/signin"}>
+          <Button>
+            <span className="text-nowrap">
+              {session ? "see homepage" : "sign up"}
+            </span>
+          </Button>
         </Link>
       </div>
     </nav>

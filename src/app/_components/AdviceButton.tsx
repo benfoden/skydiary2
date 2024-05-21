@@ -5,7 +5,7 @@ import { ChatBubbleIcon } from "@radix-ui/react-icons";
 import { revalidatePath } from "next/cache";
 import { getResponse } from "~/server/api/ai";
 import { api } from "~/trpc/server";
-import { generateCoachPrompt, generateCommentPrompt } from "~/utils/prompts";
+import { generateCoachPrompt, generateCommentPrompt } from "~/utils/constants";
 
 export default function AdviceButton({
   postId,
