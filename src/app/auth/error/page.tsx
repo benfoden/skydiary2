@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import Button from "~/app/_components/Button";
 
 export type ErrorType =
@@ -16,7 +17,7 @@ interface ErrorView {
   signin?: JSX.Element;
 }
 
-const ErrorPage = () => {
+const ErrorPageContent = () => {
   const searchParams = useSearchParams();
   const error = searchParams.get("error") as ErrorType;
 
@@ -88,5 +89,11 @@ const ErrorPage = () => {
     </div>
   );
 };
+
+const ErrorPage = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <ErrorPageContent />
+  </Suspense>
+);
 
 export default ErrorPage;
