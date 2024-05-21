@@ -5,6 +5,7 @@ import { Card } from "~/app/_components/Card";
 import DropDownMenu from "~/app/_components/DropDown";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
+import Spinner from "~/app/_components/Spinner";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import { formattedTimeStampToDate } from "~/utils/text";
@@ -42,7 +43,13 @@ export default async function Entry({
       <main className="flex min-h-screen w-full flex-col items-center justify-start">
         <div className="flex h-full flex-col items-center gap-12 px-4 pb-4">
           {posts && (
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense
+              fallback={
+                <div className="flex h-full w-full items-center justify-center font-light">
+                  <Spinner />
+                </div>
+              }
+            >
               <ul>
                 {posts.map((post) => (
                   <li key={post.id} className="flex flex-col rounded-lg p-4">
