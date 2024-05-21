@@ -43,6 +43,7 @@ model Tag {
     user        User[]   @relation("UserTags")
     @@index([content])
 }
+
 model Comment {
     id        String   @id @default(cuid())
     content   String // @db.Text

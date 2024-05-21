@@ -3,7 +3,7 @@ export default function Button({
   children,
   ...props
 }: {
-  variant?: "primary" | "text" | "menuElement" | "cta";
+  variant?: "primary" | "text" | "menuElement" | "cta" | "chip";
   children: React.ReactNode;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   let buttonClass = "";
@@ -24,6 +24,10 @@ export default function Button({
     case "cta":
       buttonClass +=
         " flex px-6 py-3 sm:px-4 sm:py-2 items-center justify-between gap-4 rounded-full text-decoration-none no-underline transition text-primary bg-white/80 hover:bg-white";
+      break;
+    case "chip":
+      buttonClass +=
+        " flex px-2 py-1 items-center justify-between gap-4 rounded-full text-decoration-none no-underline transition text-xs font-medium bg-white/40 hover:bg-white/60";
       break;
     default:
       buttonClass += defaultButton;

@@ -1,6 +1,8 @@
 "use client";
 import { type Post } from "@prisma/client";
+import { CheckCircledIcon } from "@radix-ui/react-icons";
 import { useState, type SetStateAction } from "react";
+import ButtonSpinner from "~/app/_components/ButtonSpinner";
 import { api } from "~/trpc/react";
 
 export default function EntryBody({ post }: { post: Post }) {
@@ -42,8 +44,14 @@ export default function EntryBody({ post }: { post: Post }) {
         className="min-h-screen w-full resize-none rounded-3xl border-none bg-white/20 px-8 py-4 text-transparent hover:text-[#424245] focus:outline-none active:text-[#424245] sm:max-w-5xl sm:px-16 sm:py-12"
         autoFocus
       />
-      <div className="fixed bottom-4 right-4 text-sm font-semibold text-gray-500">
-        {isSaving ? "Saving..." : "Saved"}
+      <div className="fixed bottom-1 right-1 text-black/20">
+        <div className="flex items-center justify-center">
+          {isSaving ? (
+            <ButtonSpinner />
+          ) : (
+            <CheckCircledIcon className="h-5 w-5" />
+          )}
+        </div>
       </div>
     </div>
   );
