@@ -53,8 +53,14 @@ export default async function Topics() {
         <h1>topics</h1>
 
         <DropDownMenu>
-          <Link href={"/api/auth/signout"}>
+          <div className="text-decoration-none flex w-full items-start gap-4 px-6 py-3 no-underline sm:px-4 sm:py-2">
+            {session?.user?.name}
+          </div>
+          <Link href={"/auth/signout"}>
             <Button variant="menuElement">Sign out {session.user?.name}</Button>
+          </Link>
+          <Link href={"/settings"}>
+            <Button variant="menuElement">settings</Button>
           </Link>
         </DropDownMenu>
       </SessionNav>

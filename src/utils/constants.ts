@@ -34,9 +34,8 @@ export const TAGS = [
 export const coachVariants = ["criticism", "insight", "boost"];
 export const generateCoachPrompt =
   "Based on the following types of coaching, please select a coach for the following diary entry. " +
-  "The coach should the one best suited to the most pressing need of the person writing the diary entry to live a good life or achieve what they are striving for." +
-  "Select one coaching type from this list: " +
   coachVariants.join(", ") +
+  "The coach should the one best suited to the personality, needs, and desired results of the person writing the diary entry." +
   "Respond with only the coach name string and nothing else." +
   "Here is the entry: ";
 

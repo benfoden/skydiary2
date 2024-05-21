@@ -25,8 +25,8 @@ export default async function Entry({ params }: { params: { id: string } }) {
         <h1>{formattedTimeStampToDate(post?.createdAt)}</h1>
 
         <DropDownMenu>
-          <DeleteButton postId={post?.id} />
           <CopyTextButton text={post?.content} />
+          <DeleteButton postId={post?.id} />
         </DropDownMenu>
       </SessionNav>
       <Suspense fallback={<Spinner />}>
