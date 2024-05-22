@@ -61,8 +61,11 @@ export default async function Entry({ params }: { params: { id: string } }) {
             action={async () => {
               "use server";
               try {
+                const latestPost = await api.post.getByPostId({
+                  postId: params.id,
+                });
                 const tags = await getResponse(
-                  generateTagsPrompt + post?.content,
+                  generateTagsPrompt + latestPost?.content,
                 );
 
                 const tagContents = tags?.split(",").map((tag) => tag.trim());
@@ -74,7 +77,7 @@ export default async function Entry({ params }: { params: { id: string } }) {
                   .filter((tag): tag is string => tag !== undefined);
                 if (tagIds?.length) {
                   await api.post.addTags({
-                    postId: post?.id,
+                    postId: params?.id,
                     tagIds: tagIds,
                   });
                 } else {
@@ -110,16 +113,21 @@ export default async function Entry({ params }: { params: { id: string } }) {
                 action={async () => {
                   "use server";
                   try {
+                    const latestPost = await api.post.getByPostId({
+                      postId: params.id,
+                    });
+
                     const coachVariant = await getResponse(
-                      generateCoachPrompt + post?.content,
+                      generateCoachPrompt + latestPost?.content,
                     );
                     const prompt =
-                      generateCommentPrompt(coachVariant!) + post?.content;
+                      generateCommentPrompt(coachVariant!) +
+                      latestPost?.content;
                     const response = await getResponse(prompt);
                     if (response) {
                       await api.comment.create({
                         content: response,
-                        postId: post?.id,
+                        postId: params?.id,
                         coachVariant: coachVariant!,
                       });
                     } else {
