@@ -7,13 +7,14 @@ export default async function LoadingPageBody() {
   return (
     <>
       <SessionNav>
-        <div className="flex items-center gap-2">
-          <NavChevronLeft targetPathname={"/home"} label={"home"} />
+        <div className="flex w-full flex-row items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <NavChevronLeft targetPathname={"/home"} label={"home"} />
+          </div>
+          <DropDownMenu>
+            <div>Loading...</div>
+          </DropDownMenu>
         </div>
-        <h1>loading...</h1>
-        <DropDownMenu>
-          <div>Loading...</div>
-        </DropDownMenu>
       </SessionNav>
       <div className="flex h-full flex-col items-center gap-12 px-4 py-32">
         <Spinner />
