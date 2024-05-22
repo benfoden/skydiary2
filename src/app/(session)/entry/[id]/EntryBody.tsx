@@ -1,6 +1,7 @@
 "use client";
 import { type Post } from "@prisma/client";
 import { CheckCircledIcon } from "@radix-ui/react-icons";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type SetStateAction } from "react";
 import ButtonSpinner from "~/app/_components/ButtonSpinner";
 import { api } from "~/trpc/react";
@@ -11,12 +12,16 @@ export default function EntryBody({ post }: { post: Post }) {
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  const router = useRouter();
+
   const updatePost = api.post.update.useMutation({
     onMutate: () => {
       setIsSaving(true);
+      router.push(`${window.location.pathname}?s=1`);
     },
     onSuccess: () => {
       setIsSaving(false);
+      router.push(`${window.location.pathname}`);
     },
   });
 
@@ -33,11 +38,14 @@ export default function EntryBody({ post }: { post: Post }) {
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value;
+
     setContent(newContent);
 
     if (debounceTimeout) {
       clearTimeout(debounceTimeout);
     }
+
+    router.push(`${window.location.pathname}?s=1`);
 
     const newTimeout = setTimeout(() => {
       updatePost.mutate({ content: newContent, postId: post?.id });
