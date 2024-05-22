@@ -24,13 +24,13 @@ import { formattedTimeStampToDate } from "~/utils/text";
 import EntryBody from "./EntryBody";
 
 export default async function Entry({ params }: { params: { id: string } }) {
-  const [post, comments, tags] = await Promise.all([
-    api.post.getByPostId({ postId: params.id }),
+  const post = await api.post.getByPostId({ postId: params.id });
+  if (!post) return null;
+
+  const [comments, tags] = await Promise.all([
     api.comment.getCommentsByPostId({ postId: params.id }),
     api.tag.getByPostId({ postId: params.id }),
   ]);
-
-  if (!post) return null;
 
   return (
     <>
