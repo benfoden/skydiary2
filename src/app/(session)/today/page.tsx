@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { api } from "~/trpc/server";
 
-export async function GET() {
+export default async function Today() {
   const post = await api.post.getLatest();
 
   const today = new Date();

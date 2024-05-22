@@ -86,19 +86,24 @@ export default async function Home() {
 
 async function PostsList() {
   const userPosts = await api.post.getByUser();
-  const today = new Date();
+  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const today = new Date().toLocaleDateString("en-US", {
+    timeZone: userTimezone,
+  });
 
   return (
     <>
       <div className="flex flex-col items-start justify-center gap-4 sm:max-w-5xl">
         Today
-        {userPosts[0]?.createdAt.toDateString() !== today.toDateString() ? (
+        {new Date(userPosts[0]?.createdAt ?? 0).toLocaleDateString("en-US", {
+          timeZone: userTimezone,
+        }) !== today || userPosts?.length === 0 ? (
           <Link href="/today">
             <Button>Whats on your mind?</Button>
           </Link>
         ) : (
           <Link key={userPosts[0]?.id} href={`/entry/${userPosts[0]?.id}`}>
-            <PostCard key={userPosts[0]?.id} post={userPosts[0]} />
+            <PostCard key={userPosts[0]?.id} post={userPosts[0]!} />
           </Link>
         )}
         {filterPostsByDateRange(0, 6, userPosts).length > 0 && (

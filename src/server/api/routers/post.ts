@@ -47,7 +47,7 @@ export const postRouter = createTRPCRouter({
     }),
 
   update: protectedProcedure
-    .input(z.object({ postId: z.string(), content: z.string().min(1) }))
+    .input(z.object({ postId: z.string(), content: z.string() }))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.post.update({
         where: { id: input.postId },

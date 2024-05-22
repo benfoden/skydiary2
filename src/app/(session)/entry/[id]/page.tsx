@@ -23,20 +23,30 @@ import {
 import { formattedTimeStampToDate } from "~/utils/text";
 import EntryBody from "./EntryBody";
 
-export default async function Entry({ params }: { params: { id: string } }) {
-  const [post, comments, tags] = await Promise.all([
-    api.post.getByPostId({ postId: params.id }),
+export default async function Entry({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams: { s: string };
+}) {
+  const post = await api.post.getByPostId({ postId: params.id });
+  if (!post) return null;
+
+  const [comments, tags] = await Promise.all([
     api.comment.getCommentsByPostId({ postId: params.id }),
     api.tag.getByPostId({ postId: params.id }),
   ]);
-
-  if (!post) return null;
 
   return (
     <>
       <SessionNav>
         <div className="flex items-center gap-2">
-          <NavChevronLeft targetPathname={"/home"} label={"home"} />
+          <NavChevronLeft
+            targetPathname={"/home"}
+            label={"home"}
+            isDisabled={searchParams.s === "1"}
+          />
         </div>
         <h1>{formattedTimeStampToDate(post?.createdAt)}</h1>
 
@@ -61,8 +71,14 @@ export default async function Entry({ params }: { params: { id: string } }) {
             action={async () => {
               "use server";
               try {
+                if (searchParams.s === "1") {
+                  return;
+                }
+                const latestPost = await api.post.getByPostId({
+                  postId: params.id,
+                });
                 const tags = await getResponse(
-                  generateTagsPrompt + post?.content,
+                  generateTagsPrompt + latestPost?.content,
                 );
 
                 const tagContents = tags?.split(",").map((tag) => tag.trim());
@@ -74,7 +90,7 @@ export default async function Entry({ params }: { params: { id: string } }) {
                   .filter((tag): tag is string => tag !== undefined);
                 if (tagIds?.length) {
                   await api.post.addTags({
-                    postId: post?.id,
+                    postId: params?.id,
                     tagIds: tagIds,
                   });
                 } else {
@@ -85,41 +101,53 @@ export default async function Entry({ params }: { params: { id: string } }) {
               }
             }}
           >
-            <GetTagsButton />
+            <GetTagsButton isDisabled={searchParams.s === "1"} />
           </form>
           <div className="flex w-full flex-row items-center justify-center gap-4">
-            {tags && (
-              <Suspense
-                fallback={
-                  <div className="flex h-full w-full items-center justify-center">
-                    <Spinner />
-                  </div>
-                }
-              >
-                {tags.map((tag) => (
-                  <Link key={tag.id} href={`/topics/${tag.content}/${tag.id}`}>
-                    <Button variant="chip">{tag.content}</Button>
-                  </Link>
-                ))}
-              </Suspense>
-            )}
+            <Suspense
+              fallback={
+                <div className="flex h-full w-full items-center justify-center">
+                  <Spinner />
+                </div>
+              }
+            >
+              {tags && (
+                <ul>
+                  {tags.map((tag) => (
+                    <li key={tag.id}>
+                      <Link href={`/topics/${tag.content}/${tag.id}`}>
+                        <Button variant="chip">{tag.content}</Button>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Suspense>
           </div>
           <div className="flex h-full w-full flex-col items-center pb-4">
             <div className="flex w-full flex-row items-center justify-center">
               <form
                 action={async () => {
                   "use server";
+                  if (searchParams.s === "1") {
+                    return;
+                  }
                   try {
+                    const latestPost = await api.post.getByPostId({
+                      postId: params.id,
+                    });
+
                     const coachVariant = await getResponse(
-                      generateCoachPrompt + post?.content,
+                      generateCoachPrompt + latestPost?.content,
                     );
                     const prompt =
-                      generateCommentPrompt(coachVariant!) + post?.content;
+                      generateCommentPrompt(coachVariant!) +
+                      latestPost?.content;
                     const response = await getResponse(prompt);
                     if (response) {
                       await api.comment.create({
                         content: response,
-                        postId: post?.id,
+                        postId: params?.id,
                         coachVariant: coachVariant!,
                       });
                     } else {
@@ -132,17 +160,17 @@ export default async function Entry({ params }: { params: { id: string } }) {
                   }
                 }}
               >
-                <GetAdviceButton />
+                <GetAdviceButton isDisabled={searchParams.s === "1"} />
               </form>
             </div>
-            {comments && (
-              <Suspense
-                fallback={
-                  <div className="flex h-full w-full items-center justify-center font-light">
-                    <Spinner />
-                  </div>
-                }
-              >
+            <Suspense
+              fallback={
+                <div className="flex h-full w-full items-center justify-center font-light">
+                  <Spinner />
+                </div>
+              }
+            >
+              {comments && (
                 <ul>
                   {comments
                     .sort(
@@ -171,8 +199,8 @@ export default async function Entry({ params }: { params: { id: string } }) {
                       </li>
                     ))}
                 </ul>
-              </Suspense>
-            )}
+              )}
+            </Suspense>
           </div>
         </div>
       </div>
