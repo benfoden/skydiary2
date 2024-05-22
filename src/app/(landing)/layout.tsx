@@ -29,13 +29,13 @@ export async function Nav() {
       <div className="flex items-center">
         {!session && (
           <Link
-            href={session ? "/home" : "/auth/signin"}
+            href={session ? "/home" : "/auth/login"}
             className="text-nowrap rounded-full px-4 py-2 no-underline transition hover:bg-white/50"
           >
             log in
           </Link>
         )}
-        <Link href={session ? "/home" : "/auth/signin"}>
+        <Link href={session ? "/home" : "/auth/login"}>
           <Button>
             <span className="text-nowrap">{session ? "home" : "sign up"}</span>
           </Button>
