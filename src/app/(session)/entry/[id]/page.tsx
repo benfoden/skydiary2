@@ -93,6 +93,7 @@ export default async function Entry({
                     postId: params?.id,
                     tagIds: tagIds,
                   });
+                  revalidatePath(`/entry/${params.id}`);
                 } else {
                   console.error("Failed to tag.");
                 }
@@ -112,7 +113,7 @@ export default async function Entry({
               }
             >
               {tags && (
-                <ul>
+                <ul className="flex flex-row gap-2">
                   {tags.map((tag) => (
                     <li key={tag.id}>
                       <Link href={`/topics/${tag.content}/${tag.id}`}>
@@ -140,9 +141,10 @@ export default async function Entry({
                     const coachVariant = await getResponse(
                       generateCoachPrompt + latestPost?.content,
                     );
-                    const prompt =
-                      generateCommentPrompt(coachVariant!) +
-                      latestPost?.content;
+                    const prompt = generateCommentPrompt(
+                      coachVariant!,
+                      latestPost?.content ?? "",
+                    );
                     const response = await getResponse(prompt);
                     if (response) {
                       await api.comment.create({
@@ -150,6 +152,7 @@ export default async function Entry({
                         postId: params?.id,
                         coachVariant: coachVariant!,
                       });
+                      revalidatePath(`/entry/${params.id}`);
                     } else {
                       console.error(
                         "Failed to get a response for the comment.",
@@ -171,7 +174,7 @@ export default async function Entry({
               }
             >
               {comments && (
-                <ul>
+                <ul className="w-[420px]">
                   {comments
                     .sort(
                       (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
@@ -182,7 +185,7 @@ export default async function Entry({
                         className="flex flex-col rounded-lg p-4"
                       >
                         <Card>
-                          <div className="flex w-full flex-col gap-4 pt-4">
+                          <div className="flex w-full flex-col gap-4 py-4">
                             <div className="flex w-full justify-between gap-4 text-xs">
                               <div className="font-medium">
                                 {comment.coachVariant}
