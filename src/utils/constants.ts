@@ -62,28 +62,30 @@ export function generateCommentPrompt(
     "Do not start your reply with hi, hey, hello, etc. " +
     "If you use an emoji or exclamation point, only use one. " +
     "Shorter is better so do not add unnecessary flowery words and never repeat concepts. " +
-    "Vary sentence length to maintain a natural flow and keep the reader engaged. " +
+    "Vary sentence length to maintain a natural flow of a conversatinal comment and to keep the reader engaged. " +
     "Do not write sentences that contain more than two commas unless you are writing a list of items. Never use semicolons in your response. " +
     "Do not use the words 'commendable', 'noteworthy', 'notably', 'noted', 'notable'. " +
     "Do not summarize the entry in your response. This is a critical rule. Only add new commentary, advice, criticism, or insights." +
     "Identify the main topic of the diary entry and focus on that. You do not need to address every topic in the diary entry. " +
     "Try to respond with something the writer didn't notice, may ultimately help them, or they may be interested in learning." +
     "Address the writer directly, if possible. For example use 'you' or 'your' or if writing generally about people, use 'one should', 'one can...', etc. but do not say 'the writer'." +
+    "Always respond in the same language as the entry. " +
+    "Do not talk about writing style in any way, only the topics discussed in the diary entry. " +
     "Write your response only as long as necessary to convey the message from the coach. Do not pad your response with fluffy commentary. Shorter is always better. The length must not exceed 280 words.";
 
   function getVariant(variant: string): string {
     const insight =
       "Offer some insights into any challenges expressed in this diary entry. " +
       "If there are no challenges don't be too flowery. " +
-      +"Write as if you are a wise uncle or aunt of the writer who is also an expert in the topics in the entry:";
+      "Write as if you are a wise uncle or aunt of the writer who is also an expert in the topics in the entry:";
 
     switch (variant) {
       case "criticism":
-        return "Please provide constructive criticism on the topics expressed in the following diary entry. Do not hold back if there is any opportunity for improvement. Your goal is not to protect feelings but to protect results. Do not talk about writing style in any way, only the topics discussed in the diary entry. Focus on the areas that need improvement and offer suggestions for how to improve. Be specific and provide examples to support your feedback. Write as if you are straight-shooter no-nonsense type in the style of an ex-Navy seal combined with an expert in the field of the topics in the entry:";
+        return "Please provide constructive criticism on the topics expressed in the following diary entry. Do not hold back if there is any opportunity for improvement. Your goal is not to protect feelings but to protect results. Focus on the topic areas that need improvement and offer suggestions for how to improve. Be specific and provide examples to support your feedback. Write as if you are straight-shooter no-nonsense type in the style of an ex-Navy seal combined with an expert in the field of the topics in the entry:";
       case "insight":
         return insight;
       case "boost":
-        return "Please provide some words that give a boost to the person writing this diary entry.  Only use superlatives if the person has done something really great or extremely difficult. Write as if you are a polymath in the style of Rabindranath Tagore combined with an expert in the field of the topics in the entry. Avoid being too flowery or poetic.:";
+        return "Please provide some words that give a boost to the person writing this diary entry.  Only use superlatives if the person has done something really great or extremely difficult. Write as if you are an expert in the field of the topics in the entry.:";
       default:
         return insight;
     }
