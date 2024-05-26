@@ -69,6 +69,7 @@ export function generateCommentPrompt(
     "Identify the main topic of the diary entry and focus on that. You do not need to address every topic in the diary entry. " +
     "Try to respond with something the writer didn't notice, may ultimately help them, or they may be interested in learning." +
     "Address the writer directly, if possible. For example use 'you' or 'your' or if writing generally about people, use 'one should', 'one can...', etc. but do not say 'the writer'." +
+    "Always respond in the same language as the entry. " +
     "Write your response only as long as necessary to convey the message from the coach. Do not pad your response with fluffy commentary. Shorter is always better. The length must not exceed 280 words.";
 
   function getVariant(variant: string): string {
