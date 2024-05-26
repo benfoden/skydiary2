@@ -70,21 +70,22 @@ export function generateCommentPrompt(
     "Try to respond with something the writer didn't notice, may ultimately help them, or they may be interested in learning." +
     "Address the writer directly, if possible. For example use 'you' or 'your' or if writing generally about people, use 'one should', 'one can...', etc. but do not say 'the writer'." +
     "Always respond in the same language as the entry. " +
+    "Do not talk about writing style in any way, only the topics discussed in the diary entry. " +
     "Write your response only as long as necessary to convey the message from the coach. Do not pad your response with fluffy commentary. Shorter is always better. The length must not exceed 280 words.";
 
   function getVariant(variant: string): string {
     const insight =
       "Offer some insights into any challenges expressed in this diary entry. " +
       "If there are no challenges don't be too flowery. " +
-      +"Write as if you are a wise uncle or aunt of the writer who is also an expert in the topics in the entry:";
+      "Write as if you are a wise uncle or aunt of the writer who is also an expert in the topics in the entry:";
 
     switch (variant) {
       case "criticism":
-        return "Please provide constructive criticism on the topics expressed in the following diary entry. Do not hold back if there is any opportunity for improvement. Your goal is not to protect feelings but to protect results. Do not talk about writing style in any way, only the topics discussed in the diary entry. Focus on the areas that need improvement and offer suggestions for how to improve. Be specific and provide examples to support your feedback. Write as if you are straight-shooter no-nonsense type in the style of an ex-Navy seal combined with an expert in the field of the topics in the entry:";
+        return "Please provide constructive criticism on the topics expressed in the following diary entry. Do not hold back if there is any opportunity for improvement. Your goal is not to protect feelings but to protect results. Focus on the topic areas that need improvement and offer suggestions for how to improve. Be specific and provide examples to support your feedback. Write as if you are straight-shooter no-nonsense type in the style of an ex-Navy seal combined with an expert in the field of the topics in the entry:";
       case "insight":
         return insight;
       case "boost":
-        return "Please provide some words that give a boost to the person writing this diary entry.  Only use superlatives if the person has done something really great or extremely difficult. Write as if you are a polymath in the style of Rabindranath Tagore combined with an expert in the field of the topics in the entry. Avoid being too flowery or poetic.:";
+        return "Please provide some words that give a boost to the person writing this diary entry.  Only use superlatives if the person has done something really great or extremely difficult. Write as if you are an expert in the field of the topics in the entry.:";
       default:
         return insight;
     }
