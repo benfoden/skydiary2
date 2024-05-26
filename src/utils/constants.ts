@@ -62,7 +62,7 @@ export function generateCommentPrompt(
     "Do not start your reply with hi, hey, hello, etc. " +
     "If you use an emoji or exclamation point, only use one. " +
     "Shorter is better so do not add unnecessary flowery words and never repeat concepts. " +
-    "Vary sentence length to maintain a natural flow and keep the reader engaged. " +
+    "Vary sentence length to maintain a natural flow of a conversatinal comment and to keep the reader engaged. " +
     "Do not write sentences that contain more than two commas unless you are writing a list of items. Never use semicolons in your response. " +
     "Do not use the words 'commendable', 'noteworthy', 'notably', 'noted', 'notable'. " +
     "Do not summarize the entry in your response. This is a critical rule. Only add new commentary, advice, criticism, or insights." +
