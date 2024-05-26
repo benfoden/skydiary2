@@ -45,13 +45,19 @@ export const TAGS = [
 
 export const coachVariants = ["criticism", "insight", "boost"];
 export const generateCoachPrompt =
-  "Based on the following types of coaching, please select a coach for the following diary entry. " +
+  "Based on these three types of comments and a journal entry that will follow: " +
   coachVariants.join(", ") +
-  "The coach should the one best suited to the personality, needs, and desired results of the person writing the diary entry." +
-  "Respond with only the coach name string and nothing else." +
-  "Here is the entry: ";
+  "Please select one comment type that, if read by the writer, could help the person achieve their interests, whether plainly stated, implied, or discerned. Attempt read between the lines and identify the main topic of the diary entry and focus on that. You do not need to address every topic in the diary entry." +
+  "Respond with only the comment type as a single word text string and nothing else." +
+  "If the person needs some tough love, or if they are complaining, or if they are rambling, then you could select 'criticism'." +
+  "If the person is trying to get a better understanding of the topic, if they have an explicit question, or if they are trying to improve their skills, then you could select 'insight'." +
+  "If the person is upset, or having a very hard day, or struggling with a problem with no immediate solution, then you could select 'boost'." +
+  "Here is the journal entry text: ";
 
-export function generateCommentPrompt(variant = "insight"): string {
+export function generateCommentPrompt(
+  variant: string,
+  entryText: string,
+): string {
   const details =
     "Do not start your reply with hi, hey, hello, etc. " +
     "If you use an emoji or exclamation point, only use one. " +
@@ -59,15 +65,17 @@ export function generateCommentPrompt(variant = "insight"): string {
     "Vary sentence length to maintain a natural flow and keep the reader engaged. " +
     "Do not write sentences that contain more than two commas unless you are writing a list of items. Never use semicolons in your response. " +
     "Do not use the words 'commendable', 'noteworthy', 'notably', 'noted', 'notable'. " +
+    "Do not summarize the entry in your response. This is a critical rule. Only add new commentary, advice, criticism, or insights." +
     "Identify the main topic of the diary entry and focus on that. You do not need to address every topic in the diary entry. " +
-    "Your response must be no longer than 280 characters.";
+    "Try to respond with something the writer didn't notice, may ultimately help them, or they may be interested in learning." +
+    "Address the writer directly, if possible. For example use 'you' or 'your' or if writing generally about people, use 'one should', 'one can...', etc. but do not say 'the writer'." +
+    "Write your response only as long as necessary to convey the message from the coach. Do not pad your response with fluffy commentary. Shorter is always better. The length must not exceed 280 words.";
 
   function getVariant(variant: string): string {
     const insight =
       "Offer some insights into any challenges expressed in this diary entry. " +
-      "If there are no challenges then add a philosophical reflection of the topic discussed, but don't be too flowery. " +
-      "Do not address your master by the word 'master', 'sir', 'the creator', etc. but instead use the word 'you' or 'your'. " +
-      +"Write as if you are a wise butler in the style of Alfred Pennyworth from the Batman universe combined with an expert in the field of the topics in the entry:";
+      "If there are no challenges don't be too flowery. " +
+      +"Write as if you are a wise uncle or aunt of the writer who is also an expert in the topics in the entry:";
 
     switch (variant) {
       case "criticism":
@@ -80,7 +88,7 @@ export function generateCommentPrompt(variant = "insight"): string {
         return insight;
     }
   }
-  return getVariant(variant) + details + " ";
+  return getVariant(variant) + details + " " + "Entry text:" + entryText;
 }
 
 export const generateTagsPrompt =

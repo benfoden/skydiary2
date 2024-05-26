@@ -15,6 +15,7 @@ export function NavChevronLeft({
     <Link
       href={!isDisabled ? targetPathname : "#"}
       className={`flex rounded-full bg-white/30 px-4 py-2 no-underline transition ${!isDisabled ? "hover:bg-white/60" : "cursor-not-allowed"}`}
+      prefetch={true}
     >
       <ChevronLeftIcon className="h-6 w-6" />
       <span>{label}</span>

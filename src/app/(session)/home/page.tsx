@@ -98,7 +98,7 @@ async function PostsList() {
         {new Date(userPosts[0]?.createdAt ?? 0).toLocaleDateString("en-US", {
           timeZone: userTimezone,
         }) !== today || userPosts?.length === 0 ? (
-          <Link href="/today">
+          <Link href="/today" prefetch={true}>
             <Button>Whats on your mind?</Button>
           </Link>
         ) : (
@@ -110,7 +110,7 @@ async function PostsList() {
           <>
             Last 7 days
             {filterPostsByDateRange(0, 6, userPosts).map((post) => (
-              <Link key={post.id} href={`/entry/${post.id}`}>
+              <Link key={post.id} href={`/entry/${post.id}`} prefetch={true}>
                 <PostCard key={post.id} post={post} />
               </Link>
             ))}

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Nav } from "./(landing)/layout";
+import { Nav } from "../../(landing)/layout";
 import Button from "./_components/Button";
 
 export default function NotFound() {
