@@ -26,7 +26,7 @@ export default async function About() {
               you get feedback on your progress over time and learn new things
               you might not have imagined
             </p>
-            <Link href="/auth/signin">
+            <Link href="/auth/login">
               <Button variant="cta">try it</Button>
             </Link>
           </div>
