@@ -2,7 +2,7 @@ import "~/styles/globals.css";
 
 import Link from "next/link";
 import { getServerAuthSession } from "~/server/auth";
-import Button from "../src/app/_components/Button";
+import Button from "../_components/Button";
 
 export async function Nav() {
   const session = await getServerAuthSession();
