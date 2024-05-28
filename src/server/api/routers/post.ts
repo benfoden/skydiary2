@@ -5,6 +5,8 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+import { summarizeText } from "~/utils/constants";
+import { getResponse } from "../ai";
 
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
@@ -47,11 +49,17 @@ export const postRouter = createTRPCRouter({
     }),
 
   update: protectedProcedure
-    .input(z.object({ postId: z.string(), content: z.string() }))
+    .input(
+      z.object({
+        postId: z.string(),
+        content: z.string().optional(),
+        summary: z.string().optional(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       return ctx.db.post.update({
         where: { id: input.postId },
-        data: { content: input.content },
+        data: { content: input.content, summary: input.summary },
       });
     }),
 
@@ -132,5 +140,55 @@ export const postRouter = createTRPCRouter({
       return ctx.db.post.delete({
         where: { id: input.postId, createdBy: { id: ctx.session.user.id } },
       });
+    }),
+
+  summarizeAllPostsNotFromToday: protectedProcedure
+    .input(z.object({ userTimezone: z.string(), today: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const posts = await ctx.db.post.findMany({
+        where: { createdBy: { id: ctx.session.user.id } },
+      });
+
+      const postsNotFromToday = posts.filter((post) => {
+        const postDate = new Date(post.createdAt).toLocaleDateString("en-US", {
+          timeZone: input.userTimezone,
+        });
+        return postDate !== input.today && !post.summary && post.content.length;
+      });
+
+      for (const post of postsNotFromToday) {
+        const summary = await getResponse(summarizeText(post.content));
+        if (summary) {
+          await ctx.db.post.update({
+            where: { id: post.id },
+            data: { summary },
+          });
+        }
+      }
+    }),
+
+  checkAndSummarizeLastPost: protectedProcedure
+    .input(z.object({ userTimezone: z.string(), today: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const posts = await ctx.db.post.findMany({
+        where: { createdBy: { id: ctx.session.user.id } },
+      });
+
+      const lastPost = posts.find((post) => {
+        const postDate = new Date(post.createdAt).toLocaleDateString("en-US", {
+          timeZone: input.userTimezone,
+        });
+        return postDate !== input.today && !post.summary && post.content.length;
+      });
+
+      if (lastPost) {
+        const summary = await getResponse(summarizeText(lastPost.content));
+        if (summary) {
+          await ctx.db.post.update({
+            where: { id: lastPost.id },
+            data: { summary },
+          });
+        }
+      }
     }),
 });

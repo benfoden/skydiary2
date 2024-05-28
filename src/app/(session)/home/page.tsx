@@ -43,9 +43,7 @@ function PostCard({ post }: { post: Post }) {
             year: "numeric",
           })}
         </div>
-        {post.content && post.content.length > 70
-          ? post.content.slice(0, 70) + "..."
-          : post.content}
+        {post.summary ?? post.content.slice(0, 70) + "..."}
       </div>
     </Card>
   );
@@ -90,6 +88,12 @@ async function PostsList() {
   const today = new Date().toLocaleDateString("en-US", {
     timeZone: userTimezone,
   });
+
+  api.post
+    .checkAndSummarizeLastPost({ userTimezone, today })
+    .catch((error) =>
+      console.error("Error summarizing the last entry:", error),
+    );
 
   return (
     <>

@@ -2,9 +2,10 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 // To update the DB, run:
-// bun prisma migrate dev --name addcols
-// bun prisma migrate deploy addcols
-// turso db shell journel < ./prisma/migrations/20240514025841_addcols/migration.sql
+// bun prisma migrate dev --name <name_here>
+// bun prisma generate
+// bun prisma migrate deploy <name_here>
+// turso db shell skydiary < ./prisma/migrations/20240514025841_addcols/migration.sql
 
 generator client {
     provider = "prisma-client-js"
@@ -13,7 +14,6 @@ generator client {
 
 datasource db {
     provider = "sqlite"
-    // Further reading:
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
     url = "file:./tmp/dev.db"
@@ -30,6 +30,7 @@ model Post {
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
     sentimentScore String?
+    summary   String?
 
     @@index([title])
 }
