@@ -7,6 +7,7 @@ CREATE TABLE "Post" (
     "updatedAt" DATETIME NOT NULL,
     "createdById" TEXT NOT NULL,
     "sentimentScore" TEXT,
+    "summary" TEXT,
     CONSTRAINT "Post_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -122,4 +123,3 @@ CREATE UNIQUE INDEX "_UserTags_AB_unique" ON "_UserTags"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_UserTags_B_index" ON "_UserTags"("B");
-

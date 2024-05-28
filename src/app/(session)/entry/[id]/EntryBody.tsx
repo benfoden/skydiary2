@@ -61,7 +61,6 @@ export default function EntryBody({ post }: { post: Post }) {
         value={content}
         onChange={handleContentChange}
         placeholder="Today..."
-        required
         className="min-h-[calc(100vh-224px)] w-full resize-none rounded-3xl border-none bg-white/20 px-8 py-4 text-[#424245] focus:outline-none active:text-[#424245] sm:max-w-5xl sm:px-16 sm:py-12"
         autoFocus
         style={{ height: "auto", overflow: "hidden", paddingBottom: "16px" }}

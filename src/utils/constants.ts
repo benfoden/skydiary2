@@ -104,3 +104,13 @@ export const generateTagsPrompt =
   TAGS.map((tag) => tag.content).join(", ") +
   " " +
   "Diary entry:";
+
+export const summarizeText = (content: string): string =>
+  "Please summarize the following text, compressing the length as much as possible while maintaining the original content and meaning." +
+  "Only respond with a summary of the text. " +
+  "Always return a response of 80 words or less." +
+  "Do not mention the author or the writer of the text. The summary should be absolutely as concise as possible." +
+  "Return your response in the same language as the majority of the words in the text." +
+  "If there is no text, return nothing." +
+  "Text: " +
+  content;
