@@ -1,3 +1,5 @@
+import Button from "~/app/_components/Button";
+
 export default function EmailSignin({
   searchParams,
 }: {
@@ -24,12 +26,7 @@ export default function EmailSignin({
                 value={searchParams.callbackUrl}
               />
               <input type="hidden" name="email" value={searchParams.email} />
-              <button
-                type="submit"
-                className="mt-2 flex h-12 w-full items-center justify-center space-x-2 rounded bg-white/70 px-4 text-base font-light transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-zinc-800 focus:ring-offset-2"
-              >
-                Continue to your homepage
-              </button>
+              <Button variant="submit">Continue to your homepage</Button>
             </form>
           </div>
         </div>

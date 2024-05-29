@@ -17,6 +17,14 @@ interface ErrorView {
   signin?: JSX.Element;
 }
 
+const SignInButton = () => (
+  <div className="flex flex-col items-center gap-3">
+    <Link href="/auth/signin">
+      <Button variant="cta">sign in again</Button>
+    </Link>
+  </div>
+);
+
 const ErrorPageContent = () => {
   const searchParams = useSearchParams();
   const error = searchParams.get("error") as ErrorType;
@@ -26,46 +34,47 @@ const ErrorPageContent = () => {
       status: 200,
       heading: "Error",
       message: (
-        <div className="flex flex-col items-center gap-3">
+        <>
           <p className="mb-3">an unindentified error has occured.</p>
           <Link href="/">
-            <Button variant="cta">back to top page</Button>
+            <Button variant="cta">go back to top page</Button>
           </Link>
-        </div>
+        </>
       ),
     },
     configuration: {
       status: 500,
       heading: "Server error",
       message: (
-        <div className="flex flex-col items-center gap-3">
-          <p>there is a problem with the server configuration.</p>
-          <p className="leading-8">
-            please tell us to check the server logs for more information.
-          </p>
-        </div>
+        <>
+          <p>there is a problem with the server. please try again later</p>
+          <p className="leading-8">if this continues, please contact us</p>
+          <Button variant="cta">
+            <Link href="/">go back to top page</Link>
+          </Button>
+        </>
       ),
     },
     accessdenied: {
       status: 403,
       heading: "Access Denied",
       message: (
-        <div className="flex flex-col items-center gap-3">
-          <p className="mb-4">you do not have permission to sign in.</p>
-          <Link href="/auth/signin">sign in</Link>
-        </div>
+        <>
+          <p className="mb-4">you do not have permission</p>
+        </>
       ),
+      signin: <SignInButton />,
     },
     verification: {
       status: 403,
       heading: "Unable to sign in",
       message: (
-        <div className="flex flex-col items-center gap-3">
-          <p>the sign in link is no longer valid.</p>
-          <p>it may have been used already or it may have expired.</p>
-        </div>
+        <>
+          <p>the sign in link is no longer valid</p>
+          <p>it may have been used already or it may have expired</p>
+        </>
       ),
-      signin: <Link href="/auth/signin">sign in</Link>,
+      signin: <SignInButton />,
     },
   };
 
@@ -80,8 +89,10 @@ const ErrorPageContent = () => {
             {heading}
           </h1>
           <div className="text-center">
-            <div>{`${status}`}</div>
-            <div>{message}</div>
+            <div className="pb-4 font-bold">{`${status}`}</div>
+            <div className="flex flex-col items-center gap-3 text-sm">
+              {message}
+            </div>
             {signin && <div className="mt-5">{signin}</div>}
           </div>
         </div>
