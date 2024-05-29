@@ -73,8 +73,7 @@ export const authOptions: NextAuthOptions = {
       },
       from: env.EMAIL_FROM,
       generateVerificationToken() {
-        const random = crypto.getRandomValues(new Uint8Array(8));
-        return Buffer.from(random).toString("hex").slice(0, 6);
+        return randomBytes(16).toString("hex");
       },
       async sendVerificationRequest(params) {
         const { identifier, provider } = params;
@@ -91,7 +90,27 @@ export const authOptions: NextAuthOptions = {
           from,
           subject: `skydiary sign in link`,
           text: `Sign in here ${logInURL.toString()}`,
-          html: `<body style="font-family: sans-serif; background: linear-gradient(to bottom, #cce3f1, #F3F6F6); color: #424245;"><table width="100%" border="0" cellspacing="20" cellpadding="0" style="background: rgba(255,255,255,0.4); max-width: 600px; margin: auto; border-radius: 10px;"> <tr> <td align="center" style="padding: 10px 0px; font-size: 22px; color: #424245;">sign in to skydiary</td></tr><tr> <td align="center" style="padding: 20px 0;"> <table border="0" cellspacing="0" cellpadding="0"> <tr> <td align="center" style="border-radius: 5px;"><button style="background: #fff; font-size: 18px; font-family: sans-serif; color:#424245; border-radius: 5px; padding: 10px 20px; display: inline-block; font-weight: bold;"><a href="${logInURL.toString()}" target="_blank" style="text-decoration: none;">Sign in</a></button></td></tr></table> </td></tr><tr> <td align="center" style="padding: 0px 0px 10px 0px; font-size: 16px; line-height: 22px; color: #424245;"> If you did not request this email you can safely ignore it. </td></tr></table></body>`,
+          html: `<body style="font-family: sans-serif; background: linear-gradient(to bottom, #cce3f1, #F3F6F6) no-repeat; background-size: cover; color: #424245; padding: 32px 16px; text-align: center;">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.4); max-width: 360px; min-height: 360px; margin: auto; border-radius: 10px; vertical-align: middle; padding: 32px 0px;">
+                      <tr>
+                        <td align="center" style="font-size: 22px; color: #424245; font-weight: 300; padding-bottom: 16px;">sign in to skydiary</td>
+                      </tr>
+                      <tr>
+                        <td align="center">
+                          <table border="0" cellspacing="0" cellpadding="0" style="margin: auto;">
+                            <tr>
+                              <td align="center" style="border-radius: 5px;">
+                                <a href="${logInURL.toString()}" target="_blank" rel="noopener noreferrer" style="background: rgba(255,255,255,0.6); font-size: 16px; font-family: sans-serif; color:#424245; border-radius: 5px; border-color: transparent; padding: 12px 36px; text-decoration: none; color: #424245; font-weight: 500; display: inline-block;">verify and continue</a>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align="center" style="font-size: 16px; line-height: 22px; color: #424245; padding: 0px 16px; font-weight: 300;">if you didn't request this email you can safely ignore it</td>
+                      </tr>
+                    </table>
+                  </body>`,
         });
         const failed = result.rejected.concat(result.pending).filter(Boolean);
         if (failed.length) {
