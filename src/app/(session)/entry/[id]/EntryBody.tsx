@@ -17,11 +17,11 @@ export default function EntryBody({ post }: { post: Post }) {
   const updatePost = api.post.update.useMutation({
     onMutate: () => {
       setIsSaving(true);
-      router.push(`${window.location.pathname}?s=1`);
+      router.replace(`${window.location.pathname}?s=1`, { scroll: false });
     },
     onSuccess: () => {
       setIsSaving(false);
-      router.push(`${window.location.pathname}`);
+      router.replace(`${window.location.pathname}`, { scroll: false });
     },
   });
 
@@ -51,7 +51,6 @@ export default function EntryBody({ post }: { post: Post }) {
 
     setDebounceTimeout(newTimeout as unknown as SetStateAction<null>);
 
-    // Ensure router.push doesn't fire more than every 300ms
     if (!debounceTimeout) {
       router.push(`${window.location.pathname}?s=1`);
       const routerTimeout = setTimeout(() => {
