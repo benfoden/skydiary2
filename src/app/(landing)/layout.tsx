@@ -6,6 +6,7 @@ import Button from "../_components/Button";
 
 export async function Nav() {
   const session = await getServerAuthSession();
+  console.log(session);
 
   return (
     <nav className="flex w-full items-center justify-between bg-transparent p-4 text-[#424245]">

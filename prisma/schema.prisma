@@ -56,6 +56,19 @@ model Comment {
     post      Post     @relation(fields: [postId], references: [id])
 }
 
+model Recap {
+    id        String   @id @default(cuid())
+    startDate DateTime
+    endDate   DateTime
+    content   String   // @db.Text
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    createdBy User     @relation(fields: [createdById], references: [id])
+    createdById String
+
+    @@index([startDate, endDate])
+}
+
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -89,10 +102,12 @@ model User {
     email         String?   @unique
     emailVerified DateTime?
     image         String?
+    isDarkMode    Boolean   @default(false)
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
     tags          Tag[]   @relation("UserTags")
+    recaps        Recap[]  
     isAdmin       Boolean   @default(false)
     isSpecial     Boolean   @default(false)
 }
