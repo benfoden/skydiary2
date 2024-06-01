@@ -45,13 +45,20 @@ export default function EntryBody({ post }: { post: Post }) {
       clearTimeout(debounceTimeout);
     }
 
-    router.push(`${window.location.pathname}?s=1`);
-
     const newTimeout = setTimeout(() => {
       updatePost.mutate({ content: newContent, postId: post?.id });
     }, 1000);
 
     setDebounceTimeout(newTimeout as unknown as SetStateAction<null>);
+
+    // Ensure router.push doesn't fire more than every 300ms
+    if (!debounceTimeout) {
+      router.push(`${window.location.pathname}?s=1`);
+      const routerTimeout = setTimeout(() => {
+        setDebounceTimeout(null);
+      }, 300);
+      setDebounceTimeout(routerTimeout as unknown as SetStateAction<null>);
+    }
   };
 
   return (
