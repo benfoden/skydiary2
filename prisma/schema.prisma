@@ -49,8 +49,8 @@ model Comment {
     id        String   @id @default(cuid())
     content   String // @db.Text
     isAI      Boolean  @default(true)
-    coachVariant String? // @db.Text
-    coachName String? // @db.Text
+    createdByPersona   Persona?   @relation(fields: [createdByPersonaId], references: [id])
+    createdByPersonaId String?
     createdAt DateTime @default(now())
     postId    String
     post      Post     @relation(fields: [postId], references: [id])
@@ -92,9 +92,29 @@ model User {
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    personas      Persona[]
     tags          Tag[]   @relation("UserTags")
     isAdmin       Boolean   @default(false)
     isSpecial     Boolean   @default(false)
+}
+
+
+model Persona {
+    id                  String   @id @default(cuid())
+    name                String
+    description         String?
+    image               String?
+    age                 Int?
+    gender              String?
+    occupation          String?
+    traits              String
+    communicationStyle  String?
+    communicationSample String?
+    comments            Comment[]
+    createdAt           DateTime @default(now())
+    updatedAt           DateTime @updatedAt
+    createdBy           User     @relation(fields: [createdById], references: [id])
+    createdById         String
 }
 
 model VerificationToken {
