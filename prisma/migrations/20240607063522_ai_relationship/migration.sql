@@ -3,7 +3,6 @@
 
   - You are about to drop the column `coachName` on the `Comment` table. All the data in the column will be lost.
   - You are about to drop the column `coachVariant` on the `Comment` table. All the data in the column will be lost.
-  - Added the required column `createdByPersonaId` to the `Comment` table without a default value. This is not possible if the table is not empty.
 
 */
 -- CreateTable
@@ -14,6 +13,7 @@ CREATE TABLE "Persona" (
     "image" TEXT,
     "age" INTEGER,
     "gender" TEXT,
+    "relationship" TEXT,
     "occupation" TEXT,
     "traits" TEXT NOT NULL,
     "communicationStyle" TEXT,
@@ -30,10 +30,10 @@ CREATE TABLE "new_Comment" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "content" TEXT NOT NULL,
     "isAI" BOOLEAN NOT NULL DEFAULT true,
-    "createdByPersonaId" TEXT NOT NULL,
+    "createdByPersonaId" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "postId" TEXT NOT NULL,
-    CONSTRAINT "Comment_createdByPersonaId_fkey" FOREIGN KEY ("createdByPersonaId") REFERENCES "Persona" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Comment_createdByPersonaId_fkey" FOREIGN KEY ("createdByPersonaId") REFERENCES "Persona" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 INSERT INTO "new_Comment" ("content", "createdAt", "id", "isAI", "postId") SELECT "content", "createdAt", "id", "isAI", "postId" FROM "Comment";
