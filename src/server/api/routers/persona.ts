@@ -31,36 +31,31 @@ export const personaRouter = createTRPCRouter({
           traits: input.traits,
           communicationStyle: input.communicationStyle,
           communicationSample: input.communicationSample,
+          createdBy: { connect: { id: ctx.session.user.id } },
         },
       });
     }),
 
-  getAll: protectedProcedure.query(({ ctx }) => {
+  getAllByUserId: protectedProcedure.query(({ ctx }) => {
     return ctx.db.persona.findMany({
+      where: { createdBy: { id: ctx.session.user.id } },
       orderBy: { createdAt: "desc" },
     });
   }),
 
-  getByUserId: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.persona.findMany({
-      where: { user: { some: { id: ctx.session.user.id } } },
-      orderBy: { createdAt: "desc" },
-    });
-  }),
-
-  getByPostId: protectedProcedure
-    .input(z.object({ postId: z.string() }))
-    .query(({ ctx, input }) => {
-      return ctx.db.persona.findMany({
-        where: { post: { some: { id: input.postId } } },
-      });
-    }),
+  // getByPostId: protectedProcedure
+  //   .input(z.object({ postId: z.string() }))
+  //   .query(({ ctx, input }) => {
+  //     return ctx.db.persona.findMany({
+  //       where: { post: { some: { id: input.postId } } },
+  //     });
+  //   }),
 
   delete: protectedProcedure
-    .input(z.object({ tagId: z.string() }))
+    .input(z.object({ personaId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.persona.delete({
-        where: { id: input.tagId },
+        where: { id: input.personaId },
       });
     }),
 });

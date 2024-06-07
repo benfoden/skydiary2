@@ -37,7 +37,18 @@ export default async function Persona() {
 
                 if (name ?? email) {
                   try {
-                    await api.user.updateUser({ name, email });
+                    await api.persona.create({
+                      name,
+                      description,
+                      image,
+                      age,
+                      gender,
+                      relationship,
+                      occupation,
+                      traits,
+                      communicationStyle,
+                      communicationSample,
+                    });
                   } catch (error) {
                     console.error("Error updating user:", error);
                   }
@@ -46,25 +57,78 @@ export default async function Persona() {
               }}
             >
               <label className="text-base font-light" htmlFor="name">
-                your name
+                their name
                 <input
                   type="text"
                   id="name"
                   name="name"
                   className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
                   required
-                  placeholder={session.user.name ?? "your name"}
                 />
               </label>
-              <label className="text-base font-light" htmlFor="name">
-                your email
+              <label className="text-base font-light" htmlFor="description">
+                a short description{" "}
+                <span className="opacity-60">(recommended)</span>
                 <input
-                  type="email"
-                  id="email"
-                  name="email"
+                  type="text"
+                  id="description"
+                  name="description"
                   className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                  required
-                  placeholder={session.user.email ?? "your email"}
+                />
+              </label>
+              <label className="text-base font-light" htmlFor="image">
+                their image
+                <input
+                  type="text"
+                  id="image"
+                  name="image"
+                  className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
+                />
+              </label>
+              <label className="text-base font-light" htmlFor="age">
+                their age
+                <input
+                  type="number"
+                  id="age"
+                  name="age"
+                  className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
+                  placeholder="1"
+                />
+              </label>
+              <label className="text-base font-light" htmlFor="gender">
+                their gender
+                <input
+                  type="text"
+                  id="gender"
+                  name="gender"
+                  className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
+                />
+              </label>
+              <label className="text-base font-light" htmlFor="relationship">
+                their relationship
+                <input
+                  type="text"
+                  id="relationship"
+                  name="relationship"
+                  className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
+                />
+              </label>
+              <label className="text-base font-light" htmlFor="occupation">
+                their occupation
+                <input
+                  type="text"
+                  id="occupation"
+                  name="occupation"
+                  className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
+                />
+              </label>
+              <label className="text-base font-light" htmlFor="traits">
+                their traits
+                <input
+                  type="text"
+                  id="traits"
+                  name="traits"
+                  className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
                 />
               </label>
               <button

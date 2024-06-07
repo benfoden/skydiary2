@@ -165,6 +165,9 @@ export default async function Entry({
               >
                 <GetCommentButton isDisabled={searchParams.s === "1"} />
               </form>
+              <Link href="/persona">
+                <Button>personas</Button>
+              </Link>
             </div>
             <Suspense
               fallback={
