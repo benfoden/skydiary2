@@ -7,7 +7,7 @@ import { Card } from "~/app/_components/Card";
 import CopyTextButton from "~/app/_components/CopyTextButton";
 import DeleteButton from "~/app/_components/DeleteButton";
 import DropDownMenu from "~/app/_components/DropDown";
-import GetAdviceButton from "~/app/_components/GetAdviceButton";
+import GetCommentButton from "~/app/_components/GetCommentButton";
 import GetTagsButton from "~/app/_components/GetTagsButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
@@ -163,7 +163,7 @@ export default async function Entry({
                   }
                 }}
               >
-                <GetAdviceButton isDisabled={searchParams.s === "1"} />
+                <GetCommentButton isDisabled={searchParams.s === "1"} />
               </form>
             </div>
             <Suspense
