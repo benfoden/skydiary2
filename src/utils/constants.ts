@@ -1,3 +1,5 @@
+import { type Persona } from "@prisma/client";
+
 export function pathHelper(pathname: string): string {
   switch (pathname) {
     case "/":
@@ -47,32 +49,43 @@ export const coachVariants = ["criticism", "insight", "boost"];
 export const generateCoachPrompt =
   "Based on these three types of comments and a journal entry that will follow: " +
   coachVariants.join(", ") +
-  "Please select one comment type that, if read by the writer, could help the person achieve their interests, whether plainly stated, implied, or discerned. Attempt read between the lines and identify the main topic of the diary entry and focus on that. You do not need to address every topic in the diary entry." +
+  "Please select one comment type that, if read by the writer, could help the person achieve their interests, whether plainly stated, implied, or discerned. Attempt to read between the lines and identify the main topic of the diary entry and focus on that. You do not need to address every topic in the diary entry." +
   "Respond with only the comment type as a single word text string and nothing else." +
   "If the person needs some tough love, or if they are complaining, or if they are rambling, then you could select 'criticism'." +
   "If the person is trying to get a better understanding of the topic, if they have an explicit question, or if they are trying to improve their skills, then you could select 'insight'." +
   "If the person is upset, or having a very hard day, or struggling with a problem with no immediate solution, then you could select 'boost'." +
   "Here is the journal entry text: ";
 
+export const personaPrompt = (persona: Persona) =>
+  "Based on the following persona and a journal entry that will follow these messages, write a comment: " +
+  JSON.stringify(persona) +
+  "Please return a comment from the point of view of this persona that, if read by the writer, could help the person achieve their interests, whether plainly stated, implied, or discerned. Attempt to read between the lines and identify the main topic of the diary entry and focus on that. You do not need to address every topic in the diary entry." +
+  "Respond with only a comment as a text string and nothing else." +
+  "If the person needs some tough love, or if they are complaining, or if they are rambling, then you could return a comment with some constructive criticism'." +
+  "If the person is trying to get a better understanding of the topic, if they have an explicit question, or if they are trying to improve their skills, then you could respond with a comment that gives them some insight." +
+  "If the person simply wants to be understood, is upset, having a hard time, feeling down, or otherwise struggling with a situation that has no immediate solution, then you could respond with a comment that gives them some encouragement and shows you care. " +
+  +basicPrompt +
+  "Here is the journal entry text: ";
+
+export const basicPrompt =
+  "Do not start your reply with hi, hey, hello, etc. " +
+  "If you use an emoji or exclamation point, only use one. " +
+  "Shorter is better so do not add unnecessary flowery words and never repeat concepts. " +
+  "Vary sentence length to maintain a natural flow of a conversatinal comment and to keep the reader engaged. " +
+  "Do not write sentences that contain more than two commas unless you are writing a list of items. Never use semicolons in your response. " +
+  "Do not use the words 'commendable', 'noteworthy', 'notably', 'noted', 'notable'. " +
+  "Do not summarize the entry in your response. This is a critical rule. Only add new commentary, advice, criticism, or insights." +
+  "Identify the main topic of the diary entry and focus on that. You do not need to address every topic in the diary entry. " +
+  "Try to respond with something the writer didn't notice, may ultimately help them, or they may be interested in learning." +
+  "Address the writer directly, if possible. For example use 'you' or 'your' or if writing generally about people, use 'one should', 'one can...', etc. but do not say 'the writer'." +
+  "Always respond in the same language as the entry. " +
+  "Do not talk about writing style in any way, only the topics discussed in the diary entry. " +
+  "Write your response only as long as necessary to convey the message from the coach. Do not pad your response with fluffy commentary. Shorter is always better. The length must not exceed 280 words.";
+
 export function generateCommentPrompt(
   variant: string,
   entryText: string,
 ): string {
-  const details =
-    "Do not start your reply with hi, hey, hello, etc. " +
-    "If you use an emoji or exclamation point, only use one. " +
-    "Shorter is better so do not add unnecessary flowery words and never repeat concepts. " +
-    "Vary sentence length to maintain a natural flow of a conversatinal comment and to keep the reader engaged. " +
-    "Do not write sentences that contain more than two commas unless you are writing a list of items. Never use semicolons in your response. " +
-    "Do not use the words 'commendable', 'noteworthy', 'notably', 'noted', 'notable'. " +
-    "Do not summarize the entry in your response. This is a critical rule. Only add new commentary, advice, criticism, or insights." +
-    "Identify the main topic of the diary entry and focus on that. You do not need to address every topic in the diary entry. " +
-    "Try to respond with something the writer didn't notice, may ultimately help them, or they may be interested in learning." +
-    "Address the writer directly, if possible. For example use 'you' or 'your' or if writing generally about people, use 'one should', 'one can...', etc. but do not say 'the writer'." +
-    "Always respond in the same language as the entry. " +
-    "Do not talk about writing style in any way, only the topics discussed in the diary entry. " +
-    "Write your response only as long as necessary to convey the message from the coach. Do not pad your response with fluffy commentary. Shorter is always better. The length must not exceed 280 words.";
-
   function getVariant(variant: string): string {
     const insight =
       "Offer some insights into any challenges expressed in this diary entry. " +
@@ -90,7 +103,7 @@ export function generateCommentPrompt(
         return insight;
     }
   }
-  return getVariant(variant) + details + " " + "Entry text:" + entryText;
+  return getVariant(variant) + basicPrompt + " " + "Entry text:" + entryText;
 }
 
 export const generateTagsPrompt =

@@ -8,6 +8,7 @@ import CopyTextButton from "~/app/_components/CopyTextButton";
 import DeleteButton from "~/app/_components/DeleteButton";
 import DropDownMenu from "~/app/_components/DropDown";
 import GetCommentButton from "~/app/_components/GetCommentButton";
+import GetCommentFromPersonaButton from "~/app/_components/GetCommentFromPersonaButton";
 import GetTagsButton from "~/app/_components/GetTagsButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
@@ -19,6 +20,7 @@ import {
   generateCoachPrompt,
   generateCommentPrompt,
   generateTagsPrompt,
+  personaPrompt,
 } from "~/utils/constants";
 import { formattedTimeStampToDate } from "~/utils/text";
 import EntryBody from "./EntryBody";
@@ -33,9 +35,10 @@ export default async function Entry({
   const post = await api.post.getByPostId({ postId: params.id });
   if (!post) return null;
 
-  const [comments, tags] = await Promise.all([
+  const [comments, tags, personas] = await Promise.all([
     api.comment.getCommentsByPostId({ postId: params.id }),
     api.tag.getByPostId({ postId: params.id }),
+    api.persona.getAllByUserId(),
   ]);
 
   return (
@@ -67,44 +70,44 @@ export default async function Entry({
       <div className="flex h-full flex-col items-center px-4 pb-4">
         {post && <EntryBody post={post} />}
         <div className="flex w-full max-w-5xl flex-col items-center gap-4">
-          <form
-            action={async () => {
-              "use server";
-              try {
-                if (searchParams.s === "1") {
-                  return;
-                }
-                const latestPost = await api.post.getByPostId({
-                  postId: params.id,
-                });
-                const tags = await getResponse(
-                  generateTagsPrompt + latestPost?.content,
-                );
-
-                const tagContents = tags?.split(",").map((tag) => tag.trim());
-                const tagIds = tagContents
-                  ?.map((content) => {
-                    const tag = TAGS.find((tag) => tag.content === content);
-                    return tag?.id ?? undefined;
-                  })
-                  .filter((tag): tag is string => tag !== undefined);
-                if (tagIds?.length) {
-                  await api.post.addTags({
-                    postId: params?.id,
-                    tagIds: tagIds,
-                  });
-                  revalidatePath(`/entry/${params.id}`);
-                } else {
-                  console.error("Failed to tag.");
-                }
-              } catch (error) {
-                console.error("Error creating tags:", error);
-              }
-            }}
-          >
-            <GetTagsButton isDisabled={searchParams.s === "1"} />
-          </form>
           <div className="flex w-full flex-row items-center justify-center gap-4">
+            <form
+              action={async () => {
+                "use server";
+                try {
+                  if (searchParams.s === "1") {
+                    return;
+                  }
+                  const latestPost = await api.post.getByPostId({
+                    postId: params.id,
+                  });
+                  const tags = await getResponse(
+                    generateTagsPrompt + latestPost?.content,
+                  );
+
+                  const tagContents = tags?.split(",").map((tag) => tag.trim());
+                  const tagIds = tagContents
+                    ?.map((content) => {
+                      const tag = TAGS.find((tag) => tag.content === content);
+                      return tag?.id ?? undefined;
+                    })
+                    .filter((tag): tag is string => tag !== undefined);
+                  if (tagIds?.length) {
+                    await api.post.addTags({
+                      postId: params?.id,
+                      tagIds: tagIds,
+                    });
+                    revalidatePath(`/entry/${params.id}`);
+                  } else {
+                    console.error("Failed to tag.");
+                  }
+                } catch (error) {
+                  console.error("Error creating tags:", error);
+                }
+              }}
+            >
+              <GetTagsButton isDisabled={searchParams.s === "1"} />
+            </form>
             <Suspense
               fallback={
                 <div className="flex h-full w-full items-center justify-center">
@@ -126,7 +129,7 @@ export default async function Entry({
             </Suspense>
           </div>
           <div className="flex h-full w-full flex-col items-center pb-4">
-            <div className="flex w-full flex-row items-center justify-center">
+            <div className="flex w-full flex-row items-center justify-center gap-2">
               <form
                 action={async () => {
                   "use server";
@@ -165,8 +168,51 @@ export default async function Entry({
               >
                 <GetCommentButton isDisabled={searchParams.s === "1"} />
               </form>
-              <Link href="/persona">
-                <Button>personas</Button>
+              {personas.map((persona) => (
+                <form
+                  key={persona.id}
+                  action={async () => {
+                    "use server";
+                    if (searchParams.s === "1") {
+                      return;
+                    }
+                    try {
+                      const latestPost = await api.post.getByPostId({
+                        postId: params.id,
+                      });
+                      console.log(
+                        "!!!!!!!!!",
+                        personaPrompt(persona) + latestPost?.content,
+                      );
+                      const response = await getResponse(
+                        personaPrompt(persona) + latestPost?.content,
+                      );
+                      if (response) {
+                        await api.comment.create({
+                          content: response,
+                          postId: params?.id,
+                          createdByPersonaId: persona.id,
+                          coachVariant: persona.name,
+                        });
+                        revalidatePath(`/entry/${params.id}`);
+                      } else {
+                        console.error(
+                          "Failed to get a response for the comment.",
+                        );
+                      }
+                    } catch (error) {
+                      console.error("Error creating comment:", error);
+                    }
+                  }}
+                >
+                  <GetCommentFromPersonaButton
+                    isDisabled={searchParams.s === "1"}
+                    personaName={persona.name}
+                  />
+                </form>
+              ))}
+              <Link href="/persona/all">
+                <Button>+</Button>
               </Link>
             </div>
             <Suspense
