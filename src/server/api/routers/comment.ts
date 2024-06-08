@@ -8,7 +8,8 @@ export const commentRouter = createTRPCRouter({
       z.object({
         content: z.string().min(1),
         postId: z.string(),
-        coachVariant: z.string(),
+        coachVariant: z.string().optional(),
+        createdByPersonaId: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -20,6 +21,7 @@ export const commentRouter = createTRPCRouter({
           content: input.content,
           postId: input.postId,
           coachVariant: input.coachVariant,
+          createdByPersonaId: input.createdByPersonaId,
         },
       });
     }),

@@ -24,10 +24,12 @@ CREATE TABLE "Comment" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "content" TEXT NOT NULL,
     "isAI" BOOLEAN NOT NULL DEFAULT true,
+    "createdByPersonaId" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "coachVariant" TEXT,
     "coachName" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "postId" TEXT NOT NULL,
+    CONSTRAINT "Comment_createdByPersonaId_fkey" FOREIGN KEY ("createdByPersonaId") REFERENCES "Persona" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -66,6 +68,25 @@ CREATE TABLE "User" (
     "image" TEXT,
     "isAdmin" BOOLEAN NOT NULL DEFAULT false,
     "isSpecial" BOOLEAN NOT NULL DEFAULT false
+);
+
+-- CreateTable
+CREATE TABLE "Persona" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+    "image" TEXT,
+    "age" INTEGER,
+    "gender" TEXT,
+    "relationship" TEXT,
+    "occupation" TEXT,
+    "traits" TEXT NOT NULL,
+    "communicationStyle" TEXT,
+    "communicationSample" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    "createdById" TEXT NOT NULL,
+    CONSTRAINT "Persona_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable

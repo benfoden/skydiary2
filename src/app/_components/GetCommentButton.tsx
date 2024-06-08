@@ -4,7 +4,7 @@ import { useFormStatus } from "react-dom";
 import Button from "./Button";
 import ButtonSpinner from "./ButtonSpinner";
 
-export default function GetAdviceButton({
+export default function GetCommentButton({
   isDisabled,
 }: {
   isDisabled: boolean;

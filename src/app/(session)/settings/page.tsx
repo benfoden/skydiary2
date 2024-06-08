@@ -56,7 +56,7 @@ export default async function Settings() {
                   placeholder={session.user.name ?? "your name"}
                 />
               </label>
-              <label className="text-base font-light" htmlFor="name">
+              <label className="text-base font-light" htmlFor="email">
                 your email
                 <input
                   type="email"
