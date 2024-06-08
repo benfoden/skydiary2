@@ -44,8 +44,8 @@ model Comment {
   coachVariant       String?
   coachName          String?
   postId             String
-  createdByPersona   Persona? @relation(fields: [createdByPersonaId], references: [id])
   post               Post     @relation(fields: [postId], references: [id])
+  createdByPersona   Persona? @relation(fields: [createdByPersonaId], references: [id])
 }
 
 model Account {

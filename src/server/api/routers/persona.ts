@@ -7,13 +7,13 @@ export const personaRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
+        traits: z.string(),
         description: z.string().optional(),
         image: z.string().optional(),
         age: z.number().optional(),
         gender: z.string().optional(),
         relationship: z.string().optional(),
         occupation: z.string().optional(),
-        traits: z.string(),
         communicationStyle: z.string().optional(),
         communicationSample: z.string().optional(),
       }),

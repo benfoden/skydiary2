@@ -2,6 +2,7 @@ import { commentRouter } from "~/server/api/routers/comment";
 import { postRouter } from "~/server/api/routers/post";
 import { tagRouter } from "~/server/api/routers/tag";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
+import { personaRouter } from "./routers/persona";
 import { userRouter } from "./routers/user";
 
 /**
@@ -11,6 +12,7 @@ import { userRouter } from "./routers/user";
  */
 export const appRouter = createTRPCRouter({
   post: postRouter,
+  persona: personaRouter,
   comment: commentRouter,
   tag: tagRouter,
   user: userRouter,
