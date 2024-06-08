@@ -1,6 +1,7 @@
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import Button from "~/app/_components/Button";
+import { Card } from "~/app/_components/Card";
 import DropDownMenu from "~/app/_components/DropDown";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
@@ -14,12 +15,11 @@ export default async function Persona() {
   const personas = await api.persona.getAllByUserId();
   return (
     <>
-      <SessionNav>old
+      <SessionNav>
         <div className="flex items-center gap-2">
           <NavChevronLeft targetPathname={"/home"} label={"home"} />
         </div>
         <h1>personas</h1>
-
         <DropDownMenu>
           <Link href={"/auth/signout"}>
             <Button variant="menuElement">Sign out {session.user?.name}</Button>
@@ -29,12 +29,12 @@ export default async function Persona() {
 
       <main className="flex min-h-screen w-full flex-col items-center justify-start">
         <div className="container flex flex-col items-center justify-start gap-12 px-4 py-16 ">
-          <div className="flex flex-row">
+          <div className="flex flex-row gap-4">
             {personas && personas.map((persona) => (
-              <div key={persona.id} className="flex flex-col items-start justify-center gap-4">
+              <Card key={persona.id}>
                 <h2>{persona.name}</h2>
                 <p>{persona.traits}</p>
-              </div>
+              </Card>
             ))}
           <div className="flex flex-col items-start justify-center gap-4">
             <form
@@ -54,7 +54,6 @@ export default async function Persona() {
                 const communicationSample: string = formData.get("communicationSample") as string;
 
                 if (name && traits) {
-                  console.log('yo!!!!!')
                   try {
                     await api.persona.create({
                       name,
