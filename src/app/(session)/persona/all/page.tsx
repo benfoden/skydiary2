@@ -1,3 +1,4 @@
+import { PlusIcon } from "@radix-ui/react-icons";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import Button from "~/app/_components/Button";
@@ -29,21 +30,38 @@ export default async function Persona() {
 
       <main className="flex min-h-screen w-full flex-col items-center justify-start">
         <div className="container flex flex-col items-center justify-start gap-12 px-4 py-16 ">
-          <div className="flex flex-row gap-4">
-            {personas?.map((persona) => (
-              <Link key={persona.id} href={`/persona/${persona.id}`}>
-                <Card>
-                  <h2>{persona.name}</h2>
-                  <p>{persona.traits}</p>
-                </Card>
-              </Link>
-            ))}
-            <div className="flex flex-col items-start justify-center gap-4">
+          <a
+            href="#newPersona"
+            className="flex items-center gap-2 text-zinc-500 transition hover:text-zinc-700"
+          >
+            <Button>
+              <PlusIcon className="h-5 w-5" />
+              <span>new</span>
+            </Button>
+          </a>
+          <div className="flex flex-col gap-4 md:flex-row">
+            {personas && (
+              <div className="mb-4 flex flex-col items-start justify-center gap-4">
+                your personas
+                {personas?.map((persona) => (
+                  <Link key={persona.id} href={`/persona/${persona.id}`}>
+                    <Card>
+                      <h2>{persona.name}</h2>
+                      <p>{persona.traits}</p>
+                    </Card>
+                  </Link>
+                ))}
+              </div>
+            )}
+            <div
+              id="newPersona"
+              className="mb-4 flex flex-col items-start justify-center gap-4"
+            >
+              new persona
               <form
                 className="flex flex-col items-start justify-center gap-4"
                 action={async (formData) => {
                   "use server";
-                  console.log("yo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                   const name: string = formData.get("name") as string;
                   const traits: string = formData.get("traits") as string;
                   const description: string = formData.get(
@@ -94,6 +112,7 @@ export default async function Persona() {
                     name="name"
                     className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
                     required
+                    placeholder="Bill, Jane, Lee..."
                   />
                 </label>
                 <label className="text-base font-light" htmlFor="traits">
@@ -104,6 +123,7 @@ export default async function Persona() {
                     name="traits"
                     className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
                     required
+                    placeholder="friendly, loving, creative..."
                   />
                 </label>
                 <label className="text-base font-light" htmlFor="description">
@@ -114,6 +134,7 @@ export default async function Persona() {
                     id="description"
                     name="description"
                     className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
+                    placeholder="they love to dance and sing.. they've been through a lot, and they've grown a lot."
                   />
                 </label>
                 <label className="text-base font-light" htmlFor="image">
@@ -123,6 +144,7 @@ export default async function Persona() {
                     id="image"
                     name="image"
                     className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
+                    placeholder="https://example.com/image.jpg"
                   />
                 </label>
                 <label className="text-base font-light" htmlFor="age">
@@ -132,25 +154,28 @@ export default async function Persona() {
                     id="age"
                     name="age"
                     className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    placeholder="1"
+                    placeholder="10"
                   />
                 </label>
                 <label className="text-base font-light" htmlFor="gender">
-                  gender <span className="opacity-60">(optional)</span>
+                  orientation <span className="opacity-60">(optional)</span>
                   <input
                     type="text"
                     id="gender"
                     name="gender"
                     className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
+                    placeholder="man, robot, she-wolf..."
                   />
                 </label>
                 <label className="text-base font-light" htmlFor="relationship">
-                  relationship <span className="opacity-60">(optional)</span>
+                  relationship with you{" "}
+                  <span className="opacity-60">(optional)</span>
                   <input
                     type="text"
                     id="relationship"
                     name="relationship"
                     className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
+                    placeholder="friend, partner, dad, advisor..."
                   />
                 </label>
                 <label className="text-base font-light" htmlFor="occupation">
@@ -160,6 +185,7 @@ export default async function Persona() {
                     id="occupation"
                     name="occupation"
                     className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
+                    placeholder="student, coach, teacher, engineer..."
                   />
                 </label>
                 <label
@@ -173,6 +199,7 @@ export default async function Persona() {
                     id="communicationStyle"
                     name="communicationStyle"
                     className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
+                    placeholder="assertive, direct, empathetic..."
                   />
                 </label>
                 <label
@@ -186,6 +213,7 @@ export default async function Persona() {
                     id="communicationSample"
                     name="communicationSample"
                     className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
+                    placeholder="If you can walk you can dance, if you can talk you can sing."
                   />
                 </label>
                 <button
