@@ -1,5 +1,6 @@
-import { PlusIcon } from "@radix-ui/react-icons";
+import { PersonIcon, PlusIcon } from "@radix-ui/react-icons";
 import { revalidatePath } from "next/cache";
+import Image from "next/image";
 import Link from "next/link";
 import Button from "~/app/_components/Button";
 import { Card } from "~/app/_components/Card";
@@ -36,18 +37,29 @@ export default async function Persona() {
           >
             <Button>
               <PlusIcon className="h-5 w-5" />
-              <span>new</span>
             </Button>
           </a>
-          <div className="flex flex-col gap-4 md:flex-row">
+          <div className="flex w-full flex-col items-center justify-between gap-4 border-zinc-900 md:flex-row md:items-start md:px-32">
             {personas && (
               <div className="mb-4 flex flex-col items-start justify-center gap-4">
                 your personas
                 {personas?.map((persona) => (
                   <Link key={persona.id} href={`/persona/${persona.id}`}>
                     <Card>
-                      <h2>{persona.name}</h2>
-                      <p>{persona.traits}</p>
+                      <span className="flex items-center gap-2">
+                        {persona.image ? (
+                          <Image
+                            alt={persona.name}
+                            src={persona.image}
+                            width="32"
+                            height="32"
+                            className="rounded-full"
+                          />
+                        ) : (
+                          <PersonIcon className="h-8 w-8" />
+                        )}
+                        <h2>{persona.name}</h2>
+                      </span>
                     </Card>
                   </Link>
                 ))}
