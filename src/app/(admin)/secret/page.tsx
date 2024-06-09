@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import Button from "~/app/_components/Button";
 import DropDownMenu from "~/app/_components/DropDown";
-import GetTagsButton from "~/app/_components/GetTagsButton";
+import GetTagsButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import { getServerAuthSession } from "~/server/auth";

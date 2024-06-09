@@ -2,9 +2,11 @@ import { PersonIcon, PlusIcon } from "@radix-ui/react-icons";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import Button from "~/app/_components/Button";
 import { Card } from "~/app/_components/Card";
 import DropDownMenu from "~/app/_components/DropDown";
+import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import { getServerAuthSession } from "~/server/auth";
@@ -38,8 +40,8 @@ export default async function Persona() {
             <Button>
               <PlusIcon className="h-5 w-5" />
             </Button>
-          </a>
-          <div className="flex w-full flex-col items-center justify-between gap-4 border-zinc-900 md:flex-row md:items-start md:px-32">
+          </a>{" "}
+          <div className="flex w-full flex-col items-center justify-center gap-4 border-zinc-900 md:flex-row md:items-start md:px-32">
             {personas && (
               <div className="mb-4 flex flex-col items-start justify-center gap-4">
                 your personas
@@ -112,7 +114,8 @@ export default async function Persona() {
                     } catch (error) {
                       console.error("Error updating persona:", error);
                     }
-                    revalidatePath("/persona");
+                    revalidatePath("/persona/all");
+                    redirect("/persona/all");
                   }
                 }}
               >
@@ -228,12 +231,7 @@ export default async function Persona() {
                     placeholder="If you can walk you can dance, if you can talk you can sing."
                   />
                 </label>
-                <button
-                  type="submit"
-                  className="mt-2 flex h-12 w-full items-center justify-center space-x-2 rounded bg-white/70 px-4 text-base font-light transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-zinc-800 focus:ring-offset-2"
-                >
-                  create persona
-                </button>
+                <FormButton variant="submit">create</FormButton>
               </form>
             </div>
           </div>

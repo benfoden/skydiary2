@@ -1,7 +1,8 @@
-import { revalidatePath } from "next/cache";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import Button from "~/app/_components/Button";
 import DropDownMenu from "~/app/_components/DropDown";
+import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import { getServerAuthSession } from "~/server/auth";
@@ -18,7 +19,7 @@ export default async function Persona({ params }: { params: { id: string } }) {
     <>
       <SessionNav>
         <div className="flex items-center gap-2">
-          <NavChevronLeft targetPathname={"/persona/all"} label={"persona"} />
+          <NavChevronLeft targetPathname={"/persona/all"} label={"personas"} />
         </div>
         <h1>{persona.name}</h1>
         <DropDownMenu>
@@ -36,7 +37,6 @@ export default async function Persona({ params }: { params: { id: string } }) {
                 className="flex flex-col items-start justify-center gap-4"
                 action={async (formData) => {
                   "use server";
-                  console.log("yo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                   const name: string = formData.get("name") as string;
                   const traits: string = formData.get("traits") as string;
                   const description: string = formData.get(
@@ -76,7 +76,7 @@ export default async function Persona({ params }: { params: { id: string } }) {
                     } catch (error) {
                       console.error("Error updating persona:", error);
                     }
-                    revalidatePath(`/persona/${personaId}`);
+                    redirect("/persona/all");
                   }
                 }}
               >
@@ -192,12 +192,7 @@ export default async function Persona({ params }: { params: { id: string } }) {
                     defaultValue={persona.communicationSample ?? ""}
                   />
                 </label>
-                <button
-                  type="submit"
-                  className="mt-2 flex h-12 w-full items-center justify-center space-x-2 rounded bg-white/70 px-4 text-base font-light transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-zinc-800 focus:ring-offset-2"
-                >
-                  update
-                </button>
+                <FormButton variant="submit">update</FormButton>
               </form>
             </div>
           </div>

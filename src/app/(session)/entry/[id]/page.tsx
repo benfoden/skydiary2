@@ -1,3 +1,4 @@
+import { ChatBubbleIcon, FrameIcon } from "@radix-ui/react-icons";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -7,9 +8,7 @@ import { Card } from "~/app/_components/Card";
 import CopyTextButton from "~/app/_components/CopyTextButton";
 import DeleteButton from "~/app/_components/DeleteButton";
 import DropDownMenu from "~/app/_components/DropDown";
-import GetCommentButton from "~/app/_components/GetCommentButton";
-import GetCommentFromPersonaButton from "~/app/_components/GetCommentFromPersonaButton";
-import GetTagsButton from "~/app/_components/GetTagsButton";
+import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
@@ -106,7 +105,9 @@ export default async function Entry({
                 }
               }}
             >
-              <GetTagsButton isDisabled={searchParams.s === "1"} />
+              <FormButton isDisabled={searchParams.s === "1"}>
+                <FrameIcon className="h-5 w-5" />
+              </FormButton>
             </form>
             <Suspense
               fallback={
@@ -166,7 +167,9 @@ export default async function Entry({
                   }
                 }}
               >
-                <GetCommentButton isDisabled={searchParams.s === "1"} />
+                <FormButton isDisabled={searchParams.s === "1"}>
+                  <ChatBubbleIcon className="h-5 w-5" />
+                </FormButton>
               </form>
               {personas.map((persona) => (
                 <form
@@ -205,10 +208,9 @@ export default async function Entry({
                     }
                   }}
                 >
-                  <GetCommentFromPersonaButton
-                    isDisabled={searchParams.s === "1"}
-                    personaName={persona.name}
-                  />
+                  <FormButton isDisabled={searchParams.s === "1"}>
+                    {persona.name}
+                  </FormButton>
                 </form>
               ))}
               <Link href="/persona/all">
