@@ -1,5 +1,6 @@
 import { ChatBubbleIcon, FrameIcon } from "@radix-ui/react-icons";
 import { revalidatePath } from "next/cache";
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -209,7 +210,17 @@ export default async function Entry({
                   }}
                 >
                   <FormButton isDisabled={searchParams.s === "1"}>
-                    {persona.name}
+                    {persona.image ? (
+                      <Image
+                        alt={persona.name}
+                        src={persona.image}
+                        width="24"
+                        height="24"
+                        className="rounded-full"
+                      />
+                    ) : (
+                      persona.name
+                    )}
                   </FormButton>
                 </form>
               ))}

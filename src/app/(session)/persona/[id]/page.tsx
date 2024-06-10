@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import Button from "~/app/_components/Button";
@@ -80,6 +81,15 @@ export default async function Persona({ params }: { params: { id: string } }) {
                   }
                 }}
               >
+                <div className="flex w-full flex-row items-center justify-center">
+                  <Image
+                    alt={persona.name}
+                    src={persona.image ?? ""}
+                    width="64"
+                    height="64"
+                    className="rounded-full"
+                  />
+                </div>
                 <label className="text-base font-light" htmlFor="name">
                   name
                   <input
