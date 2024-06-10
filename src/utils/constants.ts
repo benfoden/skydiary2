@@ -36,7 +36,7 @@ export const TAGS = [
   { content: "emotions", id: "clwg3mpgd000avsr5zukohqjx" },
   { content: "goals", id: "clwg3mpgd0009vsr5at0fkh96" },
   { content: "relationships", id: "clwg3mpgd000gvsr5ek7jx2w2" },
-  { content: "self-improvement", id: "clwg3mpgd000hvsr57ftkjbtj" },
+  { content: "self", id: "clwg3mpgd000hvsr57ftkjbtj" },
   { content: "work", id: "clwg3mpgd000evsr5nzdy9ece" },
   { content: "education", id: "clwg3mpgd000fvsr5dgk1w7nh" },
   { content: "physical health", id: "clwg3mpgd000ivsr53125sjfk" },

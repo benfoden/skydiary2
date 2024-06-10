@@ -14,11 +14,7 @@ export default function FormButton({
 }) {
   const { pending }: { pending: boolean } = useFormStatus();
   return (
-    <Button
-      variant={variant}
-      type={variant === "submit" ? "submit" : "button"}
-      disabled={pending ?? isDisabled}
-    >
+    <Button variant={variant} type="submit" disabled={pending || isDisabled}>
       {pending || isDisabled ? <ButtonSpinner /> : children}
     </Button>
   );

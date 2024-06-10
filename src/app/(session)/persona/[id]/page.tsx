@@ -22,7 +22,7 @@ export default async function Persona({ params }: { params: { id: string } }) {
     <>
       <SessionNav>
         <div className="flex items-center gap-2">
-          <NavChevronLeft isBack={true} />
+          <NavChevronLeft targetPathname={"/persona/all"} label={"personas"} />
         </div>
         <h1>{persona.name}</h1>
         <DropDownMenu>
