@@ -8,6 +8,7 @@ import { Card } from "~/app/_components/Card";
 import DropDownMenu from "~/app/_components/DropDown";
 import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
+import PersonaFormFields from "~/app/_components/PersonaFormFields";
 import { SessionNav } from "~/app/_components/SessionNav";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
@@ -33,22 +34,21 @@ export default async function Persona() {
 
       <main className="flex min-h-screen w-full flex-col items-center justify-start">
         <div className="container flex flex-col items-center justify-start gap-12 px-4 py-16 ">
-          <a
-            href="#newPersona"
-            className="flex items-center gap-2 text-zinc-500 transition hover:text-zinc-700"
-          >
-            <Button>
-              <PlusIcon className="h-5 w-5" />
-            </Button>
-          </a>{" "}
           <div className="flex w-full flex-col items-center justify-center gap-4 border-zinc-900 md:flex-row md:items-start md:px-32">
-            {personas && (
-              <div className="mb-4 flex flex-col items-start justify-center gap-4">
-                your personas
-                {personas?.map((persona) => (
-                  <Link key={persona.id} href={`/persona/${persona.id}`}>
-                    <Card>
-                      <span className="flex items-center gap-2">
+            <div className="mb-4 flex flex-col items-start justify-center gap-4">
+              <a
+                href="#newPersona"
+                className="flex items-center gap-2 text-zinc-500 transition hover:text-zinc-700"
+              >
+                <Button>
+                  <PlusIcon className="h-5 w-5" /> create new
+                </Button>
+              </a>{" "}
+              {personas && (
+                <>
+                  {personas?.map((persona) => (
+                    <Link key={persona.id} href={`/persona/${persona.id}`}>
+                      <Card>
                         {persona.image ? (
                           <Image
                             alt={persona.name}
@@ -61,12 +61,12 @@ export default async function Persona() {
                           <PersonIcon className="h-8 w-8" />
                         )}
                         <h2>{persona.name}</h2>
-                      </span>
-                    </Card>
-                  </Link>
-                ))}
-              </div>
-            )}
+                      </Card>
+                    </Link>
+                  ))}
+                </>
+              )}
+            </div>
             <div
               id="newPersona"
               className="mb-4 flex flex-col items-start justify-center gap-4"
@@ -119,118 +119,7 @@ export default async function Persona() {
                   }
                 }}
               >
-                <label className="text-base font-light" htmlFor="name">
-                  name
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    required
-                    placeholder="Bill, Jane, Lee..."
-                  />
-                </label>
-                <label className="text-base font-light" htmlFor="traits">
-                  traits
-                  <input
-                    type="text"
-                    id="traits"
-                    name="traits"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    required
-                    placeholder="friendly, loving, creative..."
-                  />
-                </label>
-                <label className="text-base font-light" htmlFor="description">
-                  a short description{" "}
-                  <span className="opacity-60">(optional)</span>
-                  <input
-                    type="text"
-                    id="description"
-                    name="description"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    placeholder="they love to dance and sing.. they've been through a lot, and they've grown a lot."
-                  />
-                </label>
-                <label className="text-base font-light" htmlFor="image">
-                  image <span className="opacity-60">(optional)</span>
-                  <input
-                    type="text"
-                    id="image"
-                    name="image"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    placeholder="https://example.com/image.jpg"
-                  />
-                </label>
-                <label className="text-base font-light" htmlFor="age">
-                  age <span className="opacity-60">(optional)</span>
-                  <input
-                    type="number"
-                    id="age"
-                    name="age"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    placeholder="10"
-                  />
-                </label>
-                <label className="text-base font-light" htmlFor="gender">
-                  orientation <span className="opacity-60">(optional)</span>
-                  <input
-                    type="text"
-                    id="gender"
-                    name="gender"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    placeholder="man, robot, she-wolf..."
-                  />
-                </label>
-                <label className="text-base font-light" htmlFor="relationship">
-                  relationship with you{" "}
-                  <span className="opacity-60">(optional)</span>
-                  <input
-                    type="text"
-                    id="relationship"
-                    name="relationship"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    placeholder="friend, partner, dad, advisor..."
-                  />
-                </label>
-                <label className="text-base font-light" htmlFor="occupation">
-                  occupation <span className="opacity-60">(optional)</span>
-                  <input
-                    type="text"
-                    id="occupation"
-                    name="occupation"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    placeholder="student, coach, teacher, engineer..."
-                  />
-                </label>
-                <label
-                  className="text-base font-light"
-                  htmlFor="communicationStyle"
-                >
-                  communication style{" "}
-                  <span className="opacity-60">(optional)</span>
-                  <input
-                    type="text"
-                    id="communicationStyle"
-                    name="communicationStyle"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    placeholder="assertive, direct, empathetic..."
-                  />
-                </label>
-                <label
-                  className="text-base font-light"
-                  htmlFor="communicationSample"
-                >
-                  communication sample{" "}
-                  <span className="opacity-60">(optional)</span>
-                  <input
-                    type="text"
-                    id="communicationSample"
-                    name="communicationSample"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    placeholder="If you can walk you can dance, if you can talk you can sing."
-                  />
-                </label>
+                <PersonaFormFields />
                 <FormButton variant="submit">create</FormButton>
               </form>
             </div>

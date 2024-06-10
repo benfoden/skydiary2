@@ -1,3 +1,4 @@
+import { PersonIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -5,6 +6,7 @@ import Button from "~/app/_components/Button";
 import DropDownMenu from "~/app/_components/DropDown";
 import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
+import PersonaFormFields from "~/app/_components/PersonaFormFields";
 import { SessionNav } from "~/app/_components/SessionNav";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
@@ -20,7 +22,7 @@ export default async function Persona({ params }: { params: { id: string } }) {
     <>
       <SessionNav>
         <div className="flex items-center gap-2">
-          <NavChevronLeft targetPathname={"/persona/all"} label={"personas"} />
+          <NavChevronLeft isBack={true} />
         </div>
         <h1>{persona.name}</h1>
         <DropDownMenu>
@@ -82,126 +84,19 @@ export default async function Persona({ params }: { params: { id: string } }) {
                 }}
               >
                 <div className="flex w-full flex-row items-center justify-center">
-                  <Image
-                    alt={persona.name}
-                    src={persona.image ?? ""}
-                    width="64"
-                    height="64"
-                    className="rounded-full"
-                  />
+                  {persona.image ? (
+                    <Image
+                      alt={persona.name}
+                      src={persona.image ?? ""}
+                      width="64"
+                      height="64"
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <PersonIcon className="h-16 w-16" />
+                  )}
                 </div>
-                <label className="text-base font-light" htmlFor="name">
-                  name
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    required
-                    defaultValue={persona.name}
-                  />
-                </label>
-                <label className="text-base font-light" htmlFor="traits">
-                  traits
-                  <input
-                    type="text"
-                    id="traits"
-                    name="traits"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    required
-                    defaultValue={persona.traits}
-                  />
-                </label>
-                <label className="text-base font-light" htmlFor="description">
-                  a short description{" "}
-                  <span className="opacity-60">(optional)</span>
-                  <input
-                    type="text"
-                    id="description"
-                    name="description"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    defaultValue={persona.description ?? ""}
-                  />
-                </label>
-                <label className="text-base font-light" htmlFor="image">
-                  image <span className="opacity-60">(optional)</span>
-                  <input
-                    type="text"
-                    id="image"
-                    name="image"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    defaultValue={persona.image ?? ""}
-                  />
-                </label>
-                <label className="text-base font-light" htmlFor="age">
-                  age <span className="opacity-60">(optional)</span>
-                  <input
-                    type="number"
-                    id="age"
-                    name="age"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    placeholder="1"
-                    defaultValue={persona.age ?? ""}
-                  />
-                </label>
-                <label className="text-base font-light" htmlFor="gender">
-                  gender <span className="opacity-60">(optional)</span>
-                  <input
-                    type="text"
-                    id="gender"
-                    name="gender"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    defaultValue={persona.gender ?? ""}
-                  />
-                </label>
-                <label className="text-base font-light" htmlFor="relationship">
-                  relationship <span className="opacity-60">(optional)</span>
-                  <input
-                    type="text"
-                    id="relationship"
-                    name="relationship"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    defaultValue={persona.relationship ?? ""}
-                  />
-                </label>
-                <label className="text-base font-light" htmlFor="occupation">
-                  occupation <span className="opacity-60">(optional)</span>
-                  <input
-                    type="text"
-                    id="occupation"
-                    name="occupation"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    defaultValue={persona.occupation ?? ""}
-                  />
-                </label>
-                <label
-                  className="text-base font-light"
-                  htmlFor="communicationStyle"
-                >
-                  communication style{" "}
-                  <span className="opacity-60">(optional)</span>
-                  <input
-                    type="text"
-                    id="communicationStyle"
-                    name="communicationStyle"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    defaultValue={persona.communicationStyle ?? ""}
-                  />
-                </label>
-                <label
-                  className="text-base font-light"
-                  htmlFor="communicationSample"
-                >
-                  communication sample{" "}
-                  <span className="opacity-60">(optional)</span>
-                  <input
-                    type="text"
-                    id="communicationSample"
-                    name="communicationSample"
-                    className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                    defaultValue={persona.communicationSample ?? ""}
-                  />
-                </label>
+                <PersonaFormFields persona={persona} />
                 <FormButton variant="submit">update</FormButton>
               </form>
             </div>
