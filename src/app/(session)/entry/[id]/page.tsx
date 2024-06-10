@@ -1,4 +1,12 @@
+import { type Persona } from "@prisma/client";
+import {
+  ChatBubbleIcon,
+  FrameIcon,
+  PersonIcon,
+  PlusIcon,
+} from "@radix-ui/react-icons";
 import { revalidatePath } from "next/cache";
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -7,9 +15,7 @@ import { Card } from "~/app/_components/Card";
 import CopyTextButton from "~/app/_components/CopyTextButton";
 import DeleteButton from "~/app/_components/DeleteButton";
 import DropDownMenu from "~/app/_components/DropDown";
-import GetCommentButton from "~/app/_components/GetCommentButton";
-import GetCommentFromPersonaButton from "~/app/_components/GetCommentFromPersonaButton";
-import GetTagsButton from "~/app/_components/GetTagsButton";
+import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
@@ -24,6 +30,42 @@ import {
 } from "~/utils/constants";
 import { formattedTimeStampToDate } from "~/utils/text";
 import EntryBody from "./EntryBody";
+
+const PersonaImage = ({
+  personaId,
+  personas,
+  coachVariant,
+}: {
+  personaId: string;
+  personas: Persona[];
+  coachVariant?: string;
+}) => {
+  if (!personaId && coachVariant)
+    return (
+      <div className="flex items-center gap-2 opacity-70">
+        <PersonIcon className="h-8 w-8" />
+        <h2 className="italic">sky {coachVariant}</h2>
+      </div>
+    );
+  const persona = personas.find((persona) => persona.id === personaId);
+
+  return (
+    <div className="flex items-center gap-2">
+      {persona?.image ? (
+        <Image
+          alt={persona.name}
+          src={persona.image}
+          width="32"
+          height="32"
+          className="rounded-full"
+        />
+      ) : (
+        <PersonIcon className="h-8 w-8" />
+      )}
+      <h2>{persona?.name}</h2>
+    </div>
+  );
+};
 
 export default async function Entry({
   params,
@@ -106,7 +148,9 @@ export default async function Entry({
                 }
               }}
             >
-              <GetTagsButton isDisabled={searchParams.s === "1"} />
+              <FormButton isDisabled={searchParams.s === "1"}>
+                <FrameIcon className="h-5 w-5" />
+              </FormButton>
             </form>
             <Suspense
               fallback={
@@ -166,7 +210,9 @@ export default async function Entry({
                   }
                 }}
               >
-                <GetCommentButton isDisabled={searchParams.s === "1"} />
+                <FormButton isDisabled={searchParams.s === "1"}>
+                  <ChatBubbleIcon className="h-5 w-5" />
+                </FormButton>
               </form>
               {personas.map((persona) => (
                 <form
@@ -205,14 +251,35 @@ export default async function Entry({
                     }
                   }}
                 >
-                  <GetCommentFromPersonaButton
-                    isDisabled={searchParams.s === "1"}
-                    personaName={persona.name}
-                  />
+                  <Link href={`/persona/${persona.id}`}>
+                    <FormButton isDisabled={searchParams.s === "1"}>
+                      <div className="flex flex-row items-center gap-2 font-medium">
+                        {persona.image ? (
+                          <>
+                            <Image
+                              alt={persona.name}
+                              src={persona.image}
+                              width="16"
+                              height="16"
+                              className="rounded-full"
+                            />
+                            <span className="text-xs">{persona.name}</span>
+                          </>
+                        ) : (
+                          <>
+                            <PersonIcon className="h-4 w-4" />
+                            <span className="text-xs">{persona.name}</span>
+                          </>
+                        )}
+                      </div>
+                    </FormButton>
+                  </Link>
                 </form>
               ))}
               <Link href="/persona/all">
-                <Button>+</Button>
+                <Button>
+                  <PlusIcon className="h-4 w-4" />
+                </Button>
               </Link>
             </div>
             <Suspense
@@ -233,11 +300,15 @@ export default async function Entry({
                         key={comment.id}
                         className="flex flex-col rounded-lg p-4"
                       >
-                        <Card>
+                        <Card isButton={false}>
                           <div className="flex w-full flex-col gap-4 py-4">
                             <div className="flex w-full justify-between gap-4 text-xs">
                               <div className="font-medium">
-                                {comment.coachVariant}
+                                <PersonaImage
+                                  personaId={comment.createdByPersonaId!}
+                                  personas={personas}
+                                  coachVariant={comment.coachVariant ?? ""}
+                                />
                               </div>
                               <div>
                                 {formattedTimeStampToDate(comment.createdAt)}

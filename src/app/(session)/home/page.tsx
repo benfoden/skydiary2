@@ -89,6 +89,12 @@ async function PostsList() {
     timeZone: userTimezone,
   });
 
+  const lastPostDate = new Date(
+    userPosts[0]?.createdAt ?? 0,
+  ).toLocaleDateString("en-US", {
+    timeZone: userTimezone,
+  });
+
   api.post
     .checkAndSummarizeLastPost({ userTimezone, today })
     .catch((error) =>
@@ -99,9 +105,7 @@ async function PostsList() {
     <>
       <div className="flex flex-col items-start justify-center gap-4 sm:max-w-5xl">
         Today
-        {new Date(userPosts[0]?.createdAt ?? 0).toLocaleDateString("en-US", {
-          timeZone: userTimezone,
-        }) !== today || userPosts?.length === 0 ? (
+        {lastPostDate !== today || userPosts?.length === 0 ? (
           <Link href="/today" prefetch={true}>
             <Button>Whats on your mind?</Button>
           </Link>
