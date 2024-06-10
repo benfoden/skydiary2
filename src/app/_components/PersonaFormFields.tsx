@@ -11,7 +11,7 @@ export default function PersonaFormFields({ persona }: { persona?: Persona }) {
           name="name"
           className=" w-full  rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
           required
-          placeholder="Bill, Jane, Lee..."
+          placeholder="bob, jill..."
           defaultValue={persona?.name}
         />
       </label>
@@ -105,8 +105,7 @@ export default function PersonaFormFields({ persona }: { persona?: Persona }) {
       </label>
       <label className="text-base font-light" htmlFor="communicationSample">
         communication sample <span className="opacity-60">(optional)</span>
-        <input
-          type="text"
+        <textarea
           id="communicationSample"
           name="communicationSample"
           className=" w-full  rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"

@@ -22,7 +22,7 @@ export default async function Persona() {
     <>
       <SessionNav>
         <div className="flex items-center gap-2">
-          <NavChevronLeft targetPathname={"/home"} label={"home"} />
+          <NavChevronLeft targetPathname={"/today"} label={"today"} />
         </div>
         <h1>personas</h1>
         <DropDownMenu>

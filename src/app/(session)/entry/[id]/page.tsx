@@ -1,9 +1,9 @@
 import { type Persona } from "@prisma/client";
 import {
   ChatBubbleIcon,
+  DotsHorizontalIcon,
   FrameIcon,
   PersonIcon,
-  PlusIcon,
 } from "@radix-ui/react-icons";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
@@ -226,10 +226,6 @@ export default async function Entry({
                       const latestPost = await api.post.getByPostId({
                         postId: params.id,
                       });
-                      console.log(
-                        "!!!!!!!!!",
-                        personaPrompt(persona) + latestPost?.content,
-                      );
                       const response = await getResponse(
                         personaPrompt(persona) + latestPost?.content,
                       );
@@ -251,34 +247,32 @@ export default async function Entry({
                     }
                   }}
                 >
-                  <Link href={`/persona/${persona.id}`}>
-                    <FormButton isDisabled={searchParams.s === "1"}>
-                      <div className="flex flex-row items-center gap-2 font-medium">
-                        {persona.image ? (
-                          <>
-                            <Image
-                              alt={persona.name}
-                              src={persona.image}
-                              width="16"
-                              height="16"
-                              className="rounded-full"
-                            />
-                            <span className="text-xs">{persona.name}</span>
-                          </>
-                        ) : (
-                          <>
-                            <PersonIcon className="h-4 w-4" />
-                            <span className="text-xs">{persona.name}</span>
-                          </>
-                        )}
-                      </div>
-                    </FormButton>
-                  </Link>
+                  <FormButton isDisabled={searchParams.s === "1"}>
+                    <div className="flex flex-row items-center gap-2 font-medium">
+                      {persona.image ? (
+                        <>
+                          <Image
+                            alt={persona.name}
+                            src={persona.image}
+                            width="16"
+                            height="16"
+                            className="rounded-full"
+                          />
+                          <span className="text-xs">{persona.name}</span>
+                        </>
+                      ) : (
+                        <>
+                          <PersonIcon className="h-4 w-4" />
+                          <span className="text-xs">{persona.name}</span>
+                        </>
+                      )}
+                    </div>
+                  </FormButton>
                 </form>
               ))}
               <Link href="/persona/all">
                 <Button>
-                  <PlusIcon className="h-4 w-4" />
+                  <DotsHorizontalIcon className="h-4 w-4" />
                 </Button>
               </Link>
             </div>
