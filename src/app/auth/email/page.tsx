@@ -18,15 +18,21 @@ export default function EmailSignin({
               action="/api/auth/callback/email"
               method="get"
             >
-              <p className="text-sm">verification successful</p>
-              <input type="hidden" name="token" value={searchParams.token} />
+              <p className="text-sm">enter code from the email to log in</p>
               <input
+                className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
+                required
+                placeholder="012345"
+                name="token"
+                type="text"
+              />
+              {/* <input
                 type="hidden"
                 name="callbackUrl"
                 value={searchParams.callbackUrl}
-              />
+              /> */}
               <input type="hidden" name="email" value={searchParams.email} />
-              <Button variant="submit">Continue to your homepage</Button>
+              <Button variant="submit">log in</Button>
             </form>
           </div>
         </div>

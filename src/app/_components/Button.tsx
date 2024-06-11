@@ -34,7 +34,7 @@ export default function Button({
       break;
     case "cta":
       buttonClass +=
-        " flex px-6 py-3 sm:px-4 sm:py-2 items-center justify-between gap-4 rounded-full text-decoration-none no-underline transition text-primary bg-white/80 hover:bg-white";
+        " flex px-6 py-3 sm:px-4 sm:py-2 items-center justify-between gap-4 rounded-full text-decoration-none no-underline transition text-primary bg-white/70 hover:bg-white";
       break;
     case "chip":
       buttonClass +=
