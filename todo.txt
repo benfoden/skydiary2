@@ -1,0 +1,13 @@
+Exceptional experience
+- hash and salt user entries on update, decrypt on read
+- create more user details fields
+
+Must have
+- add more user profile details in the new user page
+- do not redirect existing users to the new user page
+
+Nice to haves
+- discover more personas to use
+- export / import persona data as json you can copy and paste
+
+Will not have
