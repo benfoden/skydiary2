@@ -5,7 +5,7 @@ import VerificationAlert from "./VerificationAlert";
 
 async function authenticationPrecheck(): Promise<void> {
   const session = await getServerAuthSession();
-  if (session?.user) return redirect("/home");
+  if (session) return redirect("/home");
 }
 
 export default async function SignIn() {
