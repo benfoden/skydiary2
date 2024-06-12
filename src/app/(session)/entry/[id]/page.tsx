@@ -113,7 +113,15 @@ export default async function Entry({
         </DropDownMenu>
       </SessionNav>
       <div className="flex h-full flex-col items-center px-4 pb-4">
-        {post && <EntryBody post={post} />}
+        <Suspense
+          fallback={
+            <div className="flex h-full w-full items-center justify-center">
+              <Spinner />
+            </div>
+          }
+        >
+          <EntryBody postId={params.id} />
+        </Suspense>
         <div className="flex w-full max-w-5xl flex-col items-center gap-4">
           <div className="flex w-full flex-row items-center justify-center gap-4">
             <form
