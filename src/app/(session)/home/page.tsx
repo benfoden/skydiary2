@@ -7,9 +7,7 @@ import DropDownMenu from "~/app/_components/DropDown";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
-import { env } from "~/env";
 import { getServerAuthSession } from "~/server/auth";
-import { libsql } from "~/server/db";
 import { api } from "~/trpc/server";
 export const dynamic = "true";
 
@@ -53,9 +51,6 @@ function PostCard({ post }: { post: Post }) {
 }
 export default async function Home() {
   const session = await getServerAuthSession();
-  if (env.NODE_ENV !== "development") {
-    await libsql.sync();
-  }
   return (
     <>
       <SessionNav>
