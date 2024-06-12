@@ -1,28 +1,15 @@
-"use client";
-import { signIn } from "next-auth/react";
-import { useState } from "react";
-import { z } from "zod";
-import Button from "~/app/_components/Button";
+import { redirect } from "next/navigation";
+import { getServerAuthSession } from "~/server/auth";
+import LogInForm from "./LogInForm";
+import VerificationAlert from "./VerificationAlert";
 
-export default function SignInPage() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [email, setEmail] = useState("");
+async function authenticationPrecheck(): Promise<void> {
+  const session = await getServerAuthSession();
+  if (session?.user) return redirect("/home");
+}
 
-  const emailSchema = z.string().email();
-
-  const handleSignIn = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!emailSchema.safeParse(email).success) {
-      alert("Please enter a valid email address.");
-      return;
-    }
-    setIsSubmitting(true);
-    await signIn("email", {
-      email,
-      callbackUrl: "/home",
-    });
-    setIsSubmitting(false);
-  };
+export default async function LogIn() {
+  // await authenticationPrecheck();
 
   return (
     <div className="relative flex h-full w-full overflow-hidden">
@@ -32,27 +19,8 @@ export default function SignInPage() {
             <span className="text-xl font-light text-[#424245]">skydiary</span>
           </h2>
           <div className="m-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
-            <form>
-              <label className="text-base font-light">
-                email
-                <input
-                  className={`block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm ${isSubmitting && "opacity-50"}`}
-                  required
-                  placeholder="email"
-                  name="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </label>
-              <Button
-                variant="submit"
-                onClick={handleSignIn}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "signing in..." : "sign in"}
-              </Button>
-            </form>
+            <VerificationAlert />
+            <LogInForm />
           </div>
         </div>
       </div>
