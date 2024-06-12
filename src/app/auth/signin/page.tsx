@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getServerAuthSession } from "~/server/auth";
-import LogInForm from "./LogInForm";
+import SignInForm from "./SignInForm";
 import VerificationAlert from "./VerificationAlert";
 
 async function authenticationPrecheck(): Promise<void> {
@@ -8,8 +8,8 @@ async function authenticationPrecheck(): Promise<void> {
   if (session?.user) return redirect("/home");
 }
 
-export default async function LogIn() {
-  // await authenticationPrecheck();
+export default async function SignIn() {
+  await authenticationPrecheck();
 
   return (
     <div className="relative flex h-full w-full overflow-hidden">
@@ -18,10 +18,8 @@ export default async function LogIn() {
           <h2 className="mb-4 flex items-center space-x-2 font-light text-[#424245]">
             <span className="text-xl font-light text-[#424245]">skydiary</span>
           </h2>
-          <div className="m-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
-            <VerificationAlert />
-            <LogInForm />
-          </div>
+          <VerificationAlert />
+          <SignInForm />
         </div>
       </div>
     </div>

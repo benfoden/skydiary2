@@ -43,7 +43,7 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   pages: {
-    signIn: "/auth/login",
+    signIn: "/auth/signin",
     verifyRequest: "/auth/verify-request",
     error: "/auth/error",
     newUser: "/auth/new-user",
@@ -83,7 +83,7 @@ export const authOptions: NextAuthOptions = {
         const result = await createTransport(server).sendMail({
           to: email,
           from,
-          subject: `skydiary sign in code`,
+          subject: `skydiary sign in passcode`,
           text: `sign in to skydiary`,
           html: `<body style="font-family: sans-serif; background: linear-gradient(to bottom, #cce3f1, #F3F6F6) no-repeat; background-size: cover; color: #424245; padding: 32px 16px; text-align: center;">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.4); max-width: 360px; min-height: 360px; margin: auto; border-radius: 10px; vertical-align: middle; padding: 32px 0px;">
@@ -105,7 +105,7 @@ export const authOptions: NextAuthOptions = {
                             </tr>
                             <tr>
                               <td align="center" style="padding-top: 16px;">
-                                <p style="font-size: 16px; color: #424245;">go back to skydiary and enter your code to log in.</p>
+                                <p style="font-size: 16px; color: #424245;">go back to skydiary and enter your passcode to log in.</p>
                               </td>
                             </tr>
                           </table>
