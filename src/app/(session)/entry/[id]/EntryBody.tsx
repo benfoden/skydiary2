@@ -31,7 +31,6 @@ export default function EntryBody({ postId }: { postId: string }) {
     onSuccess: () => {
       setIsSaving(false);
       router.replace(`${window.location.pathname}`, { scroll: false });
-      // api.post.invalidateQuery("getByPostId", { postId: post?.id });
     },
   });
 
