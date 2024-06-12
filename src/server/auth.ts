@@ -95,12 +95,12 @@ export const authOptions: NextAuthOptions = {
                           <table border="0" cellspacing="0" cellpadding="0" style="margin: auto;">
                           <tr>
                               <td align="center" style="border-radius: 5px; padding-bottom: 16px;">
-                                <span style="font-size: 22px;">your code:</span>
+                                <span style="font-size: 16px;">your code:</span>
                               </td>
                             </tr>
                             <tr>
                               <td align="center" style="border-radius: 5px;">
-                                <span style="font-size: 22px;">${token}</span>
+                                <code style="font-size: 22px;">${token}</code>
                               </td>
                             </tr>
                             <tr>
