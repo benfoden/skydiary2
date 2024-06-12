@@ -20,12 +20,12 @@ export default function OTPVerification({ email }: Props) {
 
     const formattedEmail = encodeURIComponent(email.toLowerCase().trim());
     const formattedCode = encodeURIComponent(code);
-    const formattedCallback = encodeURIComponent("/home");
+    const formattedCallback = encodeURIComponent("/auth/new-user");
     const otpRequestURL = `/api/auth/callback/email?email=${formattedEmail}&token=${formattedCode}&callbackUrl=${formattedCallback}`;
     const response = await fetch(otpRequestURL);
 
     if (response) {
-      if (response.url.includes("/private")) {
+      if (response.url.includes("/auth/new-user")) {
         router.push(response.url);
       } else {
         router.replace(`/auth/signin?error=Verification`);
@@ -55,7 +55,8 @@ export default function OTPVerification({ email }: Props) {
             />
           </label>
 
-          <p>your code expires in 5 minutes</p>
+          <p>please check your email</p>
+          <p>your new passcode expires in 5 minutes</p>
 
           <FormButton
             variant="submit"
