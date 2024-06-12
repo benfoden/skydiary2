@@ -19,7 +19,9 @@ import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
+import { env } from "~/env";
 import { getResponse } from "~/server/api/ai";
+import { libsql } from "~/server/db";
 import { api } from "~/trpc/server";
 import {
   TAGS,
@@ -30,6 +32,8 @@ import {
 } from "~/utils/constants";
 import { formattedTimeStampToDate } from "~/utils/text";
 import EntryBody from "./EntryBody";
+
+export const dynamic = "true";
 
 const PersonaImage = ({
   personaId,
@@ -74,7 +78,12 @@ export default async function Entry({
   params: { id: string };
   searchParams: { s: string };
 }) {
+  if (env.NODE_ENV !== "development") {
+    await libsql.sync();
+  }
+
   const post = await api.post.getByPostId({ postId: params.id });
+
   if (!post) return null;
 
   const [comments, tags, personas] = await Promise.all([
