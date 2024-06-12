@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { randomBytes, randomUUID } from "crypto";
+import { randomBytes, randomInt, randomUUID } from "crypto";
 import {
   getServerSession,
   type DefaultSession,
@@ -73,8 +73,9 @@ export const authOptions: NextAuthOptions = {
       },
       from: env.EMAIL_FROM,
       generateVerificationToken() {
-        return randomBytes(16).toString("hex");
+        return randomInt(100000, 999999).toString();
       },
+      maxAge: 5 * 60,
       async sendVerificationRequest(params) {
         const { identifier, provider } = params;
         const url = new URL(params.url);
