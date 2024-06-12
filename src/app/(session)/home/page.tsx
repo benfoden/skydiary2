@@ -9,6 +9,7 @@ import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
+export const dynamic = "true";
 
 const filterPostsByDateRange = (
   daysMin: number,
