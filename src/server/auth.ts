@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { randomBytes, randomUUID } from "crypto";
+import { randomBytes, randomInt, randomUUID } from "crypto";
 import {
   getServerSession,
   type DefaultSession,
@@ -43,7 +43,7 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   pages: {
-    signIn: "/auth/login",
+    signIn: "/auth/signin",
     verifyRequest: "/auth/verify-request",
     error: "/auth/error",
     newUser: "/auth/new-user",
@@ -73,23 +73,18 @@ export const authOptions: NextAuthOptions = {
       },
       from: env.EMAIL_FROM,
       generateVerificationToken() {
-        return randomBytes(16).toString("hex");
+        return randomInt(100000, 999999).toString();
       },
+      maxAge: 5 * 60,
       async sendVerificationRequest(params) {
-        const { identifier, provider } = params;
-        const url = new URL(params.url);
-        // url.searchParams.delete("token") // uncomment if you want the user to type this manually
-        const logInURL = new URL(
-          `/auth/email?${url.searchParams.toString()}`,
-          url.origin,
-        );
-
+        const { identifier: email, provider, token } = params;
         const { server, from } = provider;
+
         const result = await createTransport(server).sendMail({
-          to: identifier,
+          to: email,
           from,
-          subject: `skydiary sign in link`,
-          text: `Sign in here ${logInURL.toString()}`,
+          subject: `skydiary sign in passcode`,
+          text: `sign in to skydiary`,
           html: `<body style="font-family: sans-serif; background: linear-gradient(to bottom, #cce3f1, #F3F6F6) no-repeat; background-size: cover; color: #424245; padding: 32px 16px; text-align: center;">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.4); max-width: 360px; min-height: 360px; margin: auto; border-radius: 10px; vertical-align: middle; padding: 32px 0px;">
                       <tr>
@@ -98,9 +93,19 @@ export const authOptions: NextAuthOptions = {
                       <tr>
                         <td align="center">
                           <table border="0" cellspacing="0" cellpadding="0" style="margin: auto;">
+                          <tr>
+                              <td align="center" style="border-radius: 5px; padding-bottom: 16px;">
+                                <span style="font-size: 16px;">your code:</span>
+                              </td>
+                            </tr>
                             <tr>
                               <td align="center" style="border-radius: 5px;">
-                                <a href="${logInURL.toString()}" target="_blank" rel="noopener noreferrer" style="background: rgba(255,255,255,0.6); font-size: 16px; font-family: sans-serif; color:#424245; border-radius: 5px; border-color: transparent; padding: 12px 36px; text-decoration: none; color: #424245; font-weight: 500; display: inline-block;">verify and continue</a>
+                                <code style="font-size: 22px;">${token}</code>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td align="center" style="padding-top: 16px;">
+                                <p style="font-size: 16px; color: #424245;">go back to skydiary and enter your passcode to log in.</p>
                               </td>
                             </tr>
                           </table>
