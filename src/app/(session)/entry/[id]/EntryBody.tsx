@@ -23,25 +23,6 @@ export default function EntryBody({ postId }: { postId: string }) {
     }
   }, [data, isLoading, isFetching]);
 
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (
-        document.visibilityState === "visible" &&
-        !isLoading &&
-        !isFetching &&
-        data
-      ) {
-        console.log("Tab is now active");
-        setContent(data.content);
-      }
-    };
-
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, [isFetching, isLoading, data]);
   const updatePost = api.post.update.useMutation({
     onMutate: () => {
       setIsSaving(true);
