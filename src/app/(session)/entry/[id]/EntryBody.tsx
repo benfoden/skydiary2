@@ -1,18 +1,27 @@
 "use client";
-import { type Post } from "@prisma/client";
 import { CheckCircledIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type SetStateAction } from "react";
 import ButtonSpinner from "~/app/_components/ButtonSpinner";
 import { api } from "~/trpc/react";
 
-export default function EntryBody({ post }: { post: Post }) {
-  const [content, setContent] = useState(post?.content);
+export default function EntryBody({ postId }: { postId: string }) {
+  const [content, setContent] = useState("");
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const router = useRouter();
+
+  const { isFetching, isLoading, data } = api.post.getByPostId.useQuery({
+    postId,
+  });
+
+  useEffect(() => {
+    if (!isLoading && !isFetching && data) {
+      setContent(data?.content ?? "");
+    }
+  }, [data, isLoading, isFetching]);
 
   const updatePost = api.post.update.useMutation({
     onMutate: () => {
@@ -46,7 +55,7 @@ export default function EntryBody({ post }: { post: Post }) {
     }
 
     const newTimeout = setTimeout(() => {
-      updatePost.mutate({ content: newContent, postId: post?.id });
+      updatePost.mutate({ content: newContent, postId });
     }, 1000);
 
     setDebounceTimeout(newTimeout as unknown as SetStateAction<null>);
@@ -66,7 +75,9 @@ export default function EntryBody({ post }: { post: Post }) {
         ref={textareaRef}
         value={content}
         onChange={handleContentChange}
-        placeholder="Today..."
+        placeholder={
+          (!content && isLoading) || isFetching ? "Loading..." : "Today..."
+        }
         className="min-h-[calc(100vh-224px)] w-full resize-none rounded-3xl border-none bg-white/20 px-8 py-4 text-[#424245] focus:outline-none active:text-[#424245] sm:max-w-5xl sm:px-16 sm:py-12"
         autoFocus
         style={{ height: "auto", overflow: "hidden", paddingBottom: "16px" }}

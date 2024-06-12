@@ -8,7 +8,7 @@ export const libsql = createClient({
   url: env.DATABASE_URL ?? "file:./tmp/dev.db",
   syncUrl: env.DATABASE_URL,
   authToken: env.DATABASE_AUTH_TOKEN,
-  syncInterval: 5,
+  syncInterval: 120,
 });
 
 const adapter = new PrismaLibSQL(libsql);
