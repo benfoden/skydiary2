@@ -14,14 +14,17 @@ export default function EntryBody({ post }: { post: Post }) {
 
   const router = useRouter();
 
+  const utils = api.useUtils();
   const updatePost = api.post.update.useMutation({
     onMutate: () => {
       setIsSaving(true);
       router.replace(`${window.location.pathname}?s=1`, { scroll: false });
     },
-    onSuccess: () => {
+    onSuccess: (input) => {
       setIsSaving(false);
       router.replace(`${window.location.pathname}`, { scroll: false });
+      // Invalidate cache to ensure content is up-to-date across different browsers
+      void utils.post.getByPostId.invalidate({ postId: input?.id });
     },
   });
 

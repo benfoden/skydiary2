@@ -76,6 +76,7 @@ export default async function Entry({
   params: { id: string };
   searchParams: { s: string };
 }) {
+  revalidatePath(`/entry/${params.id}`);
   const post = await api.post.getByPostId({ postId: params.id });
 
   if (!post) return null;
