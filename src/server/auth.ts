@@ -79,39 +79,45 @@ export const authOptions: NextAuthOptions = {
       async sendVerificationRequest(params) {
         const { identifier, provider } = params;
         const url = new URL(params.url);
-        // url.searchParams.delete("token") // uncomment if you want the user to type this manually
-        const logInURL = new URL(
-          `/auth/email?${url.searchParams.toString()}`,
-          url.origin,
-        );
+        url.searchParams.delete("token"); // uncomment if you want the user to type this manually
 
         const { server, from } = provider;
         const result = await createTransport(server).sendMail({
           to: identifier,
           from,
-          subject: `skydiary sign in link`,
-          text: `Sign in here ${logInURL.toString()}`,
+          subject: `skydiary sign in code`,
+          text: `Sign in with code ${token}`,
           html: `<body style="font-family: sans-serif; background: linear-gradient(to bottom, #cce3f1, #F3F6F6) no-repeat; background-size: cover; color: #424245; padding: 32px 16px; text-align: center;">
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.4); max-width: 360px; min-height: 360px; margin: auto; border-radius: 10px; vertical-align: middle; padding: 32px 0px;">
-                      <tr>
-                        <td align="center" style="font-size: 22px; color: #424245; font-weight: 300; padding-bottom: 16px;">sign in to skydiary</td>
-                      </tr>
-                      <tr>
-                        <td align="center">
-                          <table border="0" cellspacing="0" cellpadding="0" style="margin: auto;">
-                            <tr>
-                              <td align="center" style="border-radius: 5px;">
-                                <a href="${logInURL.toString()}" target="_blank" rel="noopener noreferrer" style="background: rgba(255,255,255,0.6); font-size: 16px; font-family: sans-serif; color:#424245; border-radius: 5px; border-color: transparent; padding: 12px 36px; text-decoration: none; color: #424245; font-weight: 500; display: inline-block;">verify and continue</a>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td align="center" style="font-size: 16px; line-height: 22px; color: #424245; padding: 0px 16px; font-weight: 300;">if you didn't request this email you can safely ignore it</td>
-                      </tr>
-                    </table>
-                  </body>`,
+          <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.4); max-width: 360px; min-height: 360px; margin: auto; border-radius: 10px; vertical-align: middle; padding: 32px 0px;">
+            <tr>
+              <td align="center" style="font-size: 22px; color: #424245; font-weight: 300; padding-bottom: 16px;">sign in to skydiary</td>
+            </tr>
+            <tr>
+              <td align="center">
+                <table border="0" cellspacing="0" cellpadding="0" style="margin: auto;">
+                <tr>
+                    <td align="center" style="border-radius: 5px; padding-bottom: 16px;">
+                      <span style="font-size: 22px;">your code:</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="border-radius: 5px;">
+                      <span style="font-size: 22px;">${token}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center" style="padding-top: 16px;">
+                      <p style="font-size: 16px; color: #424245;">go back to skydiary and enter your code to log in.</p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="font-size: 16px; line-height: 22px; color: #424245; padding: 0px 16px; font-weight: 300;">if you didn't request this email you can safely ignore it</td>
+            </tr>
+          </table>
+        </body>`,
         });
         const failed = result.rejected.concat(result.pending).filter(Boolean);
         if (failed.length) {
