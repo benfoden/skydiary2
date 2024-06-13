@@ -4,7 +4,6 @@ Exceptional experience
 
 Must have
 - add more user profile details in the new user page
-- do not redirect existing users to the new user page
 
 Nice to haves
 - discover more personas to use
