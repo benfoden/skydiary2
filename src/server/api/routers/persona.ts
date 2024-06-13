@@ -16,6 +16,7 @@ export const personaRouter = createTRPCRouter({
         occupation: z.string().optional(),
         communicationStyle: z.string().optional(),
         communicationSample: z.string().optional(),
+        isUser: z.boolean().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -31,6 +32,7 @@ export const personaRouter = createTRPCRouter({
           traits: input.traits,
           communicationStyle: input.communicationStyle,
           communicationSample: input.communicationSample,
+          isUser: input.isUser,
           createdBy: { connect: { id: ctx.session.user.id } },
         },
       });
@@ -49,6 +51,7 @@ export const personaRouter = createTRPCRouter({
         traits: z.string().optional(),
         communicationStyle: z.string().optional(),
         communicationSample: z.string().optional(),
+        isUser: z.boolean().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -65,29 +68,35 @@ export const personaRouter = createTRPCRouter({
           traits: input.traits,
           communicationStyle: input.communicationStyle,
           communicationSample: input.communicationSample,
+          isUser: input.isUser,
         },
       });
     }),
 
   getAllByUserId: protectedProcedure.query(({ ctx }) => {
     return ctx.db.persona.findMany({
-      where: { createdBy: { id: ctx.session.user.id } },
+      where: { createdBy: { id: ctx.session.user.id }, isUser: false },
       orderBy: { createdAt: "desc" },
     });
   }),
   getById: protectedProcedure
-    .input(z.object({ personaId: z.string() }))
+    .input(z.object({ personaId: z.string(), isUser: z.boolean() }))
     .query(({ ctx, input }) => {
       return ctx.db.persona.findUnique({
-        where: { id: input.personaId },
+        where: { id: input.personaId, isUser: input.isUser },
       });
     }),
+  getUserPersona: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.persona.findFirst({
+      where: { createdBy: { id: ctx.session.user.id }, isUser: true },
+    });
+  }),
 
   delete: protectedProcedure
     .input(z.object({ personaId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.persona.delete({
-        where: { id: input.personaId },
+        where: { id: input.personaId, isUser: false },
       });
     }),
 });
