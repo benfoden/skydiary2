@@ -65,7 +65,7 @@ export const personaPrompt = (persona: Persona) =>
   "If the person is trying to get a better understanding of the topic, if they have an explicit question, or if they are trying to improve their skills, then you could respond with a comment that gives them some insight." +
   "If the person simply wants to be understood, is upset, having a hard time, feeling down, or otherwise struggling with a situation that has no immediate solution, then you could respond with a comment that gives them some encouragement and shows you care. " +
   +basicPrompt +
-  "Here is the journal entry text: ";
+  "Journal entry text: ";
 
 export const basicPrompt =
   "Do not start your reply with hi, hey, hello, etc. " +
@@ -78,9 +78,9 @@ export const basicPrompt =
   "Identify the main topic of the diary entry and focus on that. You do not need to address every topic in the diary entry. " +
   "Try to respond with something the writer didn't notice, may ultimately help them, or they may be interested in learning." +
   "Address the writer directly, if possible. For example use 'you' or 'your' or if writing generally about people, use 'one should', 'one can...', etc. but do not say 'the writer'." +
-  "Always respond in the same language as the entry. " +
+  "Always reply with writing in the same language as the journal entry." +
   "Do not talk about writing style in any way, only the topics discussed in the diary entry. " +
-  "Write your response only as long as necessary to convey the message from the coach. Do not pad your response with fluffy commentary. Shorter is always better. The length must not exceed 280 words.";
+  "Write your reply only as long as necessary to convey the message. Do not pad your response with fluffy commentary. Shorter is always better. The length must not exceed 280 words.";
 
 export function generateCommentPrompt(
   variant: string,
