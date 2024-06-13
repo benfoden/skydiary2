@@ -22,15 +22,28 @@ const NewUserPage: React.FC = async () => {
           </h2>
 
           <div className="m-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
+            <p className="text-sm opacity-60">
+              these details help to personalize your experience, privately.
+            </p>
             <form
-              className="[&>div]:last-of-type:hidden"
+              className="flex flex-col gap-4"
               action={async (formData) => {
                 "use server";
                 const name: string = formData.get("name") as string;
+                const age = Number(formData.get("age"));
+                const gender: string = formData.get("gender") as string;
+                const isUser = true;
 
                 if (name) {
                   try {
                     await api.user.updateUser({ name });
+                    await api.persona.create({
+                      name,
+                      age,
+                      gender,
+                      traits: "",
+                      isUser,
+                    });
                   } catch (error) {
                     console.error("Error updating user:", error);
                   }
@@ -46,7 +59,29 @@ const NewUserPage: React.FC = async () => {
                   name="name"
                   className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
                   required
-                  placeholder={session.user.name ?? "your name"}
+                  placeholder="name"
+                />
+              </label>
+              <label className="text-base font-light" htmlFor="age">
+                your age
+                <input
+                  type="number"
+                  id="age"
+                  name="age"
+                  className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
+                  required
+                  placeholder="1"
+                />
+              </label>
+              <label className="text-base font-light" htmlFor="gender">
+                your identity
+                <input
+                  type="text"
+                  id="gender"
+                  name="gender"
+                  className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
+                  required
+                  placeholder="man, woman, or any other identity"
                 />
               </label>
               <button
