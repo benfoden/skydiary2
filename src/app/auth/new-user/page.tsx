@@ -74,14 +74,14 @@ const NewUserPage: React.FC = async () => {
                 />
               </label>
               <label className="text-base font-light" htmlFor="gender">
-                your identity
+                your identities
                 <input
                   type="text"
                   id="gender"
                   name="gender"
                   className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
                   required
-                  placeholder="man, woman, or any other identity"
+                  placeholder="man, husband, father"
                 />
               </label>
               <button
