@@ -1,6 +1,6 @@
 Exceptional experience
 - hash and salt user entries on update, decrypt on read
-- create more user details fields
+- create much more user details fields
 
 Must have
 - add more user profile details in the new user page
