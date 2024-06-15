@@ -129,17 +129,12 @@ export const summarizeText = (content: string): string =>
   content;
 
 export interface NewPersona {
-  name: string;
   description: string;
-  image: string;
-  age: number | null;
-  gender: string;
   relationship: string;
   occupation: string;
   traits: string;
   communicationStyle: string;
   communicationSample: string;
-  isUser: boolean;
 }
 
 export const NEWPERSONAUSER = {
@@ -153,7 +148,7 @@ export const NEWPERSONAUSER = {
 export const generatePersonaPrompt = (persona: Persona | NewPersona) =>
   "Based on the following person (persona object) and journal entry written by that person, return an updated object that describes them as accurately as possible. " +
   "The values should be updated if they are blank, or if they have become substantially different. " +
-  "Do not change existing values if they have not changed, but if there is new information then you can append that. " +
+  "If there is new information then you can append that to existing values. Prefer this to replacing values when accurate and appropriate. " +
   "For example, if the person's occupation has changed, you could update the occupation key value to reflect their new occupation. " +
   "The description value should be a short and concise summary of the person's goals, key concerns, and overall motivations. " +
   "The traits values should be a list of comma separated descriptors that are short and concise, reflecting the person's personality traits, preferences, morals, and values. " +
@@ -161,6 +156,7 @@ export const generatePersonaPrompt = (persona: Persona | NewPersona) =>
   "Only respond with the updated object. " +
   "Return your response in the same language as the majority of the words in the journal entry text, even if the persona details are in English." +
   "If there is no text in the journal entry, return the same persona object without any changes." +
+  "Never update or change these values, and return them as received: name, image, age, gender, isUser" +
   "Persona object: " +
   JSON.stringify(persona) +
   " " +
