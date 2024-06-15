@@ -1,0 +1,8 @@
+{
+  "title": "skydiary",
+  "description": "Write a daily entry and you're done. You get recaps and advice in total privacy with an AI friend, coach, and mentor.",
+  "top": {
+    "welcome": "Welcome",
+    "welcomeBack": "Welcome back"
+  }
+}
