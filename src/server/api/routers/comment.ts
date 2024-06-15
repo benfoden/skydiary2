@@ -16,6 +16,7 @@ export const commentRouter = createTRPCRouter({
       if (!input.content.trim()) {
         throw new Error("Content cannot be empty.");
       }
+
       return ctx.db.comment.create({
         data: {
           content: input.content,
