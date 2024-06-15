@@ -11,8 +11,14 @@ const dictionaries: Dicts = {
   ja: () => import("./dictionaries/ja.json").then((module) => module.default),
 };
 
-export const getDictionary = async (lang: Lang): Promise<Dict> =>
-  dictionaries[lang]();
+export const getDictionary = async (lang: Lang): Promise<Dict> => {
+  const dictionaryFunction = dictionaries[lang];
+  if (typeof dictionaryFunction === "function") {
+    return dictionaryFunction();
+  } else {
+    throw new Error(`Dictionary not found for language: ${lang}`);
+  }
+};
 
 export type Translator = (key: string) => string | undefined;
 export const getTranslations = async (lang: Lang): Promise<Translator> => {

@@ -20,7 +20,7 @@ export default async function Top({
               type="button"
               className="flex flex-col items-center gap-2 rounded-full bg-white/40 px-16 py-12 hover:bg-white/60"
             >
-              {session ? t("home.welcomeBack") : t("home.welcome")}
+              {session ? t("top.welcomeBack") : t("top.welcome")}
             </button>
           </Link>
         </div>
