@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Button from "~/app/_components/Button";
 import DropDownMenu from "~/app/_components/DropDown";
+import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import { getServerAuthSession } from "~/server/auth";
@@ -104,12 +105,7 @@ export default async function Settings() {
                   placeholder="man, husband, father"
                 />
               </label>
-              <button
-                type="submit"
-                className="mt-2 flex h-12 w-full items-center justify-center space-x-2 rounded bg-white/70 px-4 text-base font-light transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-zinc-800 focus:ring-offset-2"
-              >
-                save
-              </button>
+              <FormButton variant="submit">save</FormButton>
             </form>
           </div>
         </div>
