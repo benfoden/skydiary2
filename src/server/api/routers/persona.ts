@@ -55,6 +55,7 @@ export const personaRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      console.log("!!!!persona update", input);
       return ctx.db.persona.update({
         where: { id: input.personaId, createdBy: { id: ctx.session.user.id } },
         data: {

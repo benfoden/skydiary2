@@ -82,10 +82,7 @@ export const basicPrompt =
   "Do not talk about writing style in any way, only the topics discussed in the diary entry. " +
   "Write your reply only as long as necessary to convey the message. Do not pad your response with fluffy commentary. Shorter is always better. The length must not exceed 280 words.";
 
-export function generateCommentPrompt(
-  variant: string,
-  entryText: string,
-): string {
+export function generateCommentPrompt(variant: string): string {
   function getVariant(variant: string): string {
     const insight =
       "Offer some insights into any challenges expressed in this diary entry. " +
@@ -103,7 +100,7 @@ export function generateCommentPrompt(
         return insight;
     }
   }
-  return getVariant(variant) + basicPrompt + " " + "Entry text:" + entryText;
+  return getVariant(variant) + basicPrompt + " " + "Entry text: ";
 }
 
 export const generateTagsPrompt =
@@ -133,30 +130,32 @@ export interface NewPersona {
   relationship: string;
   occupation: string;
   traits: string;
-  communicationStyle: string;
-  communicationSample: string;
 }
 
 export const NEWPERSONAUSER = {
   description: "",
-  relationship: "",
   occupation: "",
+  relationship: "",
   traits: "",
-  communicationStyle: "",
-  communicationSample: "",
 };
 export const generatePersonaPrompt = (persona: Persona | NewPersona) =>
-  "Based on the following person (persona object) and journal entry written by that person, return an updated object that describes them as accurately as possible. " +
-  "The values should be updated if they are blank, or if they have become substantially different. " +
-  "If there is new information then you can append that to existing values. Prefer this to replacing values when accurate and appropriate. " +
-  "For example, if the person's occupation has changed, you could update the occupation key value to reflect their new occupation. " +
-  "The description value should be a short and concise summary of the person's goals, key concerns, and overall motivations. " +
+  "For the following person (persona object) and journal entry written by that person, return an updated object persona object. " +
+  "If the values are empty, update them to reflect any relevant information in the journal entry. " +
+  "If there is relevant information that is substantially different in the journal entry, they can be updated, but only if the changes are accurate and appropriate. " +
+  "Prefer appending new details over replacing values that are still accurate and appropriate." +
+  "For example, if the person's occupation has changed, you could update the occupation key value to replace the old value with their new occupation. " +
+  "The description value is general purpose and should be a short and concise summary of the person's personal goals, preferences, and aspirations. " +
+  "In the relationship value, be sure to include the name and relationship with any family members, colleagues, or friends that were mentioned in a journal entry.. " +
+  "For example: Natsumi's husband, Lina's father, Nick's brother, Athol's son, Brian's friend, Taro's coworker, and so on " +
+  "Do not include more than 15 people at any time. Prioritize family members if length is constrained. " +
   "The traits values should be a list of comma separated descriptors that are short and concise, reflecting the person's personality traits, preferences, morals, and values. " +
   "Do not include any punctuation or special characters in any of the values." +
-  "Only respond with the updated object. " +
-  "Return your response in the same language as the majority of the words in the journal entry text, even if the persona details are in English." +
-  "If there is no text in the journal entry, return the same persona object without any changes." +
-  "Never update or change these values, and return them as received: name, image, age, gender, isUser" +
+  "Only respond with the updated object and never change the keys. " +
+  "If there is no text in the journal entry, return the same persona object with no changes." +
+  "Only update values for the keys: description, occupation, relationship, and traits. All other values should be left as is." +
+  "Each value should not exceed roughly 85 words total. " +
+  "You are writing not for the user, but for an AI to read later. Compress the length as much as possible while maintaining the original content and meaning." +
+  "Return JSON. " +
   "Persona object: " +
   JSON.stringify(persona) +
   " " +

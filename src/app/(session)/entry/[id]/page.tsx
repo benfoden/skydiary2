@@ -20,7 +20,7 @@ import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
-import { getResponse } from "~/server/api/ai";
+import { getResponse, getResponseJSON } from "~/server/api/ai";
 import { api } from "~/trpc/server";
 import {
   NEWPERSONAUSER,
@@ -159,7 +159,7 @@ export default async function Entry({
                   }
 
                   const latestPersona = await api.persona.getUserPersona();
-                  const generatedPersona = await getResponse(
+                  const generatedPersona = await getResponseJSON(
                     generatePersonaPrompt(latestPersona ?? NEWPERSONAUSER) +
                       latestPost?.content,
                   );
@@ -228,13 +228,23 @@ export default async function Entry({
                       postId: params.id,
                     });
 
+                    const currentUserPersona =
+                      await api.persona.getUserPersona();
+                    let updatedContent = "";
+                    if (currentUserPersona) {
+                      updatedContent =
+                        latestPost?.content +
+                        "End of journal entry. When writing your response, also consider that this journal entry was written by the following person: " +
+                        JSON.stringify(currentUserPersona);
+                    }
+
                     const coachVariant = await getResponse(
                       generateCoachPrompt + latestPost?.content,
                     );
-                    const prompt = generateCommentPrompt(
-                      coachVariant!,
-                      latestPost?.content ?? "",
-                    );
+                    const prompt =
+                      generateCommentPrompt(coachVariant!) + updatedContent ??
+                      latestPost?.content;
+
                     const response = await getResponse(prompt);
                     if (response) {
                       await api.comment.create({
@@ -269,8 +279,21 @@ export default async function Entry({
                       const latestPost = await api.post.getByPostId({
                         postId: params.id,
                       });
+
+                      const currentUserPersona =
+                        await api.persona.getUserPersona();
+
+                      let updatedContent = "";
+                      if (currentUserPersona) {
+                        updatedContent =
+                          latestPost?.content +
+                          "End of journal entry. When writing your response, also consider that this journal entry was written by the following person: " +
+                          JSON.stringify(currentUserPersona);
+                      }
+
                       const response = await getResponse(
-                        personaPrompt(persona) + latestPost?.content,
+                        personaPrompt(persona) + updatedContent ??
+                          latestPost?.content,
                       );
                       if (response) {
                         await api.comment.create({

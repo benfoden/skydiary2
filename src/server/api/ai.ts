@@ -12,6 +12,16 @@ export async function getResponse(inputText: string) {
   return completion.choices[0]?.message.content;
 }
 
+export async function getResponseJSON(inputText: string) {
+  const completion = await openai.chat.completions.create({
+    messages: [{ role: "user", content: inputText }],
+    model: "gpt-4o",
+    response_format: { type: "json_object" },
+  });
+
+  return completion.choices[0]?.message.content;
+}
+
 export async function getResponseFromArr(inputTexts: string[]) {
   const completion = await openai.chat.completions.create({
     messages: inputTexts.map((text) => ({ role: "user", content: text })),
