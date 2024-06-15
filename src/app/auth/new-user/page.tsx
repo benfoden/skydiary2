@@ -39,8 +39,8 @@ const NewUserPage: React.FC = async () => {
                     await api.user.updateUser({ name });
                     await api.persona.create({
                       name,
-                      age,
-                      gender,
+                      age: age ?? 0,
+                      gender: gender ?? "",
                       traits: "",
                       isUser,
                     });
@@ -52,7 +52,7 @@ const NewUserPage: React.FC = async () => {
               }}
             >
               <label className="text-base font-light" htmlFor="name">
-                your name
+                your name <span className="text-xs opacity-60">(required)</span>
                 <input
                   type="text"
                   id="name"
@@ -69,7 +69,6 @@ const NewUserPage: React.FC = async () => {
                   id="age"
                   name="age"
                   className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                  required
                   placeholder="1"
                 />
               </label>
@@ -80,7 +79,6 @@ const NewUserPage: React.FC = async () => {
                   id="gender"
                   name="gender"
                   className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                  required
                   placeholder="man, husband, father"
                 />
               </label>

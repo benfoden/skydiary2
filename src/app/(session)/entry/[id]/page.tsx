@@ -5,6 +5,7 @@ import {
   FrameIcon,
   PersonIcon,
 } from "@radix-ui/react-icons";
+import { error } from "console";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,9 +23,11 @@ import Spinner from "~/app/_components/Spinner";
 import { getResponse } from "~/server/api/ai";
 import { api } from "~/trpc/server";
 import {
+  NEWPERSONAUSER,
   TAGS,
   generateCoachPrompt,
   generateCommentPrompt,
+  generatePersonaPrompt,
   generateTagsPrompt,
   personaPrompt,
 } from "~/utils/constants";
@@ -134,6 +137,7 @@ export default async function Entry({
                   const latestPost = await api.post.getByPostId({
                     postId: params.id,
                   });
+
                   const tags = await getResponse(
                     generateTagsPrompt + latestPost?.content,
                   );
@@ -150,12 +154,40 @@ export default async function Entry({
                       postId: params?.id,
                       tagIds: tagIds,
                     });
-                    revalidatePath(`/entry/${params.id}`);
                   } else {
                     console.error("Failed to tag.");
                   }
+
+                  const latestPersona = await api.persona.getUserPersona();
+                  const generatedPersona = await getResponse(
+                    generatePersonaPrompt(latestPersona ?? NEWPERSONAUSER) +
+                      latestPost?.content,
+                  );
+
+                  if (typeof generatedPersona === "string") {
+                    const personaObject = JSON.parse(
+                      generatedPersona,
+                    ) as Persona;
+                    await api.persona.update({
+                      personaId: latestPersona?.id ?? "",
+                      name: latestPersona?.name ?? "",
+                      description: personaObject?.description ?? "",
+                      image: latestPersona?.image ?? "",
+                      age: personaObject?.age ?? 0,
+                      gender: personaObject?.gender ?? "",
+                      relationship: personaObject?.relationship ?? "",
+                      occupation: personaObject?.occupation ?? "",
+                      traits: personaObject?.traits ?? "",
+                      communicationStyle:
+                        personaObject?.communicationStyle ?? "",
+                      communicationSample:
+                        personaObject?.communicationSample ?? "",
+                    });
+                  }
                 } catch (error) {
                   console.error("Error creating tags:", error);
+                } finally {
+                  if (!error) revalidatePath(`/entry/${params.id}`);
                 }
               }}
             >
