@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import Button from "~/app/_components/Button";
 import DropDownMenu from "~/app/_components/DropDown";
@@ -12,17 +13,20 @@ export default async function Settings() {
 
   if (!session?.user) return null;
   const userPersona = await api.persona.getUserPersona();
+  const t = await getTranslations();
   return (
     <>
       <SessionNav>
         <div className="flex items-center gap-2">
-          <NavChevronLeft targetPathname={"/home"} label={"home"} />
+          <NavChevronLeft targetPathname={"/home"} label={t("nav.home")} />
         </div>
-        <h1>settings</h1>
+        <h1>{t("nav.settings")}</h1>
 
         <DropDownMenu>
           <Link href={"/auth/signout"}>
-            <Button variant="menuElement">Sign out {session.user?.name}</Button>
+            <Button variant="menuElement">
+              {t("nav.signout")} {session.user?.name}
+            </Button>
           </Link>
         </DropDownMenu>
       </SessionNav>

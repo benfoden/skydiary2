@@ -14,11 +14,47 @@
     "login": "log in",
     "signup": "sign up",
     "settings": "settings",
-    "signout": "sign out"
+    "signout": "sign out",
+    "topics": "topics",
+    "personas": "personas"
   },
   "home": {
     "today": "Today",
     "last7Days": "Last 7 days",
     "last30Days": "Last 30 days"
+  },
+  "topics": {
+    "all": "all",
+    "tags": "tags",
+    "career": "career",
+    "diet": "diet",
+    "exercise": "exercise",
+    "family": "family",
+    "dating": "dating",
+    "friends": "friends",
+    "mental health": "mental health",
+    "learning": "learning",
+    "skills": "skills",
+    "finances": "finances",
+    "hobbies": "hobbies",
+    "travel": "travel",
+    "emotions": "emotions",
+    "goals": "goals",
+    "relationships": "relationships",
+    "self": "self",
+    "work": "work",
+    "education": "education",
+    "physical health": "physical health",
+    "spirituality": "spirituality",
+    "self-improvement": "self-improvement"
+  },
+  "settings": {
+    "description": "these details help to personalize your experience, privately."
+  },
+  "form": {
+    "save": "save",
+    "update": "update",
+    "create": "create",
+    "delete": "delete"
   }
 }

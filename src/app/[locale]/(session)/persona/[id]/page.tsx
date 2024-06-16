@@ -1,9 +1,8 @@
 import { PersonIcon } from "@radix-ui/react-icons";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import Button from "~/app/_components/Button";
-import DropDownMenu from "~/app/_components/DropDown";
+import DropDownUser from "~/app/_components/DropDownUser";
 import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import PersonaFormFields from "~/app/_components/PersonaFormFields";
@@ -15,21 +14,21 @@ export default async function Persona({ params }: { params: { id: string } }) {
   const session = await getServerAuthSession();
   if (!session?.user) return null;
   const personaId = params.id;
-  const persona = await api.persona.getById({ personaId });
+  const persona = await api.persona.getById({ isUser: false, personaId });
   if (!persona) return null;
+  const t = await getTranslations();
 
   return (
     <>
       <SessionNav>
         <div className="flex items-center gap-2">
-          <NavChevronLeft targetPathname={"/persona/all"} label={"personas"} />
+          <NavChevronLeft
+            targetPathname={"/persona/all"}
+            label={t("nav.personas")}
+          />
         </div>
         <h1>{persona.name}</h1>
-        <DropDownMenu>
-          <Link href={"/auth/signout"}>
-            <Button variant="menuElement">Sign out {session.user?.name}</Button>
-          </Link>
-        </DropDownMenu>
+        <DropDownUser />
       </SessionNav>
 
       <main className="flex min-h-screen w-full flex-col items-center justify-start">

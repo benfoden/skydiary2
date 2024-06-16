@@ -14,11 +14,47 @@
     "login": "ログイン",
     "signup": "サインアップ",
     "settings": "設定",
-    "signout": "サインアウト"
+    "signout": "サインアウト",
+    "topics": "トピック",
+    "personas": "人物"
   },
   "home": {
     "today": "今日",
     "last7Days": "7日間",
     "last30Days": "30日間"
+  },
+  "topics": {
+    "all": "すべて",
+    "tags": "タグ",
+    "career": "職業",
+    "diet": "食事",
+    "exercise": "体操",
+    "family": "家庭",
+    "dating": "恋愛",
+    "friends": "友達",
+    "mental health": "心理健康",
+    "learning": "学習",
+    "skills": "スキル",
+    "finances": "金融",
+    "hobbies": "趣味",
+    "travel": "旅行",
+    "emotions": "感情",
+    "goals": "目標",
+    "relationships": "関係",
+    "self": "自分",
+    "work": "働き",
+    "education": "教育",
+    "physical health": "身体健康",
+    "spirituality": "精神",
+    "self-improvement": "自身向上"
+  },
+  "settings": {
+    "description": "これらの詳細は、プライベートに経験をパーソナライズするのに役立ちます。"
+  },
+  "form": {
+    "save": "保存",
+    "update": "更新",
+    "create": "作成",
+    "delete": "削除"
   }
 }

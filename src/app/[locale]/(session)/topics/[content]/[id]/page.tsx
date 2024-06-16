@@ -1,8 +1,7 @@
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
-import Button from "~/app/_components/Button";
 import { Card } from "~/app/_components/Card";
-import DropDownMenu from "~/app/_components/DropDown";
+import DropDownUser from "~/app/_components/DropDownUser";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
@@ -15,7 +14,9 @@ export default async function Entry({
 }: {
   params: { content: string; id: string };
 }) {
+  const t = await getTranslations();
   const session = await getServerAuthSession();
+  if (!session?.user) return null;
   const posts = await api.post.getAllByUserAndTagId({ tagId: params.id });
 
   if (!posts || posts.length === 0) return <div>No posts found...</div>;
@@ -26,19 +27,8 @@ export default async function Entry({
         <div className="flex items-center gap-2">
           <NavChevronLeft targetPathname={"/topics"} label={"topics"} />
         </div>
-        <h1 className="font-light">{params.content}</h1>
-        <DropDownMenu>
-          <div className="text-decoration-none flex w-full items-start gap-4 px-6 py-3 no-underline sm:px-4 sm:py-2">
-            {session?.user?.name}
-          </div>
-
-          <Link href={"/settings"}>
-            <Button variant="menuElement">settings</Button>
-          </Link>
-          <Link href={"/auth/signout"}>
-            <Button variant="menuElement">sign out</Button>
-          </Link>
-        </DropDownMenu>
+        <h1 className="font-light">{t(`topics.${params.content}`)}</h1>
+        <DropDownUser />
       </SessionNav>
       <main className="flex min-h-screen w-full flex-col items-center justify-start">
         <div className="flex h-full flex-col items-center gap-12 px-4 pb-4">
