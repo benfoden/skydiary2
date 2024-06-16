@@ -1,10 +1,10 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { getServerAuthSession } from "~/server/auth";
 
 export default async function Top() {
-  const t = useTranslations();
   const session = await getServerAuthSession();
+  const t = await getTranslations();
 
   return (
     <>

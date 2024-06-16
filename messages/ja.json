@@ -4,5 +4,21 @@
   "top": {
     "welcome": "ようこそ",
     "welcomeBack": "おかえりなさい"
+  },
+  "nav": {
+    "home": "ホーム",
+    "about": "このサイトについて",
+    "privacy": "プライバシーポリシー",
+    "terms": "利用規約",
+    "contact": "お問い合わせ",
+    "login": "ログイン",
+    "signup": "サインアップ",
+    "settings": "設定",
+    "signout": "サインアウト"
+  },
+  "home": {
+    "today": "今日",
+    "last7Days": "7日間",
+    "last30Days": "30日間"
   }
 }

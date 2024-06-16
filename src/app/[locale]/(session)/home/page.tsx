@@ -1,4 +1,5 @@
 import { type Post } from "@prisma/client";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { Suspense } from "react";
 import Button from "~/app/_components/Button";
@@ -51,13 +52,14 @@ function PostCard({ post }: { post: Post }) {
 }
 export default async function Home() {
   const session = await getServerAuthSession();
+  const t = await getTranslations();
   return (
     <>
       <SessionNav>
         <div className="flex items-center gap-2">
           <NavChevronLeft targetPathname={"/topics"} label={"topics"} />
         </div>
-        <h1>home</h1>
+        <h1>{t("nav.home")}</h1>
 
         <DropDownMenu>
           <div className="text-decoration-none flex w-full items-start gap-4 px-6 py-3 no-underline sm:px-4 sm:py-2">
@@ -65,17 +67,17 @@ export default async function Home() {
           </div>
 
           <Link href={"/settings"}>
-            <Button variant="menuElement">settings</Button>
+            <Button variant="menuElement">{t("nav.settings")}</Button>
           </Link>
           <Link href={"/auth/signout"}>
-            <Button variant="menuElement">sign out</Button>
+            <Button variant="menuElement">{t("nav.signout")}</Button>
           </Link>
         </DropDownMenu>
       </SessionNav>
       <main className="flex min-h-screen flex-col items-start">
         <div className="container flex flex-col items-center justify-start gap-12 px-4 py-16 ">
           <Suspense fallback={<Spinner />}>
-            <PostsList />
+            <PostsList t={t} />
           </Suspense>
         </div>
       </main>
@@ -83,7 +85,7 @@ export default async function Home() {
   );
 }
 
-async function PostsList() {
+async function PostsList({ t }: { t: ReturnType<typeof getTranslations> }) {
   const userPosts = await api.post.getByUser();
   const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const today = new Date().toLocaleDateString("en-US", {
@@ -105,7 +107,7 @@ async function PostsList() {
   return (
     <>
       <div className="flex flex-col items-start justify-center gap-4 sm:max-w-5xl">
-        Today
+        {t("home.today")}
         {lastPostDate !== today || userPosts?.length === 0 ? (
           <Link href="/today" prefetch={true}>
             <Button>Whats on your mind?</Button>
@@ -117,7 +119,7 @@ async function PostsList() {
         )}
         {filterPostsByDateRange(0, 6, userPosts).length > 0 && (
           <>
-            Last 7 days
+            {t("home.last7Days")}
             {filterPostsByDateRange(0, 6, userPosts).map((post) => (
               <Link key={post.id} href={`/entry/${post.id}`} prefetch={true}>
                 <PostCard key={post.id} post={post} />
@@ -127,7 +129,7 @@ async function PostsList() {
         )}
         {filterPostsByDateRange(8, 30, userPosts).length > 0 && (
           <>
-            Last 30 days
+            {t("home.last30Days")}
             {filterPostsByDateRange(8, 30, userPosts).map((post) => (
               <Link key={post.id} href={`/entry/${post.id}`}>
                 <PostCard key={post.id} post={post} />
