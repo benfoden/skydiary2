@@ -4,6 +4,10 @@ import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
+import { locales } from "i18n-config";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -16,17 +20,28 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export default async function RootLayout({
   children,
+  params: { locale },
 }: {
   children: React.ReactNode;
+  params: { locale: string };
 }) {
+  const messages = await getMessages();
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body
         className={`font-sans ${inter.variable} bg-gradient-to-b from-[#cce3f1] to-[#F3F6F6]`}
       >
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        {" "}
+        <NextIntlClientProvider messages={messages}>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
