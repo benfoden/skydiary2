@@ -67,17 +67,18 @@
     "communication sample": "communication sample"
   },
   "settings": {
-    "description": "these details help to personalize your experience, privately."
+    "description": "these details help to personalize your experience, privately.",
+    "your name": "your name",
+    "your age": "your age",
+    "your identities": "your identities",
+    "placeholder identities": "woman, daughter, mother, etc."
   },
   "form": {
     "save": "save",
     "update": "update",
     "create": "create",
     "delete": "delete",
-    "your name": "your name",
-    "your age": "your age",
-    "your identities": "your identities",
-    "placeholder identities": "woman, daughter, mother, etc.",
+
     "optional": "optional"
   },
   "status": {

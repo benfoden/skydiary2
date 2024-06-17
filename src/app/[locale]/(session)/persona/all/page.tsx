@@ -34,10 +34,7 @@ export default async function Persona() {
         <div className="container flex flex-col items-center justify-start gap-12 px-4 py-16 ">
           <div className="flex w-full flex-col items-center justify-center gap-4 border-zinc-900 md:flex-row md:items-start md:px-32">
             <div className="mb-4 flex flex-col items-start justify-center gap-4">
-              <a
-                href="#newPersona"
-                className="flex items-center gap-2 text-zinc-500 transition hover:text-zinc-700"
-              >
+              <a href="#newPersona" className="flex items-center gap-2">
                 <Button>
                   <PlusIcon className="h-5 w-5" /> {t("personas.add new")}
                 </Button>
@@ -46,7 +43,7 @@ export default async function Persona() {
                 <>
                   {personas?.map((persona) => (
                     <Link key={persona.id} href={`/persona/${persona.id}`}>
-                      <Card>
+                      <Card variant="narrow">
                         {persona.image ? (
                           <Image
                             alt={persona.name}
@@ -118,7 +115,7 @@ export default async function Persona() {
                 }}
               >
                 <PersonaFormFields />
-                <FormButton variant="submit">create</FormButton>
+                <FormButton variant="submit">{t("form.create")}</FormButton>
               </form>
             </div>
           </div>

@@ -72,7 +72,7 @@ export default async function Settings() {
               }}
             >
               <label className="text-base font-light" htmlFor="name">
-                {t("form.your name")}
+                {t("settings.your name")}
                 <input
                   type="text"
                   id="name"
@@ -84,7 +84,7 @@ export default async function Settings() {
                 />
               </label>
               <label className="text-base font-light" htmlFor="age">
-                {t("form.your age")}
+                {t("settings.your age")}
                 <input
                   type="number"
                   id="age"
@@ -96,7 +96,7 @@ export default async function Settings() {
                 />
               </label>
               <label className="text-base font-light" htmlFor="gender">
-                {t("form.your identities")}
+                {t("settings.your identities")}
                 <input
                   type="text"
                   id="gender"
@@ -104,7 +104,7 @@ export default async function Settings() {
                   className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
                   required
                   defaultValue={userPersona?.gender ?? ""}
-                  placeholder={t("form.placeholder identities")}
+                  placeholder={t("settings.placeholder identities")}
                 />
               </label>
               <FormButton variant="submit">{t("form.save")}</FormButton>

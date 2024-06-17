@@ -96,7 +96,7 @@ export default async function Persona({ params }: { params: { id: string } }) {
                   )}
                 </div>
                 <PersonaFormFields persona={persona} />
-                <FormButton variant="submit">update</FormButton>
+                <FormButton variant="submit">{t("form.update")}</FormButton>
               </form>
             </div>
           </div>
