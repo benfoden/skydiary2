@@ -5,6 +5,19 @@
     "welcome": "Welcome",
     "welcomeBack": "Welcome back"
   },
+  "auth": {
+    "description": "these details help to personalize your experience, privately.",
+    "passcode": "passcode",
+    "email": "email",
+    "check your email": "check your email",
+    "passcode expires": "passcode expires",
+    "send a new code": "send a new code",
+    "verifying": "verifying...",
+    "verified": "verified",
+    "signing in": "signing in...",
+    "sign in": "sign in",
+    "save and continue": "save and continue"
+  },
   "nav": {
     "home": "home",
     "about": "about",
@@ -67,24 +80,31 @@
     "communication sample": "communication sample"
   },
   "settings": {
-    "description": "these details help to personalize your experience, privately.",
-    "your name": "your name",
-    "your age": "your age",
-    "your identities": "your identities",
-    "placeholder identities": "woman, daughter, mother, etc."
+    "description": "these details help to personalize your experience, privately."
   },
   "form": {
     "save": "save",
+    "save and continue": "save and continue",
     "update": "update",
     "create": "create",
     "delete": "delete",
-
-    "optional": "optional"
+    "your name": "your name",
+    "your age": "your age",
+    "your identities": "your identities",
+    "placeholder identities": "woman, daughter, mother, etc.",
+    "optional": "optional",
+    "or": "or"
   },
   "status": {
     "loading": "loading...",
     "deleting": "deleting...",
     "error": "error",
     "success": "success"
+  },
+  "error": {
+    "configuration": "There is a problem with the server configuration. Please contact the site administrator.",
+    "access denied": "You don't have permission to sigin or register on this site.",
+    "verification": "That token is not valid. Please try again or refresh the page to request a new one.",
+    "default": "There was an unknown error. Please refresh the page and try again."
   }
 }

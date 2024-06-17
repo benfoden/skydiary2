@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -13,6 +14,7 @@ export default function OTPVerification({ email }: Props) {
   const [code, setCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+  const t = useTranslations();
 
   async function handleOTPVerification(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -40,7 +42,7 @@ export default function OTPVerification({ email }: Props) {
       <form onSubmit={handleOTPVerification}>
         <div className="my-8 flex w-full flex-col gap-4 rounded-lg bg-white/50 p-6 text-sm font-light shadow-lg">
           <label>
-            passcode
+            {t("auth.passcode")}
             <input
               id="code"
               name="code"
@@ -55,19 +57,19 @@ export default function OTPVerification({ email }: Props) {
             />
           </label>
 
-          <p>please check your email</p>
-          <p>your new passcode expires in 5 minutes</p>
+          <p>{t("auth.check your email")}</p>
+          <p>{t("auth.passcode expires")}</p>
 
           <FormButton
             variant="submit"
             isDisabled={isSubmitting || !code || code.length !== 6}
           >
-            {isSubmitting ? "verifying..." : "verify"}
+            {isSubmitting ? t("auth.verifying") : t("auth.verified")}
           </FormButton>
         </div>
       </form>
       <p className="mb-4 text-sm font-light text-[#424245] opacity-80">
-        <em>or</em>
+        <em>{t("form.or")}</em>
       </p>
       <Link
         href="#"
@@ -76,7 +78,7 @@ export default function OTPVerification({ email }: Props) {
           location.reload();
         }}
       >
-        get a new code
+        {t("auth.send a new code")}
       </Link>
     </>
   );
