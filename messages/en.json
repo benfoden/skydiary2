@@ -16,7 +16,10 @@
     "settings": "settings",
     "signout": "sign out",
     "topics": "topics",
-    "personas": "personas"
+    "personas": "personas",
+    "copy all text": "copy all text",
+    "back": "back",
+    "today": "today"
   },
   "home": {
     "today": "Today",
@@ -48,6 +51,21 @@
     "spirituality": "spirituality",
     "self-improvement": "self-improvement"
   },
+  "personas": {
+    "new persona": "new persona",
+    "add new": "add new",
+    "name": "name",
+    "age": "age",
+    "gender": "gender",
+    "traits": "traits",
+    "identities": "identities",
+    "description": "description",
+    "image link": "image link",
+    "relationship": "relationship to you",
+    "occupation": "occupation",
+    "communication style": "communication style",
+    "communication sample": "communication sample"
+  },
   "settings": {
     "description": "these details help to personalize your experience, privately."
   },
@@ -55,6 +73,17 @@
     "save": "save",
     "update": "update",
     "create": "create",
-    "delete": "delete"
+    "delete": "delete",
+    "your name": "your name",
+    "your age": "your age",
+    "your identities": "your identities",
+    "placeholder identities": "woman, daughter, mother, etc.",
+    "optional": "optional"
+  },
+  "status": {
+    "loading": "loading...",
+    "deleting": "deleting...",
+    "error": "error",
+    "success": "success"
   }
 }

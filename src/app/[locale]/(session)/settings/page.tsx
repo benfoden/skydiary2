@@ -34,9 +34,7 @@ export default async function Settings() {
       <main className="flex min-h-screen w-full flex-col items-center justify-start">
         <div className="container flex w-80 flex-col items-center justify-start gap-12 px-4 py-16">
           <div className="m-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
-            <p className="text-sm opacity-60">
-              these details help to personalize your experience, privately.
-            </p>
+            <p className="text-sm opacity-60">{t("settings.description")}</p>
             <form
               className="flex flex-col gap-4"
               action={async (formData) => {
@@ -74,7 +72,7 @@ export default async function Settings() {
               }}
             >
               <label className="text-base font-light" htmlFor="name">
-                your name
+                {t("form.your name")}
                 <input
                   type="text"
                   id="name"
@@ -86,7 +84,7 @@ export default async function Settings() {
                 />
               </label>
               <label className="text-base font-light" htmlFor="age">
-                your age
+                {t("form.your age")}
                 <input
                   type="number"
                   id="age"
@@ -98,7 +96,7 @@ export default async function Settings() {
                 />
               </label>
               <label className="text-base font-light" htmlFor="gender">
-                your identities
+                {t("form.your identities")}
                 <input
                   type="text"
                   id="gender"
@@ -106,10 +104,10 @@ export default async function Settings() {
                   className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
                   required
                   defaultValue={userPersona?.gender ?? ""}
-                  placeholder="man, husband, father"
+                  placeholder={t("form.placeholder identities")}
                 />
               </label>
-              <FormButton variant="submit">save</FormButton>
+              <FormButton variant="submit">{t("form.save")}</FormButton>
             </form>
           </div>
         </div>

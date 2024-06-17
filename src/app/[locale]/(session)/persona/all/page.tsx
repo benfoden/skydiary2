@@ -39,7 +39,7 @@ export default async function Persona() {
                 className="flex items-center gap-2 text-zinc-500 transition hover:text-zinc-700"
               >
                 <Button>
-                  <PlusIcon className="h-5 w-5" /> create new
+                  <PlusIcon className="h-5 w-5" /> {t("personas.add new")}
                 </Button>
               </a>{" "}
               {personas && (
@@ -69,7 +69,7 @@ export default async function Persona() {
               id="newPersona"
               className="mb-4 flex flex-col items-start justify-center gap-4"
             >
-              new persona
+              {t("personas.new persona")}
               <form
                 className="flex flex-col items-start justify-center gap-4"
                 action={async (formData) => {

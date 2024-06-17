@@ -16,7 +16,10 @@
     "settings": "設定",
     "signout": "サインアウト",
     "topics": "トピック",
-    "personas": "人物"
+    "personas": "人物",
+    "copy all text": "全てのテキストをコピー",
+    "back": "戻る",
+    "today": "今日"
   },
   "home": {
     "today": "今日",
@@ -48,13 +51,39 @@
     "spirituality": "精神",
     "self-improvement": "自身向上"
   },
+  "personas": {
+    "new persona": "新しい人物",
+    "add new": "追加",
+    "name": "名前",
+    "age": "年齢",
+    "gender": "性別",
+    "traits": "特徴",
+    "identities": "身分",
+    "description": "説明",
+    "image link": "画像リンク",
+    "relationship": "関係を持っている",
+    "occupation": "働き",
+    "communication style": "通信スタイル",
+    "communication sample": "通信サンプル"
+  },
   "settings": {
-    "description": "これらの詳細は、プライベートに経験をパーソナライズするのに役立ちます。"
+    "description": "これらの詳細は、プライベートに経験をパーソナライズするのに役立ちます。",
+    "your name": "名前",
+    "your age": "年齢",
+    "your identities": "身分",
+    "placeholder identities": "女性、母親、妻、その他"
   },
   "form": {
     "save": "保存",
     "update": "更新",
     "create": "作成",
-    "delete": "削除"
+    "delete": "削除",
+    "optional": "任意"
+  },
+  "status": {
+    "loading": "読み込み中...",
+    "deleting": "削除中...",
+    "error": "エラー",
+    "success": "成功"
   }
 }
