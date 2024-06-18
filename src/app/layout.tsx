@@ -6,7 +6,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { locales } from "../../i18n-config";
+import { locales } from "../i18n-config";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -38,7 +38,6 @@ export default async function RootLayout({
       <body
         className={`font-sans ${inter.variable} bg-gradient-to-b from-[#cce3f1] to-[#F3F6F6]`}
       >
-        {" "}
         <NextIntlClientProvider messages={messages}>
           <TRPCReactProvider>{children}</TRPCReactProvider>
         </NextIntlClientProvider>

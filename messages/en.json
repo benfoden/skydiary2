@@ -93,7 +93,8 @@
     "your identities": "your identities",
     "placeholder identities": "woman, daughter, mother, etc.",
     "optional": "optional",
-    "or": "or"
+    "or": "or",
+    "try again": "try again"
   },
   "status": {
     "loading": "loading...",
@@ -105,6 +106,18 @@
     "configuration": "There is a problem with the server configuration. Please contact the site administrator.",
     "access denied": "You don't have permission to sigin or register on this site.",
     "verification": "That token is not valid. Please try again or refresh the page to request a new one.",
-    "default": "There was an unknown error. Please refresh the page and try again."
+    "default": "There was an unknown error. Please refresh the page and try again.",
+    "not found": "404 - Page not found.",
+    "something wrong": "Something went wrong!"
+  },
+  "email": {
+    "auth": {
+      "subject": "skydiary sign in passcode",
+      "text": "sign in to skydiary",
+      "body": "sign in to skydiary",
+      "code": "your code:",
+      "go back": "go back to skydiary and enter your passcode to log in.",
+      "safely ignore it": "if you didn't request this email you can safely ignore it"
+    }
   }
 }

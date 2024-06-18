@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 export default function GlobalError({
   error,
   reset,
@@ -7,12 +9,13 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const t = useTranslations();
   return (
     <html>
       <body>
-        <h2>Something went wrong!</h2>
+        <h2>{t("error.something wrong")}</h2>
         <p>{error.message}</p>
-        <button onClick={() => reset()}>Try again</button>
+        <button onClick={() => reset()}>{t("form.try again")}</button>
       </body>
     </html>
   );
