@@ -45,6 +45,7 @@
     "today": "today"
   },
   "home": {
+    "whats happening": "What's happening today?",
     "today": "Today",
     "last7Days": "Last 7 days",
     "last30Days": "Last 30 days"

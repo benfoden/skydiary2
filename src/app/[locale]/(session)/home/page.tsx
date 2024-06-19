@@ -87,7 +87,7 @@ export default async function Home() {
               {t("home.today")}
               {lastPostDate !== today || userPosts?.length === 0 ? (
                 <Link href="/today" prefetch={true}>
-                  <Button>Whats on your mind?</Button>
+                  <Button>{t("home.whats happening")}</Button>
                 </Link>
               ) : (
                 <Link
