@@ -21,6 +21,7 @@ export default function EmailSubmission({ onSubmit }: Props) {
     e.preventDefault();
     setIsSubmitting(true);
 
+    debugger;
     const response = await signIn("email", { email, redirect: false });
 
     console.log("THe responso!!!!!", response);
