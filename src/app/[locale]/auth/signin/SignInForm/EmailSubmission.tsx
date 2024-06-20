@@ -21,19 +21,15 @@ export default function EmailSubmission({ onSubmit }: Props) {
     e.preventDefault();
     setIsSubmitting(true);
 
-    debugger;
     const response = await signIn("email", { email, redirect: false });
 
-    console.log("THe responso!!!!!", response);
     if (response?.error) {
       if (response?.url) {
-        console.log("The url!!!!!", response.url);
-        // router.push(response.url);
+        router.push(response.url);
       } else {
-        console.log("The error!!!!!", response.error);
-        // router.replace(
-        //   `/auth/signin?error=${encodeURIComponent(response.error)}`,
-        // );
+        router.replace(
+          `/auth/signin?error=${encodeURIComponent(response.error)}`,
+        );
       }
     } else {
       onSubmit(email);
