@@ -60,6 +60,9 @@
     "last7Days": "Last 7 days",
     "last30Days": "Last 30 days"
   },
+  "entry": {
+    "today": "Today..."
+  },
   "topics": {
     "all": "all",
     "tags": "tags",

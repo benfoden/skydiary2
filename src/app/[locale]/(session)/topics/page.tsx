@@ -4,12 +4,9 @@ import { Card } from "~/app/_components/Card";
 import DropDownUser from "~/app/_components/DropDownUser";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
-import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
 export default async function Topics() {
-  const session = await getServerAuthSession();
-  if (!session?.user) return null;
   const t = await getTranslations();
   const userPosts = await api.post.getByUser();
 
@@ -40,7 +37,8 @@ export default async function Topics() {
                 tag && (
                   <Link key={tag.id} href={`/topics/${tag.content}/${tag.id}`}>
                     <Card>
-                      <p>{t(`topics.${tag.content}`)}</p>
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      <p>{t(`topics.${tag.content}` as any)}</p>
                       <p>{tag.count}</p>
                     </Card>
                   </Link>

@@ -12,7 +12,7 @@ import { api } from "~/trpc/server";
 
 export default async function Persona({ params }: { params: { id: string } }) {
   const session = await getServerAuthSession();
-  if (!session?.user) return null;
+  if (!session?.user) return redirect("/auth/signin");
   const personaId = params.id;
   const persona = await api.persona.getById({ isUser: false, personaId });
   if (!persona) return null;

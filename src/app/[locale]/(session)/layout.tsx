@@ -8,7 +8,7 @@ export default async function SessionLayout({
 }) {
   const session = await getServerAuthSession();
   if (!session) {
-    redirect("/");
+    redirect("/auth/signin");
   }
   return <div className="container mx-auto min-h-screen">{children}</div>;
 }
