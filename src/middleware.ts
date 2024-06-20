@@ -4,14 +4,9 @@ import { defaultLocale, locales } from "./i18n-config";
 export default createMiddleware({
   locales,
   defaultLocale,
-  localePrefix: "as-needed",
 });
 
 export const config = {
-  matcher: [
-    "/",
-    "/(ja|en)/:path*",
-    "/api/auth/:path*",
-    "/((?!_next|_vercel|.*\\..*).*)",
-  ],
+  // Match only internationalized pathnames
+  matcher: ["/", "/(ja|en)/:path*", "/((?!_next|_vercel|.*\\..*).*)"],
 };
