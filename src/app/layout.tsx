@@ -6,7 +6,6 @@ import { TRPCReactProvider } from "~/trpc/react";
 
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { locales } from "../i18n-config";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,8 +19,8 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
+export async function generateStaticParams() {
+  return [{ locale: "en" }, { locale: "ja" }];
 }
 
 export default async function RootLayout({

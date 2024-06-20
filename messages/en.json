@@ -154,7 +154,8 @@
     "somethingwrong": {
       "heading": "Something Went Wrong",
       "message": "Something went wrong!"
-    }
+    },
+    "back to home": "back to home"
   },
   "email": {
     "auth": {
