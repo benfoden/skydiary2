@@ -162,8 +162,8 @@
       "text": "sign in to skydiary",
       "body": "sign in to skydiary",
       "code": "your code:",
-      "go back": "go back to skydiary and enter your passcode to log in.",
-      "safely ignore it": "if you didn't request this email you can safely ignore it"
+      "goBack": "go back to skydiary and enter your passcode to log in.",
+      "safelyIgnoreIt": "if you didn't request this email you can safely ignore it"
     }
   }
 }

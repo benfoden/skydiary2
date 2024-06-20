@@ -158,12 +158,12 @@
   },
   "email": {
     "auth": {
-      "subject": "skydiaryへのサインインパスコード",
+      "subject": "skydiaryへのパスコード",
       "text": "skydiaryにサインイン",
       "body": "skydiaryにサインイン",
       "code": "パスコード:",
-      "go back": "skydiaryに戻って、パスコードを入力してログインします。",
-      "safely ignore it": "このメールをリクエストしていない場合は、安全に無視できます"
+      "goBack": "skydiaryに戻って、パスコードを入力してログインします。",
+      "safelyIgnoreIt": "このメールをリクエストしていない場合は、安全に無視できます"
     }
   }
 }
