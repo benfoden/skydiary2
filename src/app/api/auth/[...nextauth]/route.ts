@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { authOptions } from "~/server/auth";
 import { type EmailDetails } from "~/utils/types";
 
-const handler = async (req, res) => {
+const handler = async () => {
   const t = await getTranslations();
 
   const emailDetails: EmailDetails = {
@@ -16,7 +16,9 @@ const handler = async (req, res) => {
   };
 
   // Insert any logic here before NextAuth is called
-  return NextAuth(req, res, authOptions(emailDetails));
+
+  const options = authOptions(emailDetails);
+  return NextAuth(options);
 };
 
 export { handler as GET, handler as POST };

@@ -3,13 +3,9 @@ import { getServerAuthSession } from "~/server/auth";
 import SignInForm from "./SignInForm";
 import VerificationAlert from "./VerificationAlert";
 
-async function authenticationPrecheck(): Promise<void> {
+export default async function SignIn() {
   const session = await getServerAuthSession();
   if (session) return redirect("/home");
-}
-
-export default async function SignIn() {
-  await authenticationPrecheck();
 
   return (
     <div className="relative flex h-full w-full overflow-hidden">
