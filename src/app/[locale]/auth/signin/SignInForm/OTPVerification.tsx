@@ -26,12 +26,12 @@ export default function OTPVerification({ email }: Props) {
     const otpRequestURL = `/api/auth/callback/email?email=${formattedEmail}&token=${formattedCode}&callbackUrl=${formattedCallback}`;
     const response = await fetch(otpRequestURL);
 
-    if (response) {
-      if (response.url.includes("/auth/verified")) {
-        router.push(response.url);
-      } else {
-        router.replace(`/auth/signin?error=Verification`);
-      }
+    //todo: why is this required?
+    if (response.url.includes("/auth/verified")) {
+      router.replace("/home");
+    }
+    if (!response) {
+      router.replace(`/auth/signin?error=Verification`);
     }
 
     setIsSubmitting(false);
@@ -64,7 +64,7 @@ export default function OTPVerification({ email }: Props) {
             variant="submit"
             isDisabled={isSubmitting || !code || code.length !== 6}
           >
-            {isSubmitting ? t("auth.verifying") : t("auth.verified")}
+            {isSubmitting ? t("auth.verifying") : t("auth.verify and continue")}
           </FormButton>
         </div>
       </form>
