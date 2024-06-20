@@ -13,7 +13,7 @@ export default function GlobalError({
   return (
     <html>
       <body>
-        <h2>{t("error.something wrong")}</h2>
+        <h1>{t("error.somethingwrong.heading")}</h1>
         <p>{error.message}</p>
         <button onClick={() => reset()}>{t("form.try again")}</button>
       </body>

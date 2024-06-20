@@ -4,9 +4,10 @@ import { redirect } from "next/navigation";
 export default function RootPage() {
   // detect browser language and redirect to the right locale
   const lang = navigator.language.split("-")[0];
-  console.log(lang);
-  if (lang !== "en") {
-    redirect(`/en/${lang}`);
+  console.log("THE LANGO", lang);
+  if (lang === "ja") {
+    redirect(`/ja`);
+  } else {
+    redirect("/en");
   }
-  redirect("/en");
 }

@@ -55,7 +55,7 @@ export default async function Persona() {
                         ) : (
                           <PersonIcon className="h-8 w-8" />
                         )}
-                        <h2>{persona.name}</h2>
+                        {persona.name}
                       </Card>
                     </Link>
                   ))}

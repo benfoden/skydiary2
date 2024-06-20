@@ -10,7 +10,7 @@ export default function NotFound() {
       <Nav />
       <main className="flex min-h-screen items-center justify-center">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h2 className="text-3xl font-bold">{t("error.not found")}</h2>
+          <h1>{t("error.notfound.heading")}</h1>
           <Link href="/">
             <Button>{t("nav.home")}</Button>
           </Link>

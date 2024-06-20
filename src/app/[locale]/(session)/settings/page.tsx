@@ -33,7 +33,8 @@ export default async function Settings() {
 
       <main className="flex min-h-screen w-full flex-col items-center justify-start">
         <div className="container flex w-80 flex-col items-center justify-start gap-12 px-4 py-16">
-          <div className="m-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
+          <div className="mt-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
+            <h2>{t("settings.personal")}</h2>
             <p className="text-sm opacity-60">{t("settings.description")}</p>
             <form
               className="flex flex-col gap-4"
@@ -72,7 +73,7 @@ export default async function Settings() {
               }}
             >
               <label className="text-base font-light" htmlFor="name">
-                {t("form.your name")}
+                {t("settings.your name")}
                 <input
                   type="text"
                   id="name"
@@ -84,7 +85,7 @@ export default async function Settings() {
                 />
               </label>
               <label className="text-base font-light" htmlFor="age">
-                {t("form.your age")}
+                {t("settings.your age")}
                 <input
                   type="number"
                   id="age"
@@ -96,7 +97,7 @@ export default async function Settings() {
                 />
               </label>
               <label className="text-base font-light" htmlFor="gender">
-                {t("form.your identities")}
+                {t("settings.your identities")}
                 <input
                   type="text"
                   id="gender"
@@ -104,11 +105,22 @@ export default async function Settings() {
                   className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
                   required
                   defaultValue={userPersona?.gender ?? ""}
-                  placeholder={t("form.placeholder identities")}
+                  placeholder={t("settings.placeholder identities")}
                 />
               </label>
               <FormButton variant="submit">{t("form.save")}</FormButton>
             </form>
+          </div>
+          <div className="flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
+            <h2>{t("settings.language")}</h2>
+            <div className="flex flex-row gap-2">
+              <Link locale={"en"} href={"/en/settings"}>
+                <Button variant="menuElement">{t("settings.en")}</Button>
+              </Link>
+              <Link locale={"ja"} href={"/ja/settings"}>
+                <Button variant="menuElement">{t("settings.ja")}</Button>
+              </Link>
+            </div>
           </div>
         </div>
       </main>

@@ -49,7 +49,7 @@ const PersonaImage = ({
     return (
       <div className="flex items-center gap-2 opacity-70">
         <PersonIcon className="h-8 w-8" />
-        <h2 className="italic">sky {coachVariant}</h2>
+        <p className="italic">sky {coachVariant}</p>
       </div>
     );
   const persona = personas.find((persona) => persona.id === personaId);
@@ -67,7 +67,7 @@ const PersonaImage = ({
       ) : (
         <PersonIcon className="h-8 w-8" />
       )}
-      <h2>{persona?.name}</h2>
+      <p>{persona?.name}</p>
     </div>
   );
 };

@@ -6,10 +6,10 @@ import { useSearchParams } from "next/navigation";
 export default function VerificationAlert() {
   const t = useTranslations();
   const ERROR_MESSAGES = {
-    Configuration: t("error.configuration"),
-    AccessDenied: t("error.access denied"),
-    Verification: t("error.verification"),
-    Default: t("error.default"),
+    Configuration: t("error.configuration.message"),
+    AccessDenied: t("error.accessdenied.message"),
+    Verification: t("error.verification.message"),
+    Default: t("error.default.message"),
   };
 
   const params = useSearchParams();

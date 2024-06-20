@@ -15,9 +15,9 @@ export default async function SignIn() {
     <div className="relative flex h-full w-full overflow-hidden">
       <div className="z-20 flex h-dvh w-full items-center justify-center">
         <div className="flex w-80 flex-col items-center justify-center text-xl">
-          <h2 className="mb-4 flex items-center space-x-2 font-light text-[#424245]">
+          <h1>
             <span className="text-xl font-light text-[#424245]">skydiary</span>
-          </h2>
+          </h1>
           <VerificationAlert />
           <SignInForm />
         </div>

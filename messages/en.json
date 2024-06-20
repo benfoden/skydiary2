@@ -26,6 +26,9 @@
     "verified": "verified",
     "signing in": "signing in...",
     "sign in": "sign in",
+    "back to home": "back to home",
+    "signing out": "signing out...",
+    "sign out": "sign out",
     "save and continue": "save and continue"
   },
   "nav": {
@@ -43,6 +46,13 @@
     "copy all text": "copy all text",
     "back": "back",
     "today": "today"
+  },
+  "new-user": {
+    "title": "welcome to skydiary",
+    "your name": "your name",
+    "your age": "your age",
+    "your identities": "your identities",
+    "placeholder identities": "woman, daughter, mother, etc."
   },
   "home": {
     "whats happening": "What's happening today?",
@@ -91,7 +101,15 @@
     "communication sample": "communication sample"
   },
   "settings": {
-    "description": "these details help to personalize your experience, privately."
+    "personal": "personal",
+    "language": "language",
+    "description": "these details help to personalize your experience, privately.",
+    "your name": "your name",
+    "your age": "your age",
+    "your identities": "your identities",
+    "placeholder identities": "woman, daughter, mother, etc.",
+    "en": "English",
+    "ja": "日本語 (Japanese)"
   },
   "form": {
     "save": "save",
@@ -99,10 +117,6 @@
     "update": "update",
     "create": "create",
     "delete": "delete",
-    "your name": "your name",
-    "your age": "your age",
-    "your identities": "your identities",
-    "placeholder identities": "woman, daughter, mother, etc.",
     "optional": "optional",
     "or": "or",
     "try again": "try again"
@@ -114,12 +128,30 @@
     "success": "success"
   },
   "error": {
-    "configuration": "There is a problem with the server configuration. Please contact the site administrator.",
-    "access denied": "You don't have permission to sigin or register on this site.",
-    "verification": "That token is not valid. Please try again or refresh the page to request a new one.",
-    "default": "There was an unknown error. Please refresh the page and try again.",
-    "not found": "404 - Page not found.",
-    "something wrong": "Something went wrong!"
+    "configuration": {
+      "heading": "Server Error",
+      "message": "There is a problem with the server configuration. Please contact the site administrator."
+    },
+    "accessdenied": {
+      "heading": "Access Denied",
+      "message": "You don't have permission to signin or register on this site."
+    },
+    "verification": {
+      "heading": "Unable to Sign In",
+      "message": "That token is not valid. Please try again or refresh the page to request a new one."
+    },
+    "default": {
+      "heading": "Error",
+      "message": "There was an unknown error. Please refresh the page and try again."
+    },
+    "notfound": {
+      "heading": "Page Not Found",
+      "message": "404 - Page not found."
+    },
+    "somethingwrong": {
+      "heading": "Something Went Wrong",
+      "message": "Something went wrong!"
+    }
   },
   "email": {
     "auth": {

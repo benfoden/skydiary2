@@ -16,6 +16,9 @@
     "verified": "確認済み",
     "signing in": "ログイン中...",
     "sign in": "ログイン",
+    "back to home": "ホームに戻る",
+    "signing out": "サインアウト中...",
+    "sign out": "サインアウト",
     "save and continue": "保存して続行"
   },
   "about": {
@@ -44,6 +47,13 @@
     "copy all text": "全てのテキストをコピー",
     "back": "戻る",
     "today": "今日"
+  },
+  "new-user": {
+    "title": "skydiaryへようこそ",
+    "your name": "名前",
+    "your age": "年齢",
+    "your identities": "身分",
+    "placeholder identities": "女性、母親、妻、その他"
   },
   "home": {
     "whats happening": "今日何が起こっていますか？",
@@ -92,7 +102,15 @@
     "communication sample": "通信サンプル"
   },
   "settings": {
-    "description": "これらの詳細は、プライベートに経験をパーソナライズするのに役立ちます。"
+    "personal": "個人",
+    "language": "言語",
+    "description": "これらの詳細は、プライベートに経験をパーソナライズするのに役立ちます。",
+    "your name": "名前",
+    "your age": "年齢",
+    "your identities": "身分",
+    "placeholder identities": "女性、母親、妻、その他",
+    "en": "English(英語)",
+    "ja": "日本語"
   },
   "form": {
     "save": "保存",
@@ -100,10 +118,6 @@
     "update": "更新",
     "create": "作成",
     "delete": "削除",
-    "your name": "名前",
-    "your age": "年齢",
-    "your identities": "身分",
-    "placeholder identities": "女性、母親、妻、その他",
     "optional": "任意",
     "or": "または",
     "try again": "再試行"
@@ -115,12 +129,30 @@
     "success": "成功"
   },
   "error": {
-    "configuration": "サーバー設定の問題があります。サイト管理者に連絡してください。",
-    "access denied": "このサイトにはアクセス権限がありません。",
-    "verification": "トークンが正しくありません。もう一度やり直してください。",
-    "default": "不明なエラーが発生しました。ページをリロードして再試行してください。",
-    "not found": "404 - ページが見つかりませんでした。",
-    "something wrong": "何かが間違っています！"
+    "configuration": {
+      "heading": "サーバーエラー",
+      "message": "サーバーの設定に問題があります。サイトの管理者に連絡してください。"
+    },
+    "accessdenied": {
+      "heading": "アクセスが拒否されました",
+      "message": "このサイトにサインインまたは登録する権限がありません。"
+    },
+    "verification": {
+      "heading": "サインインできません",
+      "message": "そのトークンは無効です。もう一度試してみてください、または新しいものをリクエストするためにページをリフレッシュしてください。"
+    },
+    "default": {
+      "heading": "エラー",
+      "message": "不明のエラーが発生しました。ページをリフレッシュしてもう一度試してください。"
+    },
+    "notfound": {
+      "heading": "ページが見つかりません",
+      "message": "404 - ページが見つかりません。"
+    },
+    "somethingwrong": {
+      "heading": "何かが間違っています",
+      "message": "何かが間違っています！"
+    }
   },
   "email": {
     "auth": {

@@ -4,11 +4,6 @@ import React from "react";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
-/**
- * This page is where new users logging in for the first time are
- * redirected to, by Next Auth. Here we will just create two welcome
- * notifications and redirect them back on their way.
- */
 const NewUserPage: React.FC = async () => {
   const session = await getServerAuthSession();
 
@@ -20,12 +15,9 @@ const NewUserPage: React.FC = async () => {
     <div className="relative flex h-full w-full overflow-hidden">
       <div className="z-20 flex h-dvh w-full items-center justify-center">
         <div className="flex w-80 flex-col items-center justify-center">
-          <h1>
-            <span className="text-xl font-light">skydiary</span>
-          </h1>
-
+          <h1>{t("new-user.title")}</h1>
           <div className="m-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
-            <p className="text-sm opacity-60">{t("auth.description")}</p>
+            <p className="text-sm opacity-60">{t("settings.description")}</p>
             <form
               className="flex flex-col gap-4"
               action={async (formData) => {
@@ -53,7 +45,7 @@ const NewUserPage: React.FC = async () => {
               }}
             >
               <label className="text-base font-light" htmlFor="name">
-                {t("form.your name")}{" "}
+                {t("new-user.your name")}
                 <input
                   type="text"
                   id="name"
@@ -63,7 +55,7 @@ const NewUserPage: React.FC = async () => {
                 />
               </label>
               <label className="text-base font-light" htmlFor="age">
-                {t("form.your age")}
+                {t("new-user.your age")}
                 <span className="text-xs opacity-60">
                   ({t("form.optional")})
                 </span>
@@ -76,7 +68,7 @@ const NewUserPage: React.FC = async () => {
                 />
               </label>
               <label className="text-base font-light" htmlFor="gender">
-                {t("form.your identities")}
+                {t("new-user.your identities")}
                 <span className="text-xs opacity-60">
                   ({t("form.optional")})
                 </span>
@@ -85,7 +77,7 @@ const NewUserPage: React.FC = async () => {
                   id="gender"
                   name="gender"
                   className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                  placeholder={t("form.placeholder identities")}
+                  placeholder={t("new-user.placeholder identities")}
                 />
               </label>
               <button
