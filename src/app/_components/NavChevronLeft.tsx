@@ -1,5 +1,6 @@
 "use client";
 import { ChevronLeftIcon } from "@radix-ui/react-icons";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -15,6 +16,7 @@ export function NavChevronLeft({
   isDisabled?: boolean;
   isBack?: boolean;
 }) {
+  const t = useTranslations();
   const router = useRouter();
 
   return (
@@ -25,7 +27,7 @@ export function NavChevronLeft({
       onClick={() => isBack && router.back()}
     >
       <ChevronLeftIcon className="h-6 w-6" />
-      <span>{isBack ? "back" : label}</span>
+      <span>{isBack ? t("nav.back") : label}</span>
     </Link>
   );
 }

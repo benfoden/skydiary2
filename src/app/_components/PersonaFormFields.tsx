@@ -1,10 +1,16 @@
 import { type Persona } from "@prisma/client";
+import { getTranslations } from "next-intl/server";
 
-export default function PersonaFormFields({ persona }: { persona?: Persona }) {
+export default async function PersonaFormFields({
+  persona,
+}: {
+  persona?: Persona;
+}) {
+  const t = await getTranslations();
   return (
     <div className="flex max-w-md flex-col gap-4">
       <label className="text-base font-light" htmlFor="name">
-        name
+        {t("personas.name")}
         <input
           type="text"
           id="name"
@@ -16,7 +22,7 @@ export default function PersonaFormFields({ persona }: { persona?: Persona }) {
         />
       </label>
       <label className="text-base font-light" htmlFor="traits">
-        traits
+        {t("personas.traits")}
         <input
           type="text"
           id="traits"
@@ -28,7 +34,8 @@ export default function PersonaFormFields({ persona }: { persona?: Persona }) {
         />
       </label>
       <label className="text-base font-light" htmlFor="description">
-        a short description <span className="opacity-60">(optional)</span>
+        {t("personas.description")}{" "}
+        <span className="opacity-60">({t("form.optional")})</span>
         <textarea
           id="description"
           name="description"
@@ -38,7 +45,8 @@ export default function PersonaFormFields({ persona }: { persona?: Persona }) {
         />
       </label>
       <label className="text-base font-light" htmlFor="image">
-        image <span className="opacity-60">(optional)</span>
+        {t("personas.image link")}{" "}
+        <span className="opacity-60">({t("form.optional")})</span>
         <input
           type="text"
           id="image"
@@ -49,7 +57,8 @@ export default function PersonaFormFields({ persona }: { persona?: Persona }) {
         />
       </label>
       <label className="text-base font-light" htmlFor="age">
-        age <span className="opacity-60">(optional)</span>
+        {t("personas.age")}{" "}
+        <span className="opacity-60">({t("form.optional")})</span>
         <input
           type="number"
           id="age"
@@ -60,7 +69,8 @@ export default function PersonaFormFields({ persona }: { persona?: Persona }) {
         />
       </label>
       <label className="text-base font-light" htmlFor="gender">
-        orientation <span className="opacity-60">(optional)</span>
+        {t("personas.gender")}{" "}
+        <span className="opacity-60">({t("form.optional")})</span>
         <input
           type="text"
           id="gender"
@@ -71,7 +81,8 @@ export default function PersonaFormFields({ persona }: { persona?: Persona }) {
         />
       </label>
       <label className="text-base font-light" htmlFor="relationship">
-        relationship with you <span className="opacity-60">(optional)</span>
+        {t("personas.relationship")}{" "}
+        <span className="opacity-60">({t("form.optional")})</span>
         <input
           type="text"
           id="relationship"
@@ -82,7 +93,8 @@ export default function PersonaFormFields({ persona }: { persona?: Persona }) {
         />
       </label>
       <label className="text-base font-light" htmlFor="occupation">
-        occupation <span className="opacity-60">(optional)</span>
+        {t("personas.occupation")}{" "}
+        <span className="opacity-60">({t("form.optional")})</span>
         <input
           type="text"
           id="occupation"
@@ -93,7 +105,8 @@ export default function PersonaFormFields({ persona }: { persona?: Persona }) {
         />
       </label>
       <label className="text-base font-light" htmlFor="communicationStyle">
-        communication style <span className="opacity-60">(optional)</span>
+        {t("personas.communication style")}{" "}
+        <span className="opacity-60">({t("form.optional")})</span>
         <input
           type="text"
           id="communicationStyle"
@@ -104,7 +117,8 @@ export default function PersonaFormFields({ persona }: { persona?: Persona }) {
         />
       </label>
       <label className="text-base font-light" htmlFor="communicationSample">
-        communication sample <span className="opacity-60">(optional)</span>
+        {t("personas.communication sample")}{" "}
+        <span className="opacity-60">({t("form.optional")})</span>
         <textarea
           id="communicationSample"
           name="communicationSample"

@@ -1,10 +1,16 @@
 "use client";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { DotsVerticalIcon, PersonIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 
 import { useEffect, useRef } from "react";
 
-const DropDownMenu = ({ children }: { children: React.ReactNode }) => {
+const DropDownMenu = ({
+  children,
+  isUserMenu = false,
+}: {
+  children: React.ReactNode;
+  isUserMenu?: boolean;
+}) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -37,7 +43,11 @@ const DropDownMenu = ({ children }: { children: React.ReactNode }) => {
         className="rounded-full p-2 transition hover:bg-white/30"
         onClick={toggleDropdown}
       >
-        <DotsVerticalIcon className="h-5 w-5" />
+        {isUserMenu ? (
+          <PersonIcon className="h-5 w-5" />
+        ) : (
+          <DotsVerticalIcon className="h-5 w-5" />
+        )}
       </button>
       {open && (
         <div className="absolute z-10 mt-10 flex min-w-max flex-col rounded-md bg-white/60 shadow-lg">

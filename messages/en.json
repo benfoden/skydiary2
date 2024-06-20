@@ -1,0 +1,169 @@
+{
+  "title": "skydiary",
+  "description": "Write a daily entry and you're done. You get recaps and advice in total privacy with an AI friend, coach, and mentor.",
+  "top": {
+    "welcome": "Welcome",
+    "welcomeBack": "Welcome back"
+  },
+  "about": {
+    "title": "about skydiary",
+    "description 0": "the benefits of journaling are countless but you don't get any feedback.",
+    "description 1": "the process of writing is solitary and private.",
+    "description 2": "you get totally private advice and counsel from different personas (powered by AI)",
+    "description 3": "the emphasis is on simplicity. all you need to do is write a daily entry",
+    "description 4": "you get automatic tags on your entry, recaps of your week, and advice or feedback when you want it",
+    "description 5": "you can create a persona for anyone you want to talk to and learn new things you might not have imagined",
+    "try it": "try it for free"
+  },
+  "auth": {
+    "description": "these details help to personalize your experience, privately.",
+    "passcode": "passcode",
+    "email": "email",
+    "check your email": "please check your email",
+    "passcode expires": "your passcode will expire in 5 minutes",
+    "send a new code": "send a new code",
+    "verify and continue": "verify and continue",
+    "verifying": "verifying...",
+    "signing in": "signing in...",
+    "sign in": "sign in",
+    "back to home": "back to home",
+    "signing out": "signing out...",
+    "sign out": "sign out",
+    "save and continue": "save and continue"
+  },
+  "nav": {
+    "home": "home",
+    "about": "about",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "contact": "contact",
+    "login": "log in",
+    "signup": "sign up",
+    "settings": "settings",
+    "signout": "sign out",
+    "topics": "topics",
+    "personas": "personas",
+    "copy all text": "copy all text",
+    "back": "back",
+    "today": "today"
+  },
+  "new-user": {
+    "title": "welcome to skydiary",
+    "your name": "your name",
+    "your age": "your age",
+    "your identities": "your identities",
+    "placeholder identities": "woman, daughter, mother, etc."
+  },
+  "home": {
+    "whats happening": "What's happening today?",
+    "today": "Today",
+    "last7Days": "Last 7 days",
+    "last30Days": "Last 30 days"
+  },
+  "entry": {
+    "today": "Today..."
+  },
+  "topics": {
+    "all": "all",
+    "tags": "tags",
+    "career": "career",
+    "diet": "diet",
+    "exercise": "exercise",
+    "family": "family",
+    "dating": "dating",
+    "friends": "friends",
+    "mental health": "mental health",
+    "learning": "learning",
+    "skills": "skills",
+    "finances": "finances",
+    "hobbies": "hobbies",
+    "travel": "travel",
+    "emotions": "emotions",
+    "goals": "goals",
+    "relationships": "relationships",
+    "self": "self",
+    "work": "work",
+    "education": "education",
+    "physical health": "physical health",
+    "spirituality": "spirituality",
+    "self-improvement": "self-improvement"
+  },
+  "personas": {
+    "new persona": "new persona",
+    "add new": "add new",
+    "name": "name",
+    "age": "age",
+    "gender": "gender",
+    "traits": "traits",
+    "identities": "identities",
+    "description": "description",
+    "image link": "image link",
+    "relationship": "relationship to you",
+    "occupation": "occupation",
+    "communication style": "communication style",
+    "communication sample": "communication sample"
+  },
+  "settings": {
+    "personal": "personal",
+    "language": "language",
+    "description": "these details help to personalize your experience, privately.",
+    "your name": "your name",
+    "your age": "your age",
+    "your identities": "your identities",
+    "placeholder identities": "woman, daughter, mother, etc.",
+    "en": "English",
+    "ja": "日本語 (Japanese)"
+  },
+  "form": {
+    "save": "save",
+    "save and continue": "save and continue",
+    "update": "update",
+    "create": "create",
+    "delete": "delete",
+    "optional": "optional",
+    "or": "or",
+    "try again": "try again"
+  },
+  "status": {
+    "loading": "loading...",
+    "deleting": "deleting...",
+    "error": "error",
+    "success": "success"
+  },
+  "error": {
+    "configuration": {
+      "heading": "Server Error",
+      "message": "There is a problem with the server configuration. Please contact the site administrator."
+    },
+    "accessdenied": {
+      "heading": "Access Denied",
+      "message": "You don't have permission to signin or register on this site."
+    },
+    "verification": {
+      "heading": "Unable to Sign In",
+      "message": "That token is not valid. Please try again or refresh the page to request a new one."
+    },
+    "default": {
+      "heading": "Error",
+      "message": "There was an unknown error. Please refresh the page and try again."
+    },
+    "notfound": {
+      "heading": "Page Not Found",
+      "message": "404 - Page not found."
+    },
+    "somethingwrong": {
+      "heading": "Something Went Wrong",
+      "message": "Something went wrong!"
+    }
+  },
+  "email": {
+    "auth": {
+      "subject": "skydiary sign in passcode",
+      "text": "sign in to skydiary",
+      "body": "sign in to skydiary",
+      "code": "your code:",
+      "goBack": "go back to skydiary and enter your passcode to log in.",
+      "safelyIgnoreIt": "if you didn't request this email you can safely ignore it"
+    }
+  }
+}
