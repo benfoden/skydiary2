@@ -2,9 +2,10 @@
 
 import { useLocale } from "next-intl";
 import { type Locales } from "~/config";
-import { Link, usePathname } from "../navigation.public";
+import { Link, usePathname } from "../../../../navigation.public";
+import Button from "../../../_components/Button";
 
-export default function PublicNavigationLocaleSwitcher() {
+export default function PublicLocaleSwitcher() {
   return (
     <div className="flex gap-3 py-5">
       <LocaleLink locale="en" />
@@ -16,14 +17,15 @@ export default function PublicNavigationLocaleSwitcher() {
 function LocaleLink({ locale }: { locale: Locales }) {
   const pathname = usePathname();
   const isActive = useLocale() === locale;
+  console.log("locale", locale, useLocale());
 
   return (
     <Link
-      className={isActive ? "underline" : undefined}
-      href={pathname}
+      className={isActive ? "underline" : ""}
+      href={isActive ? "/" : pathname}
       locale={locale}
     >
-      {locale.toUpperCase()}
+      <Button variant="chip">{locale.toUpperCase()}</Button>
     </Link>
   );
 }

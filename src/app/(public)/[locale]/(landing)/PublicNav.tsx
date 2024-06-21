@@ -1,9 +1,8 @@
-import "~/styles/globals.css";
-
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import Button from "~/app/_components/Button";
 import { getServerAuthSession } from "~/server/auth";
+import PublicLocaleSwitcher from "./PublicLocaleSwitcher";
 
 export async function PublicNav() {
   const session = await getServerAuthSession();
@@ -28,7 +27,7 @@ export async function PublicNav() {
           {t("nav.about")}
         </Link>
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center gap-4">
         {!session && (
           <Link
             href={session ? "/home" : "/auth/signin"}
@@ -44,20 +43,8 @@ export async function PublicNav() {
             </span>
           </Button>
         </Link>
+        <PublicLocaleSwitcher />
       </div>
     </nav>
-  );
-}
-
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <>
-      <PublicNav />
-      {children}
-    </>
   );
 }
