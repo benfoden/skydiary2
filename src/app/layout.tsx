@@ -1,3 +1,6 @@
+import { redirect } from "next/navigation";
+import { getServerAuthSession } from "~/server/auth";
+
 import "~/styles/globals.css";
 
 import { Inter } from "next/font/google";
@@ -6,7 +9,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { locales } from "../i18n-config";
+import { getUserLocale } from "~/i18n";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,18 +23,18 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
-}
-
 export default async function RootLayout({
   children,
-  params: { locale },
 }: {
   children: React.ReactNode;
-  params: { locale: string };
 }) {
+  const locale = await getUserLocale();
   const messages = await getMessages();
+
+  const session = await getServerAuthSession();
+  if (!session) {
+    redirect("/auth/signin");
+  }
 
   return (
     <html lang={locale}>
@@ -40,7 +43,7 @@ export default async function RootLayout({
       >
         <TRPCReactProvider>
           <NextIntlClientProvider messages={messages}>
-            {children}
+            <div className="container mx-auto min-h-screen">{children}</div>
           </NextIntlClientProvider>
         </TRPCReactProvider>
       </body>

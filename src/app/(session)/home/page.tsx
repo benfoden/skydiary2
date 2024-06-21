@@ -9,7 +9,7 @@ import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
 import { api } from "~/trpc/server";
-export const dynamic = "true";
+export const dynamic = "force-dynamic";
 
 const filterPostsByDateRange = (
   daysMin: number,

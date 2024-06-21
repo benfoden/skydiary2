@@ -11,6 +11,8 @@ const NewUserPage: React.FC = async () => {
   if (session.user.name) return redirect("/home");
   const t = await getTranslations();
 
+  // const userLocale = getUserLocale();
+
   return (
     <div className="relative flex h-full w-full overflow-hidden">
       <div className="z-20 flex h-dvh w-full items-center justify-center">
@@ -29,6 +31,7 @@ const NewUserPage: React.FC = async () => {
 
                 if (name) {
                   try {
+                    // todo: add user locale to user profile
                     await api.user.updateUser({ name });
                     await api.persona.create({
                       name,

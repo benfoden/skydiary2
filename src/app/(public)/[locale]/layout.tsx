@@ -5,7 +5,7 @@ import Link from "next/link";
 import Button from "~/app/_components/Button";
 import { getServerAuthSession } from "~/server/auth";
 
-export async function Nav() {
+export async function PublicNav() {
   const session = await getServerAuthSession();
   const t = await getTranslations();
 
@@ -56,7 +56,7 @@ export default async function RootLayout({
 }) {
   return (
     <>
-      <Nav />
+      <PublicNav />
       {children}
     </>
   );
