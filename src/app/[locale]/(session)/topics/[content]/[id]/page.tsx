@@ -5,7 +5,6 @@ import DropDownUser from "~/app/_components/DropDownUser";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
-import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import { formattedTimeStampToDate } from "~/utils/text";
 
@@ -15,8 +14,6 @@ export default async function Entry({
   params: { content: string; id: string };
 }) {
   const t = await getTranslations();
-  const session = await getServerAuthSession();
-  if (!session?.user) return null;
   const posts = await api.post.getAllByUserAndTagId({ tagId: params.id });
 
   if (!posts || posts.length === 0) return <div>No posts found...</div>;
@@ -27,7 +24,8 @@ export default async function Entry({
         <div className="flex items-center gap-2">
           <NavChevronLeft targetPathname={"/topics"} label={"topics"} />
         </div>
-        <h1 className="font-light">{t(`topics.${params.content}`)}</h1>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <h1 className="font-light">{t(`topics.${params.content}` as any)}</h1>
         <DropDownUser />
       </SessionNav>
       <main className="flex min-h-screen w-full flex-col items-center justify-start">

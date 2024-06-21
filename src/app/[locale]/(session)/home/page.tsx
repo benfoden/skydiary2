@@ -8,7 +8,6 @@ import DropDownUser from "~/app/_components/DropDownUser";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
-import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 export const dynamic = "true";
 
@@ -51,8 +50,6 @@ function PostCard({ post }: { post: Post }) {
   );
 }
 export default async function Home() {
-  const session = await getServerAuthSession();
-  if (!session?.user) return null;
   const t = await getTranslations();
   const userPosts = await api.post.getByUser();
   const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;

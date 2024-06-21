@@ -1,10 +1,15 @@
-import createMiddleware from "next-intl/middleware";
+import createIntlMiddleware from "next-intl/middleware";
+import { type NextRequest } from "next/server";
 import { defaultLocale, locales } from "./i18n-config";
 
-export default createMiddleware({
+const intlMiddleware = createIntlMiddleware({
   locales,
   defaultLocale,
 });
+
+export default function middleware(req: NextRequest) {
+  return intlMiddleware(req);
+}
 
 export const config = {
   matcher: [
@@ -12,6 +17,6 @@ export const config = {
     "/auth/:path*",
     "/api/auth/:path*",
     "/(ja|en)/:path*",
-    // "/((?!_next|_vercel|.*\\..*).*)",
+    "/((?!_next|.*\\..*).*)",
   ],
 };

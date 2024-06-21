@@ -2,10 +2,12 @@
 import { CheckCircledIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type SetStateAction } from "react";
+import { useTranslations } from "use-intl";
 import ButtonSpinner from "~/app/_components/ButtonSpinner";
 import { api } from "~/trpc/react";
 
 export default function EntryBody({ postId }: { postId: string }) {
+  const t = useTranslations();
   const [content, setContent] = useState("");
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -76,7 +78,9 @@ export default function EntryBody({ postId }: { postId: string }) {
         value={content}
         onChange={handleContentChange}
         placeholder={
-          (!content && isLoading) || isFetching ? "Loading..." : "Today..."
+          (!content && isLoading) || isFetching
+            ? t("status.loading")
+            : t("entry.today")
         }
         className="min-h-[calc(100vh-224px)] w-full resize-none rounded-3xl border-none bg-white/20 px-8 py-4 text-[#424245] focus:outline-none active:text-[#424245] sm:max-w-5xl sm:px-16 sm:py-12"
         autoFocus

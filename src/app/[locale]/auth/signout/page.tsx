@@ -34,7 +34,7 @@ function SignoutPageContent() {
               <Link href="/home">
                 <Button variant="cta">{t("auth.back to home")}</Button>
               </Link>
-              <div className="text-sm">={t("form.or")}</div>
+              <div className="text-sm">{t("form.or")}</div>
             </div>
             <Button onClick={handleSignout}>
               {isLoading ? t("auth.signing out") : t("auth.sign out")}

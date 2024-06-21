@@ -6,6 +6,7 @@ import {
   PersonIcon,
 } from "@radix-ui/react-icons";
 import { error } from "console";
+import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
@@ -79,6 +80,7 @@ export default async function Entry({
   params: { id: string };
   searchParams: { s: string };
 }) {
+  const t = await getTranslations();
   const post = await api.post.getByPostId({ postId: params.id });
 
   if (!post) return null;
@@ -95,7 +97,7 @@ export default async function Entry({
         <div className="flex items-center gap-2">
           <NavChevronLeft
             targetPathname={"/home"}
-            label={"home"}
+            label={t("nav.home")}
             isDisabled={searchParams.s === "1"}
           />
         </div>

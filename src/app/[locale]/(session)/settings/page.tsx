@@ -11,7 +11,6 @@ import { api } from "~/trpc/server";
 export default async function Settings() {
   const session = await getServerAuthSession();
 
-  if (!session?.user) return null;
   const userPersona = await api.persona.getUserPersona();
   const t = await getTranslations();
   return (
@@ -24,9 +23,7 @@ export default async function Settings() {
 
         <DropDownMenu>
           <Link href={"/auth/signout"}>
-            <Button variant="menuElement">
-              {t("nav.signout")} {session.user?.name}
-            </Button>
+            <Button variant="menuElement">{t("nav.signout")}</Button>
           </Link>
         </DropDownMenu>
       </SessionNav>
@@ -80,7 +77,7 @@ export default async function Settings() {
                   name="name"
                   className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
                   required
-                  defaultValue={session.user.name ?? ""}
+                  defaultValue={session?.user.name ?? ""}
                   placeholder="name"
                 />
               </label>
@@ -114,10 +111,10 @@ export default async function Settings() {
           <div className="flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
             <h2>{t("settings.language")}</h2>
             <div className="flex flex-row gap-2">
-              <Link locale={"en"} href={"/en/settings"}>
+              <Link locale="en" href={"/en/home"}>
                 <Button variant="menuElement">{t("settings.en")}</Button>
               </Link>
-              <Link locale={"ja"} href={"/ja/settings"}>
+              <Link locale="ja" href={"/ja/home"}>
                 <Button variant="menuElement">{t("settings.ja")}</Button>
               </Link>
             </div>
