@@ -6,6 +6,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
+import { type Locale } from "~/config";
 import { getUserLocale } from "~/i18n";
 
 const inter = Inter({
@@ -22,14 +23,21 @@ export const metadata = {
 
 export default async function RootLayout({
   children,
+  params: { locale },
 }: {
   children: React.ReactNode;
+  params: { locale: Locale };
 }) {
-  const locale = await getUserLocale();
+  let currentLocale: Locale = "en";
+  if (locale) {
+    currentLocale = locale;
+  } else {
+    currentLocale = (await getUserLocale()) as Locale;
+  }
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang={currentLocale}>
       <body
         className={`font-sans ${inter.variable} bg-gradient-to-b from-[#cce3f1] to-[#F3F6F6]`}
       >

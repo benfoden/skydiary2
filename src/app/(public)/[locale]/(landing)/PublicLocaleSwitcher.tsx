@@ -3,7 +3,6 @@
 import { useLocale } from "next-intl";
 import { type Locales } from "~/config";
 import { Link, usePathname } from "../../../../navigation.public";
-import Button from "../../../_components/Button";
 
 export default function PublicLocaleSwitcher() {
   return (
@@ -17,15 +16,14 @@ export default function PublicLocaleSwitcher() {
 function LocaleLink({ locale }: { locale: Locales }) {
   const pathname = usePathname();
   const isActive = useLocale() === locale;
-  console.log("locale", locale, useLocale());
 
   return (
     <Link
       className={isActive ? "underline" : ""}
-      href={isActive ? "/" : pathname}
+      href={pathname}
       locale={locale}
     >
-      <Button variant="chip">{locale.toUpperCase()}</Button>
+      {locale.toUpperCase()}
     </Link>
   );
 }

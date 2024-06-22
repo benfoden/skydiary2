@@ -35,7 +35,7 @@ import {
 import { formattedTimeStampToDate } from "~/utils/text";
 import EntryBody from "./EntryBody";
 
-export const dynamic = "true";
+export const dynamic = "force-dynamic";
 
 const PersonaImage = ({
   personaId,
