@@ -4,7 +4,7 @@ import { Card } from "~/app/_components/Card";
 import DropDownUser from "~/app/_components/DropDownUser";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
-import { api } from "~/app/api/trpc/server";
+import { api } from "~/trpc/server";
 
 export default async function Topics() {
   const t = await getTranslations();

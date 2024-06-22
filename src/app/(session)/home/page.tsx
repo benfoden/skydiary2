@@ -8,7 +8,7 @@ import DropDownUser from "~/app/_components/DropDownUser";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
-import { api } from "~/app/api/trpc/server";
+import { api } from "~/trpc/server";
 export const dynamic = "force-dynamic";
 
 const filterPostsByDateRange = (

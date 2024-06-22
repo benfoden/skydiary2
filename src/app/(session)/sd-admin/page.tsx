@@ -5,8 +5,8 @@ import DropDownMenu from "~/app/_components/DropDown";
 import GetTagsButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
-import { api } from "~/app/api/trpc/server";
 import { getServerAuthSession } from "~/server/auth";
+import { api } from "~/trpc/server";
 import { TAGS } from "~/utils/constants";
 
 export default async function Secret() {
