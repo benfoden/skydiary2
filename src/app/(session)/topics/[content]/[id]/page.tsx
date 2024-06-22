@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 import { Suspense } from "react";
 import { Card } from "~/app/_components/Card";
 import DropDownUser from "~/app/_components/DropDownUser";
@@ -41,18 +42,20 @@ export default async function Entry({
               <ul>
                 {posts.map((post) => (
                   <li key={post.id} className="flex flex-col rounded-lg p-4">
-                    <Card>
-                      <div className="flex w-full flex-col gap-4 pt-4">
-                        <div className="flex w-full justify-between gap-4 text-xs">
-                          <div className="font-medium">
-                            {formattedTimeStampToDate(post.createdAt)}
+                    <Link href={`/entry/${post.id}`}>
+                      <Card isButton={true}>
+                        <div className="flex w-full flex-col gap-4 pt-4">
+                          <div className="flex w-full justify-between gap-4 text-xs">
+                            <div className="font-medium">
+                              {formattedTimeStampToDate(post.createdAt)}
+                            </div>
+                          </div>
+                          <div className="max-w-md text-sm">
+                            {post.content.slice(0, 140)}...
                           </div>
                         </div>
-                        <div className="max-w-md text-sm">
-                          {post.content.slice(0, 140)}...
-                        </div>
-                      </div>
-                    </Card>
+                      </Card>
+                    </Link>
                   </li>
                 ))}
               </ul>

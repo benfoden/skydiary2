@@ -5,9 +5,7 @@ import { Inter } from "next/font/google";
 import { TRPCReactProvider } from "~/trpc/react";
 
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
-import { type Locale } from "~/config";
-import { getUserLocale } from "~/i18n";
+import { getLocale, getMessages } from "next-intl/server";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -23,21 +21,14 @@ export const metadata = {
 
 export default async function RootLayout({
   children,
-  params: { locale },
 }: {
   children: React.ReactNode;
-  params: { locale: Locale };
 }) {
-  let currentLocale: Locale = "en";
-  if (locale) {
-    currentLocale = locale;
-  } else {
-    currentLocale = (await getUserLocale()) as Locale;
-  }
+  const locale = await getLocale();
   const messages = await getMessages();
 
   return (
-    <html lang={currentLocale}>
+    <html lang={locale}>
       <body
         className={`font-sans ${inter.variable} bg-gradient-to-b from-[#cce3f1] to-[#F3F6F6]`}
       >

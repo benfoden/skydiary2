@@ -81,6 +81,7 @@ export default async function Entry({
   searchParams: { s: string };
 }) {
   const t = await getTranslations();
+
   const post = await api.post.getByPostId({ postId: params.id });
 
   if (!post) return null;
