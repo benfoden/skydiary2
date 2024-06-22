@@ -31,10 +31,9 @@ export default function OTPVerification({ email }: Props) {
       router.replace("/home");
     }
     if (!response) {
+      setIsSubmitting(false);
       router.replace(`/auth/signin?error=Verification`);
     }
-
-    setIsSubmitting(false);
   }
 
   return (
