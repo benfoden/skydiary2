@@ -11,7 +11,8 @@ export default function EntryBody({ postId }: { postId: string }) {
   const [content, setContent] = useState("");
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [value, setValue] = useState("");
+  const textareaRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
 
@@ -22,6 +23,7 @@ export default function EntryBody({ postId }: { postId: string }) {
   useEffect(() => {
     if (!isLoading && !isFetching && data) {
       setContent(data?.content ?? "");
+      textareaRef.current.innerText = data?.content;
     }
   }, [data, isLoading, isFetching]);
 
@@ -36,56 +38,74 @@ export default function EntryBody({ postId }: { postId: string }) {
     },
   });
 
-  const adjustTextareaHeight = () => {
+  // const adjustTextareaHeight = () => {
+  //   if (textareaRef.current) {
+  //     textareaRef.current.style.height = "auto";
+  //     textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+  //   }
+  // };
+
+  const handleContentChange = () => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      const newContent = textareaRef.current.innerText;
+
+      setContent(newContent);
+
+      if (debounceTimeout) {
+        clearTimeout(debounceTimeout);
+      }
+
+      const newTimeout = setTimeout(() => {
+        updatePost.mutate({ content: newContent, postId });
+      }, 1000);
+
+      setDebounceTimeout(newTimeout as unknown as SetStateAction<null>);
+
+      if (!debounceTimeout) {
+        router.push(`${window.location.pathname}?s=1`);
+        const routerTimeout = setTimeout(() => {
+          setDebounceTimeout(null);
+        }, 300);
+        setDebounceTimeout(routerTimeout as unknown as SetStateAction<null>);
+      }
     }
   };
 
-  useEffect(() => {
-    adjustTextareaHeight();
-  }, []);
+  // useEffect(() => {
+  //   if (textAreaRef.current) {
+  //     textAreaRef.current.style.height = "auto";
+  //     const newHeight =
+  //       textAreaRef.current.scrollHeight > 16
+  //         ? textAreaRef.current.scrollHeight
+  //         : 16;
+  //     textAreaRef.current.style.height = newHeight.toString() + "px";
+  //   }
+  // }, []);
 
-  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newContent = e.target.value;
+  // useEffect(() => {
+  //   if (textAreaRef.current) {
+  //     // We need to reset the height momentarily to get the correct scrollHeight for the textarea
+  //     textAreaRef.current.style.height = "0px";
+  //     const scrollHeight = textAreaRef.current.scrollHeight;
 
-    setContent(newContent);
-
-    if (debounceTimeout) {
-      clearTimeout(debounceTimeout);
-    }
-
-    const newTimeout = setTimeout(() => {
-      updatePost.mutate({ content: newContent, postId });
-    }, 1000);
-
-    setDebounceTimeout(newTimeout as unknown as SetStateAction<null>);
-
-    if (!debounceTimeout) {
-      router.push(`${window.location.pathname}?s=1`);
-      const routerTimeout = setTimeout(() => {
-        setDebounceTimeout(null);
-      }, 300);
-      setDebounceTimeout(routerTimeout as unknown as SetStateAction<null>);
-    }
-  };
+  //     // We then set the height directly, outside of the render loop
+  //     // Trying to set this with state or a ref will product an incorrect value.
+  //     textAreaRef.current.style.height = scrollHeight + "px";
+  //   }
+  // }, [textAreaRef, value]);
 
   return (
     <div className="flex h-full w-full flex-col items-center gap-12 px-4 pb-4">
-      <textarea
+      <div
+        role="textbox"
+        aria-multiline="true"
+        aria-label="Editable content"
+        contentEditable
+        suppressContentEditableWarning
+        onInput={handleContentChange}
         ref={textareaRef}
-        value={content}
-        onChange={handleContentChange}
-        placeholder={
-          (!content && isLoading) || isFetching
-            ? t("status.loading")
-            : t("entry.today")
-        }
-        className="min-h-[calc(100vh-224px)] w-full resize-none rounded-3xl border-none bg-white/20 px-8 py-4 text-[#424245] focus:outline-none active:text-[#424245] sm:max-w-5xl sm:px-16 sm:py-12"
+        className="h-full w-full resize-none rounded-3xl border-none bg-white/20 px-8 py-4 focus:outline-none sm:max-w-5xl sm:px-16 sm:py-12"
         autoFocus
-        style={{ height: "auto", overflow: "hidden", paddingBottom: "16px" }}
-        onInput={adjustTextareaHeight}
       />
       <div className="fixed bottom-1 right-1 text-[#424245]">
         <div className="flex items-center justify-center">

@@ -219,7 +219,7 @@ export default async function Entry({
             </Suspense>
           </div>
           <div className="flex h-full w-full flex-col items-center pb-4">
-            <div className="flex w-full flex-row items-center justify-center gap-2">
+            <div className="flex w-full max-w-sm flex-row flex-wrap items-center justify-center gap-2 sm:max-w-full">
               <form
                 action={async () => {
                   "use server";
