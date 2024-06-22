@@ -31,11 +31,11 @@ export default async function RootLayout({
       <body
         className={`font-sans ${inter.variable} bg-gradient-to-b from-[#cce3f1] to-[#F3F6F6]`}
       >
-        <TRPCReactProvider>
-          <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider messages={messages}>
+          <TRPCReactProvider>
             <div className="container mx-auto min-h-screen">{children}</div>
-          </NextIntlClientProvider>
-        </TRPCReactProvider>
+          </TRPCReactProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

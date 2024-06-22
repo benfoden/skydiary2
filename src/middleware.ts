@@ -11,6 +11,8 @@ export default function middleware(request: NextRequest) {
     "/persona",
     "/entry",
     "/settings",
+    "/auth",
+    "/api/auth",
   ];
   const isAppRoute = appRoutes.some((route) => pathname.startsWith(route));
 

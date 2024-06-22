@@ -1,7 +1,7 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import FormButton from "~/app/_components/FormButton";
@@ -11,6 +11,7 @@ interface Props {
 }
 
 export default function EmailSubmission({ onSubmit }: Props) {
+  const locale = useLocale();
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
@@ -28,7 +29,7 @@ export default function EmailSubmission({ onSubmit }: Props) {
         router.push(response.url);
       } else {
         router.replace(
-          `/auth/signin?error=${encodeURIComponent(response.error)}`,
+          `${locale}/auth/signin?error=${encodeURIComponent(response.error)}`,
         );
       }
     } else {
