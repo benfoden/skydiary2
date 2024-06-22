@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { api } from "~/trpc/server";
+import { api } from "~/app/api/trpc/server";
 
 export default async function Today() {
   const post = await api.post.getLatest();

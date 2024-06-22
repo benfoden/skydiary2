@@ -6,7 +6,7 @@ import DropDownUser from "~/app/_components/DropDownUser";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
-import { api } from "~/trpc/server";
+import { api } from "~/app/api/trpc/server";
 import { formattedTimeStampToDate } from "~/utils/text";
 
 export default async function Entry({

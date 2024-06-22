@@ -15,7 +15,7 @@ import DropDownMenu from "~/app/_components/DropDown";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
-import { api } from "~/trpc/react";
+import { api } from "~/app/api/trpc/react";
 import { formattedTimeStampToDate } from "~/utils/text";
 
 export default function Entry({

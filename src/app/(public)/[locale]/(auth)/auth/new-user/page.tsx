@@ -1,8 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import React from "react";
+import { api } from "~/app/api/trpc/server";
 import { getServerAuthSession } from "~/server/auth";
-import { api } from "~/trpc/server";
 
 const NewUserPage: React.FC = async () => {
   const session = await getServerAuthSession();

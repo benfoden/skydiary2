@@ -11,8 +11,8 @@ import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import PersonaFormFields from "~/app/_components/PersonaFormFields";
 import { SessionNav } from "~/app/_components/SessionNav";
+import { api } from "~/app/api/trpc/server";
 import { getServerAuthSession } from "~/server/auth";
-import { api } from "~/trpc/server";
 
 export default async function Persona() {
   const session = await getServerAuthSession();
