@@ -1,15 +1,15 @@
 import { type Post } from "@prisma/client";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { Suspense } from "react";
 import Button from "~/app/_components/Button";
 import { Card } from "~/app/_components/Card";
-import DropDownMenu from "~/app/_components/DropDown";
+import DropDownUser from "~/app/_components/DropDownUser";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
-import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-export const dynamic = "true";
+export const dynamic = "force-dynamic";
 
 const filterPostsByDateRange = (
   daysMin: number,
@@ -50,40 +50,7 @@ function PostCard({ post }: { post: Post }) {
   );
 }
 export default async function Home() {
-  const session = await getServerAuthSession();
-  return (
-    <>
-      <SessionNav>
-        <div className="flex items-center gap-2">
-          <NavChevronLeft targetPathname={"/topics"} label={"topics"} />
-        </div>
-        <h1>home</h1>
-
-        <DropDownMenu>
-          <div className="text-decoration-none flex w-full items-start gap-4 px-6 py-3 no-underline sm:px-4 sm:py-2">
-            {session?.user?.name}
-          </div>
-
-          <Link href={"/settings"}>
-            <Button variant="menuElement">settings</Button>
-          </Link>
-          <Link href={"/auth/signout"}>
-            <Button variant="menuElement">sign out</Button>
-          </Link>
-        </DropDownMenu>
-      </SessionNav>
-      <main className="flex min-h-screen flex-col items-start">
-        <div className="container flex flex-col items-center justify-start gap-12 px-4 py-16 ">
-          <Suspense fallback={<Spinner />}>
-            <PostsList />
-          </Suspense>
-        </div>
-      </main>
-    </>
-  );
-}
-
-async function PostsList() {
+  const t = await getTranslations();
   const userPosts = await api.post.getByUser();
   const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const today = new Date().toLocaleDateString("en-US", {
@@ -96,46 +63,65 @@ async function PostsList() {
     timeZone: userTimezone,
   });
 
-  api.post
+  await api.post
     .checkAndSummarizeLastPost({ userTimezone, today })
     .catch((error) =>
       console.error("Error summarizing the last entry:", error),
     );
-
   return (
     <>
-      <div className="flex flex-col items-start justify-center gap-4 sm:max-w-5xl">
-        Today
-        {lastPostDate !== today || userPosts?.length === 0 ? (
-          <Link href="/today" prefetch={true}>
-            <Button>Whats on your mind?</Button>
-          </Link>
-        ) : (
-          <Link key={userPosts[0]?.id} href={`/entry/${userPosts[0]?.id}`}>
-            <PostCard key={userPosts[0]?.id} post={userPosts[0]!} />
-          </Link>
-        )}
-        {filterPostsByDateRange(0, 6, userPosts).length > 0 && (
-          <>
-            Last 7 days
-            {filterPostsByDateRange(0, 6, userPosts).map((post) => (
-              <Link key={post.id} href={`/entry/${post.id}`} prefetch={true}>
-                <PostCard key={post.id} post={post} />
-              </Link>
-            ))}
-          </>
-        )}
-        {filterPostsByDateRange(8, 30, userPosts).length > 0 && (
-          <>
-            Last 30 days
-            {filterPostsByDateRange(8, 30, userPosts).map((post) => (
-              <Link key={post.id} href={`/entry/${post.id}`}>
-                <PostCard key={post.id} post={post} />
-              </Link>
-            ))}
-          </>
-        )}
-      </div>
+      <SessionNav>
+        <div className="flex items-center gap-2">
+          <NavChevronLeft targetPathname={"/topics"} label={t("nav.topics")} />
+        </div>
+        <h1>{t("nav.home")}</h1>
+        <DropDownUser />
+      </SessionNav>
+      <main className="flex min-h-screen flex-col items-start">
+        <div className="container flex flex-col items-center justify-start gap-12 px-4 py-16 ">
+          <Suspense fallback={<Spinner />}>
+            <div className="flex flex-col items-start justify-center gap-4 sm:max-w-5xl">
+              {t("home.today")}
+              {lastPostDate !== today || userPosts?.length === 0 ? (
+                <Link href="/today" prefetch={true}>
+                  <Button>{t("home.whats happening")}</Button>
+                </Link>
+              ) : (
+                <Link
+                  key={userPosts[0]?.id}
+                  href={`/entry/${userPosts[0]?.id}`}
+                >
+                  <PostCard key={userPosts[0]?.id} post={userPosts[0]!} />
+                </Link>
+              )}
+              {filterPostsByDateRange(0, 6, userPosts).length > 0 && (
+                <>
+                  {t("home.last7Days")}
+                  {filterPostsByDateRange(0, 6, userPosts).map((post) => (
+                    <Link
+                      key={post.id}
+                      href={`/entry/${post.id}`}
+                      prefetch={true}
+                    >
+                      <PostCard key={post.id} post={post} />
+                    </Link>
+                  ))}
+                </>
+              )}
+              {filterPostsByDateRange(8, 30, userPosts).length > 0 && (
+                <>
+                  {t("home.last30Days")}
+                  {filterPostsByDateRange(8, 30, userPosts).map((post) => (
+                    <Link key={post.id} href={`/entry/${post.id}`}>
+                      <PostCard key={post.id} post={post} />
+                    </Link>
+                  ))}
+                </>
+              )}
+            </div>
+          </Suspense>
+        </div>
+      </main>
     </>
   );
 }

@@ -6,6 +6,7 @@ import {
   PersonIcon,
 } from "@radix-ui/react-icons";
 import { error } from "console";
+import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
@@ -34,7 +35,7 @@ import {
 import { formattedTimeStampToDate } from "~/utils/text";
 import EntryBody from "./EntryBody";
 
-export const dynamic = "true";
+export const dynamic = "force-dynamic";
 
 const PersonaImage = ({
   personaId,
@@ -49,7 +50,7 @@ const PersonaImage = ({
     return (
       <div className="flex items-center gap-2 opacity-70">
         <PersonIcon className="h-8 w-8" />
-        <h2 className="italic">sky {coachVariant}</h2>
+        <p className="italic">sky {coachVariant}</p>
       </div>
     );
   const persona = personas.find((persona) => persona.id === personaId);
@@ -67,7 +68,7 @@ const PersonaImage = ({
       ) : (
         <PersonIcon className="h-8 w-8" />
       )}
-      <h2>{persona?.name}</h2>
+      <p>{persona?.name}</p>
     </div>
   );
 };
@@ -79,6 +80,8 @@ export default async function Entry({
   params: { id: string };
   searchParams: { s: string };
 }) {
+  const t = await getTranslations();
+
   const post = await api.post.getByPostId({ postId: params.id });
 
   if (!post) return null;
@@ -95,7 +98,7 @@ export default async function Entry({
         <div className="flex items-center gap-2">
           <NavChevronLeft
             targetPathname={"/home"}
-            label={"home"}
+            label={t("nav.home")}
             isDisabled={searchParams.s === "1"}
           />
         </div>

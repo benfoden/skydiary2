@@ -2,6 +2,8 @@ import "~/styles/globals.css";
 
 import { Inter } from "next/font/google";
 
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 import { TRPCReactProvider } from "~/trpc/react";
 
 const inter = Inter({
@@ -16,17 +18,24 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body
         className={`font-sans ${inter.variable} bg-gradient-to-b from-[#cce3f1] to-[#F3F6F6]`}
       >
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <NextIntlClientProvider messages={messages}>
+          <TRPCReactProvider>
+            <div className="container mx-auto min-h-screen">{children}</div>
+          </TRPCReactProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

@@ -14,6 +14,7 @@ import { createTransport } from "nodemailer";
 import { env } from "~/env";
 
 import { db } from "~/server/db";
+import { type EmailDetails } from "~/utils/types";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -36,66 +37,64 @@ declare module "next-auth" {
   // }
 }
 
-/**
- * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
- *
- * @see https://next-auth.js.org/configuration/options
- */
-export const authOptions: NextAuthOptions = {
-  pages: {
-    signIn: "/auth/signin",
-    verifyRequest: "/auth/verify-request",
-    error: "/auth/error",
-    newUser: "/auth/new-user",
-  },
-  callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-      generateSessionToken: () => {
-        return randomUUID?.() ?? randomBytes(32).toString("hex");
-      },
-    }),
-  },
-  adapter: PrismaAdapter(db) as Adapter,
-  providers: [
-    EmailProvider({
-      server: {
-        host: env.EMAIL_SERVER_HOST,
-        port: Number(env.EMAIL_SERVER_PORT),
-        auth: {
-          user: env.EMAIL_SERVER_USER,
-          pass: env.EMAIL_SERVER_PASSWORD,
+export const authOptions = (emailDetails: EmailDetails): NextAuthOptions => {
+  return {
+    pages: {
+      signIn: "/auth/signin",
+      verifyRequest: "/auth/verify-request",
+      error: "/auth/error",
+      newUser: "/auth/new-user",
+    },
+    callbacks: {
+      session: ({ session, user }) => ({
+        ...session,
+        user: {
+          ...session.user,
+          id: user.id,
         },
-      },
-      from: env.EMAIL_FROM,
-      generateVerificationToken() {
-        return randomInt(100000, 999999).toString();
-      },
-      maxAge: 5 * 60,
-      async sendVerificationRequest(params) {
-        const { identifier: email, provider, token } = params;
-        const { server, from } = provider;
+        generateSessionToken: () => {
+          return randomUUID?.() ?? randomBytes(32).toString("hex");
+        },
+      }),
+    },
+    adapter: PrismaAdapter(db) as Adapter,
+    providers: [
+      EmailProvider({
+        server: {
+          host: env.EMAIL_SERVER_HOST,
+          port: Number(env.EMAIL_SERVER_PORT),
+          auth: {
+            user: env.EMAIL_SERVER_USER,
+            pass: env.EMAIL_SERVER_PASSWORD,
+          },
+        },
+        from: env.EMAIL_FROM,
+        generateVerificationToken() {
+          return randomInt(100000, 999999).toString();
+        },
+        maxAge: 5 * 60,
+        async sendVerificationRequest(params) {
+          const { identifier: to, provider, token } = params;
+          const { server, from } = provider;
+          const { subject, text, body, code, goBack, safelyIgnore } =
+            emailDetails;
 
-        const result = await createTransport(server).sendMail({
-          to: email,
-          from,
-          subject: `skydiary sign in passcode`,
-          text: `sign in to skydiary`,
-          html: `<body style="font-family: sans-serif; background: linear-gradient(to bottom, #cce3f1, #F3F6F6) no-repeat; background-size: cover; color: #424245; padding: 32px 16px; text-align: center;">
+          const result = await createTransport(server).sendMail({
+            to,
+            from,
+            subject,
+            text,
+            html: `<body style="font-family: sans-serif; background: linear-gradient(to bottom, #cce3f1, #F3F6F6) no-repeat; background-size: cover; color: #424245; padding: 32px 16px; text-align: center;">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.4); max-width: 360px; min-height: 360px; margin: auto; border-radius: 10px; vertical-align: middle; padding: 32px 0px;">
                       <tr>
-                        <td align="center" style="font-size: 22px; color: #424245; font-weight: 300; padding-bottom: 16px;">sign in to skydiary</td>
+                        <td align="center" style="font-size: 22px; color: #424245; font-weight: 300; padding-bottom: 16px;">${body}</td>
                       </tr>
                       <tr>
                         <td align="center">
                           <table border="0" cellspacing="0" cellpadding="0" style="margin: auto;">
                           <tr>
                               <td align="center" style="border-radius: 5px; padding-bottom: 16px;">
-                                <span style="font-size: 16px;">your code:</span>
+                                <span style="font-size: 16px;">${code}</span>
                               </td>
                             </tr>
                             <tr>
@@ -105,25 +104,30 @@ export const authOptions: NextAuthOptions = {
                             </tr>
                             <tr>
                               <td align="center" style="padding-top: 16px;">
-                                <p style="font-size: 16px; color: #424245;">go back to skydiary and enter your passcode to log in.</p>
+                                <p style="font-size: 16px; color: #424245;">${goBack}</p>
                               </td>
                             </tr>
                           </table>
                         </td>
                       </tr>
                       <tr>
-                        <td align="center" style="font-size: 16px; line-height: 22px; color: #424245; padding: 0px 16px; font-weight: 300;">if you didn't request this email you can safely ignore it</td>
+                        <td align="center" style="font-size: 16px; line-height: 22px; color: #424245; padding: 0px 16px; font-weight: 300;">
+                        ${safelyIgnore}
+                        </td>
                       </tr>
                     </table>
                   </body>`,
-        });
-        const failed = result.rejected.concat(result.pending).filter(Boolean);
-        if (failed.length) {
-          throw new Error(`Email(s) (${failed.join(", ")}) could not be sent`);
-        }
-      },
-    }),
-  ],
+          });
+          const failed = result.rejected.concat(result.pending).filter(Boolean);
+          if (failed.length) {
+            throw new Error(
+              `Email(s) (${failed.join(", ")}) could not be sent`,
+            );
+          }
+        },
+      }),
+    ],
+  };
 };
 
 /**
@@ -131,4 +135,5 @@ export const authOptions: NextAuthOptions = {
  *
  * @see https://next-auth.js.org/configuration/nextjs
  */
-export const getServerAuthSession = () => getServerSession(authOptions);
+export const getServerAuthSession = () =>
+  getServerSession(authOptions(null as unknown as EmailDetails));

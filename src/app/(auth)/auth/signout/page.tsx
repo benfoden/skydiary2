@@ -1,11 +1,13 @@
 "use client";
 import { signOut } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useState } from "react";
 import Button from "~/app/_components/Button";
 
 function SignoutPageContent() {
+  const t = useTranslations();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const searchParams = useSearchParams();
@@ -26,16 +28,16 @@ function SignoutPageContent() {
         <div className="flex w-80 flex-col items-center justify-center">
           <div className="m-8 flex w-full flex-col items-center gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
             <h1 className="mt-6 text-center text-xl font-light tracking-tight">
-              sure you want to sign out?
+              {t("auth.sign out")}
             </h1>
             <div className="mt-4 flex flex-col gap-3 text-center">
               <Link href="/home">
-                <Button variant="cta">go home</Button>
+                <Button variant="cta">{t("auth.back to home")}</Button>
               </Link>
-              <div className="text-sm">or</div>
+              <div className="text-sm">{t("form.or")}</div>
             </div>
             <Button onClick={handleSignout}>
-              {isLoading ? "signing out..." : "sign out"}
+              {isLoading ? t("auth.signing out") : t("auth.sign out")}
             </Button>
           </div>
         </div>

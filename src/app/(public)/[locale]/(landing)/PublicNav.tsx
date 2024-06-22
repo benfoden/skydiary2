@@ -1,11 +1,12 @@
-import "~/styles/globals.css";
-
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
+import Button from "~/app/_components/Button";
 import { getServerAuthSession } from "~/server/auth";
-import Button from "../_components/Button";
+import PublicLocaleSwitcher from "./PublicLocaleSwitcher";
 
-export async function Nav() {
+export async function PublicNav() {
   const session = await getServerAuthSession();
+  const t = await getTranslations();
 
   return (
     <nav className="flex w-full items-center justify-between bg-transparent p-4 text-[#424245]">
@@ -23,37 +24,28 @@ export async function Nav() {
           href="/about"
           className="rounded-full px-4 py-2 no-underline transition hover:bg-white/30"
         >
-          About
+          {t("nav.about")}
         </Link>
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center gap-4">
         {!session && (
           <Link
             href={session ? "/home" : "/auth/signin"}
             className="text-nowrap rounded-full px-4 py-2 no-underline transition hover:bg-white/50"
           >
-            log in
+            {t("nav.login")}
           </Link>
         )}
         <Link href={session ? "/home" : "/auth/signin"}>
           <Button>
-            <span className="text-nowrap">{session ? "home" : "sign up"}</span>
+            <span className="text-nowrap">
+              {session ? t("nav.home") : t("nav.signup")}
+            </span>
           </Button>
         </Link>
+        <span> · </span>
+        <PublicLocaleSwitcher />
       </div>
     </nav>
-  );
-}
-
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <>
-      <Nav />
-      {children}
-    </>
   );
 }

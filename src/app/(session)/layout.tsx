@@ -1,14 +1,15 @@
 import { redirect } from "next/navigation";
+import { type ReactNode } from "react";
 import { getServerAuthSession } from "~/server/auth";
 
-export default async function SessionLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+type Props = {
+  children: ReactNode;
+};
+
+export default async function SessionLayout({ children }: Props) {
   const session = await getServerAuthSession();
   if (!session) {
-    redirect("/");
+    redirect("/auth/signin");
   }
-  return <div className="container mx-auto min-h-screen">{children}</div>;
+  return children;
 }

@@ -1,8 +1,10 @@
 "use client";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import Button from "~/app/_components/Button";
+import Spinner from "~/app/_components/Spinner";
 
 export type ErrorType =
   | "default"
@@ -17,64 +19,63 @@ interface ErrorView {
   signin?: JSX.Element;
 }
 
-const SignInButton = () => (
+const SignInButton = ({ signInText }: { signInText: string }) => (
   <div className="flex flex-col items-center gap-3">
     <Link href="/auth/signin">
-      <Button variant="cta">sign in again</Button>
+      <Button variant="cta">{signInText}</Button>
     </Link>
   </div>
 );
 
 const ErrorPageContent = () => {
+  const t = useTranslations();
   const searchParams = useSearchParams();
   const error = searchParams.get("error") as ErrorType;
 
   const errors: Record<ErrorType, ErrorView> = {
     default: {
       status: 200,
-      heading: "Error",
+      heading: t("error.default.heading"),
       message: (
         <>
-          <p className="mb-3">an unindentified error has occured.</p>
+          <p className="mb-3">{t("error.default.message")}</p>
           <Link href="/">
-            <Button variant="cta">go back to top page</Button>
+            <Button variant="cta">{t("nav.home")}</Button>
           </Link>
         </>
       ),
     },
     configuration: {
       status: 500,
-      heading: "Server error",
+      heading: t("error.configuration.heading"),
       message: (
         <>
-          <p>there is a problem with the server. please try again later</p>
-          <p className="leading-8">if this continues, please contact us</p>
+          <p>{t("error.configuration.message")}</p>
           <Button variant="cta">
-            <Link href="/">go back to top page</Link>
+            <Link href="/">{t("nav.home")}</Link>
           </Button>
         </>
       ),
     },
     accessdenied: {
       status: 403,
-      heading: "Access Denied",
+      heading: t("error.accessdenied.heading"),
       message: (
         <>
-          <p className="mb-4">you do not have permission</p>
+          <p className="mb-4">{t("error.accessdenied.message")}</p>
         </>
       ),
-      signin: <SignInButton />,
+      signin: <SignInButton signInText={t("auth.sign in")} />,
     },
     verification: {
       status: 403,
-      heading: "Unable to sign in",
+      heading: t("error.verification.heading"),
       message: (
         <>
-          <p>the sign in link is no longer valid</p>
-          <p>it may have been used already or it may have expired</p>
+          <p>{t("error.verification.message")}</p>
         </>
       ),
-      signin: <SignInButton />,
+      signin: <SignInButton signInText={t("auth.sign in")} />,
     },
   };
 
@@ -105,7 +106,7 @@ const ErrorPage = () => (
   <Suspense
     fallback={
       <div className="flex h-full w-full items-center justify-center font-light">
-        Loading...
+        <Spinner />
       </div>
     }
   >

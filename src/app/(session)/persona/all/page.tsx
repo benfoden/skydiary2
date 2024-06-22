@@ -1,11 +1,12 @@
 import { PersonIcon, PlusIcon } from "@radix-ui/react-icons";
+import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import Button from "~/app/_components/Button";
 import { Card } from "~/app/_components/Card";
-import DropDownMenu from "~/app/_components/DropDown";
+import DropDownUser from "~/app/_components/DropDownUser";
 import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import PersonaFormFields from "~/app/_components/PersonaFormFields";
@@ -15,40 +16,34 @@ import { api } from "~/trpc/server";
 
 export default async function Persona() {
   const session = await getServerAuthSession();
-  if (!session?.user) return null;
+  if (!session?.user) return redirect("/auth/signin");
+  const t = await getTranslations();
 
   const personas = await api.persona.getAllByUserId();
   return (
     <>
       <SessionNav>
         <div className="flex items-center gap-2">
-          <NavChevronLeft targetPathname={"/today"} label={"today"} />
+          <NavChevronLeft targetPathname={"/today"} label={t("nav.today")} />
         </div>
-        <h1>personas</h1>
-        <DropDownMenu>
-          <Link href={"/auth/signout"}>
-            <Button variant="menuElement">Sign out {session.user?.name}</Button>
-          </Link>
-        </DropDownMenu>
+        <h1>{t("nav.personas")}</h1>
+        <DropDownUser />
       </SessionNav>
 
       <main className="flex min-h-screen w-full flex-col items-center justify-start">
         <div className="container flex flex-col items-center justify-start gap-12 px-4 py-16 ">
           <div className="flex w-full flex-col items-center justify-center gap-4 border-zinc-900 md:flex-row md:items-start md:px-32">
             <div className="mb-4 flex flex-col items-start justify-center gap-4">
-              <a
-                href="#newPersona"
-                className="flex items-center gap-2 text-zinc-500 transition hover:text-zinc-700"
-              >
+              <a href="#newPersona" className="flex items-center gap-2">
                 <Button>
-                  <PlusIcon className="h-5 w-5" /> create new
+                  <PlusIcon className="h-5 w-5" /> {t("personas.add new")}
                 </Button>
               </a>{" "}
               {personas && (
                 <>
                   {personas?.map((persona) => (
                     <Link key={persona.id} href={`/persona/${persona.id}`}>
-                      <Card>
+                      <Card variant="narrow">
                         {persona.image ? (
                           <Image
                             alt={persona.name}
@@ -60,7 +55,7 @@ export default async function Persona() {
                         ) : (
                           <PersonIcon className="h-8 w-8" />
                         )}
-                        <h2>{persona.name}</h2>
+                        {persona.name}
                       </Card>
                     </Link>
                   ))}
@@ -71,7 +66,7 @@ export default async function Persona() {
               id="newPersona"
               className="mb-4 flex flex-col items-start justify-center gap-4"
             >
-              new persona
+              {t("personas.new persona")}
               <form
                 className="flex flex-col items-start justify-center gap-4"
                 action={async (formData) => {
@@ -120,7 +115,7 @@ export default async function Persona() {
                 }}
               >
                 <PersonaFormFields />
-                <FormButton variant="submit">create</FormButton>
+                <FormButton variant="submit">{t("form.create")}</FormButton>
               </form>
             </div>
           </div>

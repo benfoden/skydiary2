@@ -1,20 +1,19 @@
-import Link from "next/link";
-import { Nav } from "./(landing)/layout";
-import Button from "./_components/Button";
-
 export default function NotFound() {
   return (
-    <>
-      <Nav />
-      <main className="flex min-h-screen items-center justify-center">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h2 className="text-3xl font-bold">404 Not Found</h2>
-          <p>Could not find the page you are looking for.</p>
-          <Link href="/">
-            <Button>go home</Button>
-          </Link>
+    <div className="flex h-full w-full items-center justify-center overflow-hidden">
+      <div className="z-20 flex h-dvh flex-col items-center justify-center gap-4">
+        <div className="flex w-96 flex-col gap-4 rounded-lg bg-white/50 p-6 shadow-lg">
+          <h1 className="flex w-full items-center justify-center text-xl font-light text-[#424245]">
+            404
+          </h1>
+          <div className="text-center">
+            <div className="pb-4 font-bold">404</div>
+            <div className="flex flex-col items-center gap-3 text-sm">
+              <p>The page you are looking for could not be found.</p>
+            </div>
+          </div>
         </div>
-      </main>
-    </>
+      </div>
+    </div>
   );
 }

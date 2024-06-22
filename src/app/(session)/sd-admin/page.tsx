@@ -49,7 +49,9 @@ export default async function Secret() {
                 }
               }}
             >
-              <GetTagsButton />
+              <GetTagsButton>
+                <Button variant="primary">Create tags</Button>
+              </GetTagsButton>
             </form>
             {tags && (
               <ul>
