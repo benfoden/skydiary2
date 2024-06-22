@@ -1,10 +1,12 @@
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import Button from "~/app/_components/Button";
 import DropDownMenu from "~/app/_components/DropDown";
 import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
+import { setUserLocale } from "~/i18n";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
@@ -111,12 +113,28 @@ export default async function Settings() {
           <div className="flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
             <h2>{t("settings.language")}</h2>
             <div className="flex flex-row gap-2">
-              <Link locale="en" href={"/en/home"}>
-                <Button variant="menuElement">{t("settings.en")}</Button>
-              </Link>
-              <Link locale="ja" href={"/ja/home"}>
-                <Button variant="menuElement">{t("settings.ja")}</Button>
-              </Link>
+              <form
+                action={async () => {
+                  "use server";
+                  await setUserLocale("en");
+                  redirect("/settings");
+                }}
+              >
+                <FormButton variant="menuElement">
+                  {t("settings.en")}
+                </FormButton>
+              </form>
+              <form
+                action={async () => {
+                  "use server";
+                  await setUserLocale("ja");
+                  redirect("/settings");
+                }}
+              >
+                <FormButton variant="menuElement">
+                  {t("settings.ja")}
+                </FormButton>
+              </form>
             </div>
           </div>
         </div>

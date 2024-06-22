@@ -1,29 +1,35 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { type Locales } from "~/config";
-import { Link, usePathname } from "../../../../navigation.public";
+import Button from "~/app/_components/Button";
+import { type Locale } from "~/config";
+import { usePathname } from "~/navigation.public";
 
 export default function PublicLocaleSwitcher() {
   return (
     <div className="flex gap-3 py-5">
-      <LocaleLink locale="en" />
-      <LocaleLink locale="ja" />
+      <LocaleButton locale="en" />
+      <LocaleButton locale="ja" />
     </div>
   );
 }
 
-function LocaleLink({ locale }: { locale: Locales }) {
+function LocaleButton({ locale }: { locale: Locale }) {
   const pathname = usePathname();
   const isActive = useLocale() === locale;
 
   return (
-    <Link
-      className={isActive ? "underline" : ""}
-      href={pathname}
-      locale={locale}
+    <Button
+      disabled={isActive}
+      onClick={() => {
+        if (isActive) return;
+        document.cookie = `NEXT_LOCALE=${locale};`;
+        window.location.href = pathname;
+      }}
     >
-      {locale.toUpperCase()}
-    </Link>
+      <span className={`text-xs ${isActive && "underline"}`}>
+        {locale.toUpperCase()}
+      </span>
+    </Button>
   );
 }

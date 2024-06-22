@@ -43,6 +43,7 @@ export async function PublicNav() {
             </span>
           </Button>
         </Link>
+        <span> · </span>
         <PublicLocaleSwitcher />
       </div>
     </nav>
