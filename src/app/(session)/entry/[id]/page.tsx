@@ -21,8 +21,8 @@ import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
-import { api } from "~/app/api/trpc/server";
 import { getResponse, getResponseJSON } from "~/server/api/ai";
+import { api } from "~/trpc/server";
 import {
   NEWPERSONAUSER,
   TAGS,

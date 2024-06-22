@@ -2,10 +2,9 @@ import "~/styles/globals.css";
 
 import { Inter } from "next/font/google";
 
-import { TRPCReactProvider } from "~/app/api/trpc/react";
-
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import { TRPCReactProvider } from "~/trpc/react";
 
 const inter = Inter({
   subsets: ["latin"],

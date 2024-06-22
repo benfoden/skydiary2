@@ -1,10 +1,10 @@
 "use client";
 import { CheckCircledIcon } from "@radix-ui/react-icons";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type SetStateAction } from "react";
-import { useTranslations } from "use-intl";
 import ButtonSpinner from "~/app/_components/ButtonSpinner";
-import { api } from "~/app/api/trpc/react";
+import { api } from "~/trpc/react";
 
 export default function EntryBody({ postId }: { postId: string }) {
   const t = useTranslations();
