@@ -82,7 +82,7 @@ export default function EntryBody({ postId }: { postId: string }) {
             ? t("status.loading")
             : t("entry.today")
         }
-        className="min-h-screen w-full resize-none rounded-3xl border-none bg-white/20 px-8 py-4 text-[#424245] focus:outline-none active:text-[#424245] sm:max-w-5xl sm:px-16 sm:py-12"
+        className="min-h-[calc(100vh-224px)] w-full resize-none rounded-3xl border-none bg-white/20 px-8 py-4 text-[#424245] focus:outline-none active:text-[#424245] sm:max-w-5xl sm:px-16 sm:py-12"
         autoFocus
         style={{ height: "auto", overflow: "hidden", paddingBottom: "16px" }}
         onInput={adjustTextareaHeight}
