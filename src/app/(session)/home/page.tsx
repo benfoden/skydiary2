@@ -1,4 +1,4 @@
-import { type Post } from "@prisma/client";
+import { type Persona, type Post } from "@prisma/client";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -8,7 +8,9 @@ import DropDownUser from "~/app/_components/DropDownUser";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
+import { getResponseJSON } from "~/server/api/ai";
 import { api } from "~/trpc/server";
+import { NEWPERSONAUSER, generatePersonaPrompt } from "~/utils/constants";
 export const dynamic = "force-dynamic";
 
 const filterPostsByDateRange = (
@@ -52,6 +54,7 @@ function PostCard({ post }: { post: Post }) {
 export default async function Home() {
   const t = await getTranslations();
   const userPosts = await api.post.getByUser();
+  const persona = await api.persona.getUserPersona();
   const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const today = new Date().toLocaleDateString("en-US", {
     timeZone: userTimezone,
@@ -68,6 +71,40 @@ export default async function Home() {
     .catch((error) =>
       console.error("Error summarizing the last entry:", error),
     );
+
+  async function updateUserPersona(post: Post) {
+    const generatedPersona = await getResponseJSON(
+      generatePersonaPrompt(persona ?? NEWPERSONAUSER) + post?.content,
+    );
+
+    if (typeof generatedPersona === "string") {
+      const personaObject = JSON.parse(generatedPersona) as Persona;
+      await api.persona.update({
+        personaId: persona?.id ?? "",
+        name: persona?.name ?? "",
+        description: personaObject?.description ?? "",
+        image: persona?.image ?? "",
+        age: personaObject?.age ?? 0,
+        gender: personaObject?.gender ?? "",
+        relationship: personaObject?.relationship ?? "",
+        occupation: personaObject?.occupation ?? "",
+        traits: personaObject?.traits ?? "",
+        communicationStyle: personaObject?.communicationStyle ?? "",
+        communicationSample: personaObject?.communicationSample ?? "",
+      });
+    }
+  }
+
+  //update the persona if it's older than the last post
+  for (const post of userPosts) {
+    if (!persona) {
+      return;
+    }
+    if (persona.updatedAt <= post.createdAt) {
+      await updateUserPersona(post);
+    }
+  }
+
   return (
     <>
       <SessionNav>

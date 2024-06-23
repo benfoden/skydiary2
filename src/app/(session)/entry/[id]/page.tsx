@@ -21,14 +21,12 @@ import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
-import { getResponse, getResponseJSON } from "~/server/api/ai";
+import { getResponse } from "~/server/api/ai";
 import { api } from "~/trpc/server";
 import {
-  NEWPERSONAUSER,
   TAGS,
   generateCoachPrompt,
   generateCommentPrompt,
-  generatePersonaPrompt,
   generateTagsPrompt,
   personaPrompt,
 } from "~/utils/constants";
@@ -159,33 +157,6 @@ export default async function Entry({
                     });
                   } else {
                     console.error("Failed to tag.");
-                  }
-
-                  const latestPersona = await api.persona.getUserPersona();
-                  const generatedPersona = await getResponseJSON(
-                    generatePersonaPrompt(latestPersona ?? NEWPERSONAUSER) +
-                      latestPost?.content,
-                  );
-
-                  if (typeof generatedPersona === "string") {
-                    const personaObject = JSON.parse(
-                      generatedPersona,
-                    ) as Persona;
-                    await api.persona.update({
-                      personaId: latestPersona?.id ?? "",
-                      name: latestPersona?.name ?? "",
-                      description: personaObject?.description ?? "",
-                      image: latestPersona?.image ?? "",
-                      age: personaObject?.age ?? 0,
-                      gender: personaObject?.gender ?? "",
-                      relationship: personaObject?.relationship ?? "",
-                      occupation: personaObject?.occupation ?? "",
-                      traits: personaObject?.traits ?? "",
-                      communicationStyle:
-                        personaObject?.communicationStyle ?? "",
-                      communicationSample:
-                        personaObject?.communicationSample ?? "",
-                    });
                   }
                 } catch (error) {
                   console.error("Error creating tags:", error);

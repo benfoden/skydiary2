@@ -13,6 +13,7 @@ export default function middleware(request: NextRequest) {
     "/settings",
     "/auth",
     "/api/auth",
+    "/sd-admin",
   ];
   const isAppRoute = appRoutes.some((route) => pathname.startsWith(route));
 
