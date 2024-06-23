@@ -19,12 +19,6 @@ export default function EntryBody({ postId }: { postId: string }) {
     postId,
   });
 
-  useEffect(() => {
-    if (!isLoading && !isFetching && data) {
-      setContent(data?.content ?? "");
-    }
-  }, [data, isLoading, isFetching]);
-
   const updatePost = api.post.update.useMutation({
     onMutate: () => {
       setIsSaving(true);
@@ -42,10 +36,6 @@ export default function EntryBody({ postId }: { postId: string }) {
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   };
-
-  useEffect(() => {
-    adjustTextareaHeight();
-  }, []);
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value;
@@ -70,6 +60,16 @@ export default function EntryBody({ postId }: { postId: string }) {
       setDebounceTimeout(routerTimeout as unknown as SetStateAction<null>);
     }
   };
+
+  useEffect(() => {
+    if (!isLoading && !isFetching && data) {
+      setContent(data?.content ?? "");
+    }
+  }, [data, isLoading, isFetching]);
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, []);
 
   return (
     <div className="flex h-full w-full flex-col items-center gap-12 px-4 pb-4">
