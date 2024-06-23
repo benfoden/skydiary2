@@ -1,11 +1,9 @@
-import { type Persona } from "@prisma/client";
 import {
   ChatBubbleIcon,
   DotsHorizontalIcon,
   FrameIcon,
   PersonIcon,
 } from "@radix-ui/react-icons";
-import { error } from "console";
 import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
@@ -19,6 +17,7 @@ import DeleteButton from "~/app/_components/DeleteButton";
 import DropDownMenu from "~/app/_components/DropDown";
 import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
+import { PersonaIcon } from "~/app/_components/PersonaIcon";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
 import { getResponse } from "~/server/api/ai";
@@ -34,42 +33,6 @@ import { formattedTimeStampToDate } from "~/utils/text";
 import EntryBody from "./EntryBody";
 
 export const dynamic = "force-dynamic";
-
-const PersonaImage = ({
-  personaId,
-  personas,
-  coachVariant,
-}: {
-  personaId: string;
-  personas: Persona[];
-  coachVariant?: string;
-}) => {
-  if (!personaId && coachVariant)
-    return (
-      <div className="flex items-center gap-2 opacity-70">
-        <PersonIcon className="h-8 w-8" />
-        <p className="italic">sky {coachVariant}</p>
-      </div>
-    );
-  const persona = personas.find((persona) => persona.id === personaId);
-
-  return (
-    <div className="flex items-center gap-2">
-      {persona?.image ? (
-        <Image
-          alt={persona.name}
-          src={persona.image}
-          width="32"
-          height="32"
-          className="rounded-full"
-        />
-      ) : (
-        <PersonIcon className="h-8 w-8" />
-      )}
-      <p>{persona?.name}</p>
-    </div>
-  );
-};
 
 export default async function Entry({
   params,
@@ -155,13 +118,12 @@ export default async function Entry({
                       postId: params?.id,
                       tagIds: tagIds,
                     });
+                    revalidatePath(`/entry/${params.id}`);
                   } else {
                     console.error("Failed to tag.");
                   }
                 } catch (error) {
                   console.error("Error creating tags:", error);
-                } finally {
-                  if (!error) revalidatePath(`/entry/${params.id}`);
                 }
               }}
             >
@@ -338,7 +300,7 @@ export default async function Entry({
                           <div className="flex w-full flex-col gap-4 py-4">
                             <div className="flex w-full justify-between gap-4 text-xs">
                               <div className="font-medium">
-                                <PersonaImage
+                                <PersonaIcon
                                   personaId={comment.createdByPersonaId!}
                                   personas={personas}
                                   coachVariant={comment.coachVariant ?? ""}
