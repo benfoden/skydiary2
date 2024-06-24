@@ -1,4 +1,5 @@
 "use client";
+import { type Post } from "@prisma/client";
 import { CheckCircledIcon } from "@radix-ui/react-icons";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -6,17 +7,16 @@ import { useEffect, useRef, useState, type SetStateAction } from "react";
 import ButtonSpinner from "~/app/_components/ButtonSpinner";
 import { api } from "~/trpc/react";
 
-export default function EntryBody({ postId }: { postId: string }) {
-  const t = useTranslations();
-  const [content, setContent] = useState("");
+export default function EntryBody({ post }: { post: Post }) {
+  const [content, setContent] = useState(post?.content);
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
+  const t = useTranslations();
   const router = useRouter();
 
   const { isFetching, isLoading, data } = api.post.getByPostId.useQuery({
-    postId,
+    postId: post?.id,
   });
 
   const updatePost = api.post.update.useMutation({
@@ -47,7 +47,7 @@ export default function EntryBody({ postId }: { postId: string }) {
     }
 
     const newTimeout = setTimeout(() => {
-      updatePost.mutate({ content: newContent, postId });
+      updatePost.mutate({ content: newContent, postId: post?.id });
     }, 1000);
 
     setDebounceTimeout(newTimeout as unknown as SetStateAction<null>);

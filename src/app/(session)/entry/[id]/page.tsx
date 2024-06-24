@@ -88,7 +88,7 @@ export default async function Entry({
             </div>
           }
         >
-          <EntryBody postId={params.id} />
+          <EntryBody post={post} />
         </Suspense>
         <div className="flex w-full max-w-5xl flex-col items-center gap-4">
           <div className="flex w-full flex-row items-center justify-center gap-4">
