@@ -1,3 +1,4 @@
+"use server";
 import { type Persona } from "@prisma/client";
 import {
   ChatBubbleIcon,
@@ -19,8 +20,10 @@ import DeleteButton from "~/app/_components/DeleteButton";
 import DropDownMenu from "~/app/_components/DropDown";
 import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
+import { PersonaIcon } from "~/app/_components/PersonaIcon";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
+import { getUserLocale } from "~/i18n";
 import { getResponse, getResponseJSON } from "~/server/api/ai";
 import { api } from "~/trpc/server";
 import {
@@ -35,44 +38,6 @@ import {
 import { formattedTimeStampToDate } from "~/utils/text";
 import EntryBody from "./EntryBody";
 
-export const dynamic = "force-dynamic";
-
-const PersonaImage = ({
-  personaId,
-  personas,
-  coachVariant,
-}: {
-  personaId: string;
-  personas: Persona[];
-  coachVariant?: string;
-}) => {
-  if (!personaId && coachVariant)
-    return (
-      <div className="flex items-center gap-2 opacity-70">
-        <PersonIcon className="h-8 w-8" />
-        <p className="italic">sky {coachVariant}</p>
-      </div>
-    );
-  const persona = personas.find((persona) => persona.id === personaId);
-
-  return (
-    <div className="flex items-center gap-2">
-      {persona?.image ? (
-        <Image
-          alt={persona.name}
-          src={persona.image}
-          width="32"
-          height="32"
-          className="rounded-full"
-        />
-      ) : (
-        <PersonIcon className="h-8 w-8" />
-      )}
-      <p>{persona?.name}</p>
-    </div>
-  );
-};
-
 export default async function Entry({
   params,
   searchParams,
@@ -80,32 +45,29 @@ export default async function Entry({
   params: { id: string };
   searchParams: { s: string };
 }) {
-  const t = await getTranslations();
-
-  const post = await api.post.getByPostId({ postId: params.id });
-
-  if (!post) return null;
-
-  const [comments, tags, personas] = await Promise.all([
+  const [t, locale, post, comments, tags, personas] = await Promise.all([
+    getTranslations(),
+    getUserLocale(),
+    api.post.getByPostId({ postId: params.id }),
     api.comment.getCommentsByPostId({ postId: params.id }),
     api.tag.getByPostId({ postId: params.id }),
     api.persona.getAllByUserId(),
   ]);
 
+  if (!post) return console.error("Failed to get post.");
+
   return (
     <>
       <SessionNav>
-        <div className="flex items-center gap-2">
-          <NavChevronLeft
-            targetPathname={"/home"}
-            label={t("nav.home")}
-            isDisabled={searchParams.s === "1"}
-          />
-        </div>
-        <h1>{formattedTimeStampToDate(post?.createdAt)}</h1>
+        <NavChevronLeft
+          targetPathname={"/home"}
+          label={t("nav.home")}
+          isDisabled={searchParams.s === "1"}
+        />
+        <h1>{formattedTimeStampToDate(post.createdAt, locale)}</h1>
 
         <DropDownMenu>
-          <CopyTextButton text={post?.content} />
+          <CopyTextButton text={post.content} />
           <form
             action={async () => {
               "use server";
@@ -367,7 +329,7 @@ export default async function Entry({
                           <div className="flex w-full flex-col gap-4 py-4">
                             <div className="flex w-full justify-between gap-4 text-xs">
                               <div className="font-medium">
-                                <PersonaImage
+                                <PersonaIcon
                                   personaId={comment.createdByPersonaId!}
                                   personas={personas}
                                   coachVariant={comment.coachVariant ?? ""}

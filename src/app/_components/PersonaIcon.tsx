@@ -8,7 +8,7 @@ export const PersonaIcon = ({
   coachVariant,
 }: {
   personaId: string;
-  personas: Persona[];
+  personas?: Persona[];
   coachVariant?: string;
 }) => {
   if (!personaId && coachVariant)
@@ -18,14 +18,14 @@ export const PersonaIcon = ({
         <p className="italic">sky {coachVariant}</p>
       </div>
     );
-  const persona = personas.find((persona) => persona.id === personaId);
+  const persona = personas?.find((persona) => persona.id === personaId);
 
   return (
     <div className="flex items-center gap-2">
       {persona?.image ? (
         <Image
-          alt={persona.name}
-          src={persona.image}
+          alt={persona?.name}
+          src={persona?.image}
           width="32"
           height="32"
           className="rounded-full"

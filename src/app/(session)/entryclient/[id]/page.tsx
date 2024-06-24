@@ -1,96 +1,62 @@
-import { type Persona } from "@prisma/client";
+"use client";
 import {
-  ChatBubbleIcon,
-  DotsHorizontalIcon,
-  FrameIcon,
-  PersonIcon,
-} from "@radix-ui/react-icons";
-import { error } from "console";
-import { getTranslations } from "next-intl/server";
-import { revalidatePath } from "next/cache";
-import Image from "next/image";
+  type Comment,
+  type Persona,
+  type Post,
+  type Tag,
+} from "@prisma/client";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Button from "~/app/_components/Button";
 import { Card } from "~/app/_components/Card";
 import CopyTextButton from "~/app/_components/CopyTextButton";
 import DeleteButton from "~/app/_components/DeleteButton";
 import DropDownMenu from "~/app/_components/DropDown";
-import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
+import { PersonaIcon } from "~/app/_components/PersonaIcon";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
-import { getResponse, getResponseJSON } from "~/server/api/ai";
-import { api } from "~/trpc/server";
-import {
-  NEWPERSONAUSER,
-  TAGS,
-  generateCoachPrompt,
-  generateCommentPrompt,
-  generatePersonaPrompt,
-  generateTagsPrompt,
-  personaPrompt,
-} from "~/utils/constants";
+import { api } from "~/trpc/react";
 import { formattedTimeStampToDate } from "~/utils/text";
 import EntryBody from "./EntryBody";
 
-export const dynamic = "force-dynamic";
-
-const PersonaImage = ({
-  personaId,
-  personas,
-  coachVariant,
-}: {
-  personaId: string;
-  personas: Persona[];
-  coachVariant?: string;
-}) => {
-  if (!personaId && coachVariant)
-    return (
-      <div className="flex items-center gap-2 opacity-70">
-        <PersonIcon className="h-8 w-8" />
-        <p className="italic">sky {coachVariant}</p>
-      </div>
-    );
-  const persona = personas.find((persona) => persona.id === personaId);
-
-  return (
-    <div className="flex items-center gap-2">
-      {persona?.image ? (
-        <Image
-          alt={persona.name}
-          src={persona.image}
-          width="32"
-          height="32"
-          className="rounded-full"
-        />
-      ) : (
-        <PersonIcon className="h-8 w-8" />
-      )}
-      <p>{persona?.name}</p>
-    </div>
-  );
-};
-
-export default async function Entry({
+export default function Entry({
   params,
   searchParams,
 }: {
   params: { id: string };
   searchParams: { s: string };
 }) {
-  const t = await getTranslations();
+  const [post, setPost] = useState<Post>();
+  const [comments, setComments] = useState<Comment[]>();
+  const [tags, setTags] = useState<Tag[]>();
+  const [personas, setPersonas] = useState<Persona[]>();
 
-  const post = await api.post.getByPostId({ postId: params.id });
+  const t = useTranslations();
+
+  const { data: postData } = api.post.getByPostId.useQuery({
+    postId: params.id,
+  });
+  const { data: commentsData } = api.comment.getCommentsByPostId.useQuery({
+    postId: params.id,
+  });
+  const { data: tagsData } = api.tag.getByPostId.useQuery({
+    postId: params.id,
+  });
+  const { data: personasData } = api.persona.getAllByUserId.useQuery();
+
+  useEffect(() => {
+    if (postData) {
+      setPost(postData);
+      setComments(commentsData);
+      setTags(tagsData);
+      setPersonas(personasData);
+    }
+  }, [postData, commentsData, tagsData, personasData]);
 
   if (!post) return null;
-
-  const [comments, tags, personas] = await Promise.all([
-    api.comment.getCommentsByPostId({ postId: params.id }),
-    api.tag.getByPostId({ postId: params.id }),
-    api.persona.getAllByUserId(),
-  ]);
 
   return (
     <>
@@ -102,20 +68,11 @@ export default async function Entry({
             isDisabled={searchParams.s === "1"}
           />
         </div>
-        <h1>{formattedTimeStampToDate(post?.createdAt)}</h1>
+        <h1>{formattedTimeStampToDate(post.createdAt)}</h1>
 
         <DropDownMenu>
-          <CopyTextButton text={post?.content} />
-          <form
-            action={async () => {
-              "use server";
-              await api.post.delete({ postId: post?.id });
-              revalidatePath("/home");
-              redirect("/home");
-            }}
-          >
-            <DeleteButton />
-          </form>
+          <CopyTextButton text={post.content} />
+          <DeleteButton />
         </DropDownMenu>
       </SessionNav>
       <div className="flex h-full flex-col items-center px-4 pb-4">
@@ -130,7 +87,7 @@ export default async function Entry({
         </Suspense>
         <div className="flex w-full max-w-5xl flex-col items-center gap-4">
           <div className="flex w-full flex-row items-center justify-center gap-4">
-            <form
+            {/* <form
               action={async () => {
                 "use server";
                 try {
@@ -142,7 +99,7 @@ export default async function Entry({
                   });
 
                   const tags = await getResponse(
-                    generateTagsPrompt + latestPost?.content,
+                    generateTagsPrompt + latestpost.content,
                   );
 
                   const tagContents = tags?.split(",").map((tag) => tag.trim());
@@ -164,7 +121,7 @@ export default async function Entry({
                   const latestPersona = await api.persona.getUserPersona();
                   const generatedPersona = await getResponseJSON(
                     generatePersonaPrompt(latestPersona ?? NEWPERSONAUSER) +
-                      latestPost?.content,
+                      latestpost.content,
                   );
 
                   if (typeof generatedPersona === "string") {
@@ -197,7 +154,7 @@ export default async function Entry({
               <FormButton isDisabled={searchParams.s === "1"}>
                 <FrameIcon className="h-5 w-5" />
               </FormButton>
-            </form>
+            </form> */}
             <Suspense
               fallback={
                 <div className="flex h-full w-full items-center justify-center">
@@ -220,7 +177,7 @@ export default async function Entry({
           </div>
           <div className="flex h-full w-full flex-col items-center pb-4">
             <div className="flex w-full flex-row items-center justify-center gap-2">
-              <form
+              {/* <form
                 action={async () => {
                   "use server";
                   if (searchParams.s === "1") {
@@ -236,17 +193,17 @@ export default async function Entry({
                     let updatedContent = "";
                     if (currentUserPersona) {
                       updatedContent =
-                        latestPost?.content +
+                        latestpost.content +
                         "End of journal entry. When writing your response, also consider that this journal entry was written by the following person: " +
                         JSON.stringify(currentUserPersona);
                     }
 
                     const coachVariant = await getResponse(
-                      generateCoachPrompt + latestPost?.content,
+                      generateCoachPrompt + latestpost.content,
                     );
                     const prompt =
                       generateCommentPrompt(coachVariant!) + updatedContent ??
-                      latestPost?.content;
+                      latestpost.content;
 
                     const response = await getResponse(prompt);
                     if (response) {
@@ -269,8 +226,8 @@ export default async function Entry({
                 <FormButton isDisabled={searchParams.s === "1"}>
                   <ChatBubbleIcon className="h-5 w-5" />
                 </FormButton>
-              </form>
-              {personas.map((persona) => (
+              </form> */}
+              {/* {personas.map((persona) => (
                 <form
                   key={persona.id}
                   action={async () => {
@@ -289,14 +246,14 @@ export default async function Entry({
                       let updatedContent = "";
                       if (currentUserPersona) {
                         updatedContent =
-                          latestPost?.content +
+                          latestpost.content +
                           "End of journal entry. When writing your response, also consider that this journal entry was written by the following person: " +
                           JSON.stringify(currentUserPersona);
                       }
 
                       const response = await getResponse(
                         personaPrompt(persona) + updatedContent ??
-                          latestPost?.content,
+                          latestpost.content,
                       );
                       if (response) {
                         await api.comment.create({
@@ -338,7 +295,7 @@ export default async function Entry({
                     </div>
                   </FormButton>
                 </form>
-              ))}
+              ))} */}
               <Link href="/persona/all">
                 <Button>
                   <DotsHorizontalIcon className="h-4 w-4" />
@@ -367,7 +324,7 @@ export default async function Entry({
                           <div className="flex w-full flex-col gap-4 py-4">
                             <div className="flex w-full justify-between gap-4 text-xs">
                               <div className="font-medium">
-                                <PersonaImage
+                                <PersonaIcon
                                   personaId={comment.createdByPersonaId!}
                                   personas={personas}
                                   coachVariant={comment.coachVariant ?? ""}

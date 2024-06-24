@@ -10,13 +10,21 @@ export const formattedDate = new Date().toLocaleDateString("en-US", {
   year: "numeric",
 });
 
-export const formattedTimeStampToDate = (timestamp: Date) => {
+export const formattedTimeStampToDate = (timestamp: Date, locale = "en") => {
   const date = new Date(timestamp);
-  return date.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
+  if (locale === "ja") {
+    return date.toLocaleDateString("ja-JP", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+  } else {
+    return date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  }
 };
 
 export const textToCleanArray = (text: string): string[] => {
