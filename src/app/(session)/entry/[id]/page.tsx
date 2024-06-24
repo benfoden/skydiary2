@@ -167,13 +167,6 @@ export default async function Entry({
                           });
                           revalidatePath(`/entry/${params.id}`);
                         }
-                        console.log(
-                          "reached revalidate",
-                          "loaded tags:",
-                          tags,
-                          "new tags:",
-                          newTags,
-                        );
                       } catch (error) {
                         console.error("Error creating tags:", error);
                       }
