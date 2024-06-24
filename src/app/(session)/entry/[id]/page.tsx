@@ -111,7 +111,6 @@ export default async function Entry({
                         if (!latestPost?.content) {
                           return;
                         }
-
                         const newTags = await getResponse(
                           generateTagsPrompt + latestPost?.content,
                         );
@@ -165,10 +164,11 @@ export default async function Entry({
                             communicationSample:
                               personaObject?.communicationSample ?? "",
                           });
-                          revalidatePath(`/entry/${params.id}`);
                         }
                       } catch (error) {
                         console.error("Error creating tags:", error);
+                      } finally {
+                        redirect(`/entry/${params.id}`);
                       }
                     }}
                   >
