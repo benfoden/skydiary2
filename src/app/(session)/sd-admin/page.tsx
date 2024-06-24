@@ -15,6 +15,8 @@ export default async function Secret() {
 
   const tags = await api.tag.getAll();
 
+  const userPersona = await api.persona.getUserPersona();
+
   return (
     <>
       <SessionNav>
@@ -31,41 +33,76 @@ export default async function Secret() {
       </SessionNav>
 
       <main className="flex min-h-screen w-full flex-col items-center justify-start">
-        <div className="container flex flex-col items-center justify-start gap-12 px-4 py-16 ">
-          <div className="flex flex-col items-start justify-center gap-4">
-            <form
-              action={async () => {
-                "use server";
-                try {
-                  await Promise.all(
-                    TAGS.map((tag) =>
-                      api.tag.create({
-                        content: tag.content.trim(),
-                      }),
-                    ),
-                  );
-                } catch (error) {
-                  console.error("Error creating tags:", error);
-                }
-              }}
-            >
-              <GetTagsButton>
-                <Button variant="primary">Create tags</Button>
-              </GetTagsButton>
-            </form>
-            {tags && (
-              <ul>
-                {tags.map((tag) => (
-                  <li key={tag.id} className="flex flex-col rounded-lg p-2">
-                    <div className="flex w-full justify-between gap-4 text-xs">
-                      <div className="font-medium">{tag.content}</div>
-                      <div className="font-medium">{tag.id}</div>
+        <div className="container flex flex-col items-start justify-start gap-12 px-8  py-16 ">
+          <details>
+            <summary>tags</summary>
+            <div className="flex flex-col items-start justify-center gap-4">
+              <form
+                action={async () => {
+                  "use server";
+                  try {
+                    await Promise.all(
+                      TAGS.map((tag) =>
+                        api.tag.create({
+                          content: tag.content.trim(),
+                        }),
+                      ),
+                    );
+                  } catch (error) {
+                    console.error("Error creating tags:", error);
+                  }
+                }}
+              >
+                <GetTagsButton>Update global tags from TAGS</GetTagsButton>
+              </form>
+              {tags && (
+                <ul>
+                  {tags.map((tag) => (
+                    <li key={tag.id} className="flex flex-col rounded-lg p-2">
+                      <div className="flex w-full justify-between gap-4 text-xs">
+                        <div className="font-medium">{tag.content}</div>
+                        <div className="font-medium">{tag.id}</div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </details>
+          <details>
+            <summary>user persona</summary>
+            <p>
+              {userPersona && (
+                <>
+                  <div className="flex flex-col items-start justify-center gap-4">
+                    <h2>Last updated at {userPersona.updatedAt.toString()}</h2>
+                    <div className="flex w-full items-start gap-4 text-xs">
+                      <div className="font-medium">{userPersona.name}</div>
+                      <div className="font-medium">{userPersona.gender}</div>
+                      <div className="font-medium">{userPersona.age}</div>
                     </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+                  </div>
+                  <div className="flex flex-col items-start justify-center gap-4">
+                    <div className="flex w-full flex-col justify-between gap-4 text-xs">
+                      <div className="font-medium">
+                        <strong>Description:</strong> {userPersona.description}
+                      </div>
+                      <div className="font-medium">
+                        <strong>Relationship:</strong>{" "}
+                        {userPersona.relationship}
+                      </div>
+                      <div className="font-medium">
+                        <strong>Occupation:</strong> {userPersona.occupation}
+                      </div>
+                      <div className="font-medium">
+                        <strong>Traits:</strong> {userPersona.traits}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+            </p>
+          </details>
         </div>
       </main>
     </>

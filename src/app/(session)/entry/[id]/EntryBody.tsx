@@ -1,4 +1,5 @@
 "use client";
+import { type Post } from "@prisma/client";
 import { CheckCircledIcon } from "@radix-ui/react-icons";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -6,17 +7,16 @@ import { useEffect, useRef, useState, type SetStateAction } from "react";
 import ButtonSpinner from "~/app/_components/ButtonSpinner";
 import { api } from "~/trpc/react";
 
-export default function EntryBody({ postId }: { postId: string }) {
-  const t = useTranslations();
-  const [content, setContent] = useState("");
+export default function EntryBody({ post }: { post: Post }) {
+  const [content, setContent] = useState(post?.content ?? "");
   const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
+  const t = useTranslations();
   const router = useRouter();
 
   const { isFetching, isLoading, data } = api.post.getByPostId.useQuery({
-    postId,
+    postId: post?.id,
   });
 
   const updatePost = api.post.update.useMutation({
@@ -47,7 +47,7 @@ export default function EntryBody({ postId }: { postId: string }) {
     }
 
     const newTimeout = setTimeout(() => {
-      updatePost.mutate({ content: newContent, postId });
+      updatePost.mutate({ content: newContent, postId: post?.id });
     }, 1000);
 
     setDebounceTimeout(newTimeout as unknown as SetStateAction<null>);
@@ -72,17 +72,17 @@ export default function EntryBody({ postId }: { postId: string }) {
   }, []);
 
   return (
-    <div className="flex h-full w-full flex-col items-center gap-12 px-4 pb-4">
+    <div className="flex h-full w-full flex-col items-center gap-12 pb-4">
       <textarea
         ref={textareaRef}
         value={content}
         onChange={handleContentChange}
         placeholder={
-          (!content && isLoading) || isFetching
+          !content && (isLoading || isFetching)
             ? t("status.loading")
             : t("entry.today")
         }
-        className="min-h-[calc(100vh-224px)] w-full resize-none rounded-3xl border-none bg-white/20 px-8 py-4 text-[#424245] focus:outline-none active:text-[#424245] sm:max-w-5xl sm:px-16 sm:py-12"
+        className="min-h-full w-full resize-none rounded-xl border-none bg-white/20 px-8 py-6 text-[#424245] focus:outline-none active:text-[#424245] sm:max-w-5xl sm:rounded-3xl sm:px-16 sm:py-12"
         autoFocus
         style={{ height: "auto", overflow: "hidden", paddingBottom: "16px" }}
         onInput={adjustTextareaHeight}
