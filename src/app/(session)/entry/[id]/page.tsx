@@ -83,7 +83,7 @@ export default async function Entry({
         </DropDownMenu>
       </SessionNav>
       <div className="flex h-full flex-col items-center px-2 pb-4 sm:px-8">
-        <EntryBody postId={post?.id} />
+        <EntryBody post={post} />
         <div className="flex w-full max-w-5xl flex-col items-center gap-4">
           <div className="flex w-full flex-row items-center justify-center gap-4">
             <ul className="flex w-full flex-row flex-wrap items-center justify-start gap-2">
