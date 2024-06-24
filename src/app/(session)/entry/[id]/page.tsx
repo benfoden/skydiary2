@@ -6,12 +6,11 @@ import {
   FrameIcon,
   PersonIcon,
 } from "@radix-ui/react-icons";
-import { error } from "console";
 import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Button from "~/app/_components/Button";
 import { Card } from "~/app/_components/Card";
 import CopyTextButton from "~/app/_components/CopyTextButton";
@@ -43,16 +42,21 @@ export default async function Entry({
   params: { id: string };
   searchParams: { s: string };
 }) {
-  const [t, locale, post, comments, tags, personas] = await Promise.all([
-    getTranslations(),
-    getUserLocale(),
-    api.post.getByPostId({ postId: params.id }),
-    api.comment.getCommentsByPostId({ postId: params.id }),
-    api.tag.getByPostId({ postId: params.id }),
-    api.persona.getAllByUserId(),
-  ]);
+  const [t, locale, post, comments, tags, personas, userPersona] =
+    await Promise.all([
+      getTranslations(),
+      getUserLocale(),
+      api.post.getByPostId({ postId: params.id }),
+      api.comment.getCommentsByPostId({ postId: params.id }),
+      api.tag.getByPostId({ postId: params.id }),
+      api.persona.getAllByUserId(),
+      api.persona.getUserPersona(),
+    ]);
 
-  if (!post) return console.error("Failed to get post.");
+  if (!post) {
+    console.error("Failed to get post.");
+    return notFound();
+  }
 
   return (
     <>
@@ -97,55 +101,60 @@ export default async function Entry({
                   <form
                     action={async () => {
                       "use server";
+                      if (searchParams.s === "1") {
+                        return;
+                      }
                       try {
-                        if (searchParams.s === "1") {
-                          return;
-                        }
                         const latestPost = await api.post.getByPostId({
                           postId: params.id,
                         });
+                        if (!latestPost?.content) {
+                          return;
+                        }
 
-                        const tags = await getResponse(
+                        const newTags = await getResponse(
                           generateTagsPrompt + latestPost?.content,
                         );
 
-                        const tagContents = tags
-                          ?.split(",")
-                          .map((tag) => tag.trim());
-                        const tagIds = tagContents
-                          ?.map((content) => {
-                            const tag = TAGS.find(
-                              (tag) => tag.content === content,
-                            );
-                            return tag?.id ?? undefined;
-                          })
-                          .filter((tag): tag is string => tag !== undefined);
-                        if (tagIds?.length) {
-                          await api.post.addTags({
-                            postId: params?.id,
-                            tagIds: tagIds,
-                          });
+                        if (newTags) {
+                          const tagContents = newTags
+                            ?.split(",")
+                            .map((tag) => tag.trim());
+
+                          const tagIds = tagContents
+                            ?.map((content) => {
+                              const tag = TAGS.find(
+                                (tag) => tag.content === content,
+                              );
+                              return tag?.id ?? undefined;
+                            })
+                            .filter((tag): tag is string => tag !== undefined);
+                          if (tagIds?.length) {
+                            await api.post.addTags({
+                              postId: params?.id,
+                              tagIds: tagIds,
+                            });
+                          }
                         } else {
                           console.error("Failed to tag.");
                         }
-
-                        const latestPersona =
-                          await api.persona.getUserPersona();
                         const generatedPersona = await getResponseJSON(
-                          generatePersonaPrompt(
-                            latestPersona ?? NEWPERSONAUSER,
-                          ) + latestPost?.content,
+                          generatePersonaPrompt(userPersona ?? NEWPERSONAUSER) +
+                            latestPost?.content,
                         );
 
-                        if (typeof generatedPersona === "string") {
+                        if (
+                          generatedPersona &&
+                          typeof generatedPersona === "string"
+                        ) {
                           const personaObject = JSON.parse(
                             generatedPersona,
                           ) as Persona;
                           await api.persona.update({
-                            personaId: latestPersona?.id ?? "",
-                            name: latestPersona?.name ?? "",
+                            personaId: userPersona?.id ?? "",
+                            name: userPersona?.name ?? "",
                             description: personaObject?.description ?? "",
-                            image: latestPersona?.image ?? "",
+                            image: userPersona?.image ?? "",
                             age: personaObject?.age ?? 0,
                             gender: personaObject?.gender ?? "",
                             relationship: personaObject?.relationship ?? "",
@@ -156,11 +165,17 @@ export default async function Entry({
                             communicationSample:
                               personaObject?.communicationSample ?? "",
                           });
+                          revalidatePath(`/entry/${params.id}`);
                         }
+                        console.log(
+                          "reached revalidate",
+                          "loaded tags:",
+                          tags,
+                          "new tags:",
+                          newTags,
+                        );
                       } catch (error) {
                         console.error("Error creating tags:", error);
-                      } finally {
-                        if (!error) revalidatePath(`/entry/${params.id}`);
                       }
                     }}
                   >
@@ -185,6 +200,9 @@ export default async function Entry({
                       const latestPost = await api.post.getByPostId({
                         postId: params.id,
                       });
+                      if (!latestPost?.content) {
+                        return;
+                      }
 
                       const currentUserPersona =
                         await api.persona.getUserPersona();
