@@ -1,8 +1,8 @@
 "use server";
 import { type Persona, type Tag } from "@prisma/client";
 import {
-  ChatBubbleIcon,
-  DotsHorizontalIcon,
+  AvatarIcon,
+  CircleIcon,
   FrameIcon,
   PersonIcon,
 } from "@radix-ui/react-icons";
@@ -82,148 +82,152 @@ export default async function Entry({
         <EntryBody post={post} />
         <div className="flex w-full max-w-5xl flex-col items-center gap-4">
           <div className="flex w-full flex-row items-center justify-center gap-4">
-            <ul className="flex flex-row flex-wrap gap-2">
+            <ul className="flex w-full flex-row flex-wrap items-center justify-start gap-2">
               {tags?.map((tag: Tag) => (
                 <li key={tag.id}>
                   <Link href={`/topics/${tag.content}/${tag.id}`}>
-                    <Button variant="chip">{tag.content}</Button>
+                    <Button variant="text">
+                      <span className="text-xs font-medium">{tag.content}</span>
+                    </Button>
                   </Link>
                 </li>
               ))}
+              <li>
+                {!tags.length && (
+                  <form
+                    action={async () => {
+                      "use server";
+                      try {
+                        if (searchParams.s === "1") {
+                          return;
+                        }
+                        const latestPost = await api.post.getByPostId({
+                          postId: params.id,
+                        });
+
+                        const tags = await getResponse(
+                          generateTagsPrompt + latestPost?.content,
+                        );
+
+                        const tagContents = tags
+                          ?.split(",")
+                          .map((tag) => tag.trim());
+                        const tagIds = tagContents
+                          ?.map((content) => {
+                            const tag = TAGS.find(
+                              (tag) => tag.content === content,
+                            );
+                            return tag?.id ?? undefined;
+                          })
+                          .filter((tag): tag is string => tag !== undefined);
+                        if (tagIds?.length) {
+                          await api.post.addTags({
+                            postId: params?.id,
+                            tagIds: tagIds,
+                          });
+                        } else {
+                          console.error("Failed to tag.");
+                        }
+
+                        const latestPersona =
+                          await api.persona.getUserPersona();
+                        const generatedPersona = await getResponseJSON(
+                          generatePersonaPrompt(
+                            latestPersona ?? NEWPERSONAUSER,
+                          ) + latestPost?.content,
+                        );
+
+                        if (typeof generatedPersona === "string") {
+                          const personaObject = JSON.parse(
+                            generatedPersona,
+                          ) as Persona;
+                          await api.persona.update({
+                            personaId: latestPersona?.id ?? "",
+                            name: latestPersona?.name ?? "",
+                            description: personaObject?.description ?? "",
+                            image: latestPersona?.image ?? "",
+                            age: personaObject?.age ?? 0,
+                            gender: personaObject?.gender ?? "",
+                            relationship: personaObject?.relationship ?? "",
+                            occupation: personaObject?.occupation ?? "",
+                            traits: personaObject?.traits ?? "",
+                            communicationStyle:
+                              personaObject?.communicationStyle ?? "",
+                            communicationSample:
+                              personaObject?.communicationSample ?? "",
+                          });
+                        }
+                      } catch (error) {
+                        console.error("Error creating tags:", error);
+                      } finally {
+                        if (!error) revalidatePath(`/entry/${params.id}`);
+                      }
+                    }}
+                  >
+                    <FormButton isDisabled={searchParams.s === "1"}>
+                      <FrameIcon className="h-5 w-5" />
+                    </FormButton>
+                  </form>
+                )}
+              </li>
             </ul>
-            <div className="flex w-full flex-row items-center justify-end gap-2">
-              <form
-                action={async () => {
-                  "use server";
-                  try {
+          </div>
+          <div className="flex h-full w-full flex-col items-center pb-4">
+            <div className="flex w-full flex-row items-start justify-center gap-2">
+              <ul className="flex w-full flex-row flex-wrap justify-start gap-2">
+                <form
+                  action={async () => {
+                    "use server";
                     if (searchParams.s === "1") {
                       return;
                     }
-                    const latestPost = await api.post.getByPostId({
-                      postId: params.id,
-                    });
-
-                    const tags = await getResponse(
-                      generateTagsPrompt + latestPost?.content,
-                    );
-
-                    const tagContents = tags
-                      ?.split(",")
-                      .map((tag) => tag.trim());
-                    const tagIds = tagContents
-                      ?.map((content) => {
-                        const tag = TAGS.find((tag) => tag.content === content);
-                        return tag?.id ?? undefined;
-                      })
-                      .filter((tag): tag is string => tag !== undefined);
-                    if (tagIds?.length) {
-                      await api.post.addTags({
-                        postId: params?.id,
-                        tagIds: tagIds,
+                    try {
+                      const latestPost = await api.post.getByPostId({
+                        postId: params.id,
                       });
-                    } else {
-                      console.error("Failed to tag.");
-                    }
 
-                    const latestPersona = await api.persona.getUserPersona();
-                    const generatedPersona = await getResponseJSON(
-                      generatePersonaPrompt(latestPersona ?? NEWPERSONAUSER) +
-                        latestPost?.content,
-                    );
+                      const currentUserPersona =
+                        await api.persona.getUserPersona();
+                      let updatedContent = "";
+                      if (currentUserPersona) {
+                        updatedContent =
+                          latestPost?.content +
+                          "End of journal entry. When writing your response, also consider that this journal entry was written by the following person: " +
+                          JSON.stringify(currentUserPersona);
+                      }
 
-                    if (typeof generatedPersona === "string") {
-                      const personaObject = JSON.parse(
-                        generatedPersona,
-                      ) as Persona;
-                      await api.persona.update({
-                        personaId: latestPersona?.id ?? "",
-                        name: latestPersona?.name ?? "",
-                        description: personaObject?.description ?? "",
-                        image: latestPersona?.image ?? "",
-                        age: personaObject?.age ?? 0,
-                        gender: personaObject?.gender ?? "",
-                        relationship: personaObject?.relationship ?? "",
-                        occupation: personaObject?.occupation ?? "",
-                        traits: personaObject?.traits ?? "",
-                        communicationStyle:
-                          personaObject?.communicationStyle ?? "",
-                        communicationSample:
-                          personaObject?.communicationSample ?? "",
-                      });
-                    }
-                  } catch (error) {
-                    console.error("Error creating tags:", error);
-                  } finally {
-                    if (!error) revalidatePath(`/entry/${params.id}`);
-                  }
-                }}
-              >
-                <FormButton isDisabled={searchParams.s === "1"}>
-                  <FrameIcon className="h-5 w-5" />
-                </FormButton>
-              </form>
-            </div>
-          </div>
-          <div className="flex h-full w-full flex-col items-center pb-4">
-            <div className="flex w-full flex-row items-start justify-end gap-2 pb-4">
-              <form
-                action={async () => {
-                  "use server";
-                  if (searchParams.s === "1") {
-                    return;
-                  }
-                  try {
-                    const latestPost = await api.post.getByPostId({
-                      postId: params.id,
-                    });
-
-                    const currentUserPersona =
-                      await api.persona.getUserPersona();
-                    let updatedContent = "";
-                    if (currentUserPersona) {
-                      updatedContent =
-                        latestPost?.content +
-                        "End of journal entry. When writing your response, also consider that this journal entry was written by the following person: " +
-                        JSON.stringify(currentUserPersona);
-                    }
-
-                    const coachVariant = await getResponse(
-                      generateCoachPrompt + latestPost?.content,
-                    );
-                    const prompt =
-                      generateCommentPrompt(coachVariant!) + updatedContent ??
-                      latestPost?.content;
-
-                    const response = await getResponse(prompt);
-                    if (response) {
-                      await api.comment.create({
-                        content: response,
-                        postId: params?.id,
-                        coachVariant: coachVariant!,
-                      });
-                      revalidatePath(`/entry/${params.id}`);
-                    } else {
-                      console.error(
-                        "Failed to get a response for the comment.",
+                      const coachVariant = await getResponse(
+                        generateCoachPrompt + latestPost?.content,
                       );
+                      const prompt =
+                        generateCommentPrompt(coachVariant!) + updatedContent ??
+                        latestPost?.content;
+
+                      const response = await getResponse(prompt);
+                      if (response) {
+                        await api.comment.create({
+                          content: response,
+                          postId: params?.id,
+                          coachVariant: coachVariant!,
+                        });
+                        revalidatePath(`/entry/${params.id}`);
+                      } else {
+                        console.error(
+                          "Failed to get a response for the comment.",
+                        );
+                      }
+                    } catch (error) {
+                      console.error("Error creating comment:", error);
                     }
-                  } catch (error) {
-                    console.error("Error creating comment:", error);
-                  }
-                }}
-              >
-                <FormButton isDisabled={searchParams.s === "1"}>
-                  <ChatBubbleIcon className="h-5 w-5" />
-                </FormButton>
-              </form>
-              <Link href="/persona/all">
-                <Button>
-                  <DotsHorizontalIcon className="h-5 w-5" />
-                </Button>
-              </Link>
-            </div>
-            <div className="flex w-full flex-row items-start justify-center gap-2">
-              <ul className="flex flex-row flex-wrap justify-start gap-2">
+                  }}
+                >
+                  <FormButton isDisabled={searchParams.s === "1"}>
+                    <div className="flex flex-row items-center gap-2 text-xs">
+                      <CircleIcon className="h-4 w-4" />
+                      sky
+                    </div>
+                  </FormButton>
+                </form>
                 {personas.map((persona: Persona) => (
                   <form
                     key={persona.id}
@@ -294,6 +298,16 @@ export default async function Entry({
                   </form>
                 ))}
               </ul>
+              <div className="flex w-fit flex-row items-center justify-end gap-2">
+                <DropDownMenu>
+                  <Link href="/persona/all">
+                    <Button variant="menuElement">
+                      <AvatarIcon className="h-5 w-5" />
+                      personas
+                    </Button>
+                  </Link>
+                </DropDownMenu>
+              </div>
             </div>
 
             {comments && (
