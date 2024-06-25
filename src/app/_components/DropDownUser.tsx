@@ -1,3 +1,4 @@
+import { ExitIcon, GearIcon } from "@radix-ui/react-icons";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import Button from "./Button";
@@ -8,10 +9,15 @@ export default async function DropDownUser() {
   return (
     <DropDownMenu isUserMenu>
       <Link href={"/settings"}>
-        <Button variant="menuElement">{t("nav.settings")}</Button>
+        <Button variant="menuElement">
+          {t("nav.settings")} <GearIcon className="h-4 w-4" />
+        </Button>
       </Link>
       <Link href={"/auth/signout"}>
-        <Button variant="menuElement">{t("nav.signout")}</Button>
+        <Button variant="menuElement">
+          {t("nav.signout")}
+          <ExitIcon className="h-4 w-4" />
+        </Button>
       </Link>
     </DropDownMenu>
   );

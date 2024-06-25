@@ -1,5 +1,6 @@
 import "~/styles/globals.css";
 
+import { ThemeScript } from "next-app-theme/theme-script";
 import { Inter } from "next/font/google";
 
 import { NextIntlClientProvider } from "next-intl";
@@ -28,8 +29,11 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
+      <head>
+        <ThemeScript />
+      </head>
       <body
-        className={`font-sans ${inter.variable} bg-gradient-to-b from-[#cce3f1] to-[#F3F6F6]`}
+        className={`font-sans ${inter.variable} bg-gradient-to-b from-[#cce3f1] to-[#f3f6f6] dark:from-[#101015] dark:to-[#0b0f10]`}
       >
         <NextIntlClientProvider messages={messages}>
           <TRPCReactProvider>

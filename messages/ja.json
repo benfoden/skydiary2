@@ -106,6 +106,7 @@
   "settings": {
     "personal": "個人",
     "language": "言語",
+    "theme": "テーマ",
     "description": "これらの詳細は、プライベートに経験をパーソナライズするのに役立ちます。",
     "your name": "名前",
     "your age": "年齢",
@@ -165,5 +166,9 @@
       "goBack": "skydiaryに戻って、パスコードを入力してログインします。",
       "safelyIgnoreIt": "このメールをリクエストしていない場合は、安全に無視できます"
     }
+  },
+  "theme": {
+    "light": "ライトモード",
+    "dark": "ダークモード"
   }
 }

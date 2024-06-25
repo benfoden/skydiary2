@@ -3,6 +3,7 @@ import { ChevronLeftIcon } from "@radix-ui/react-icons";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Button from "./Button";
 
 // Start of Selection
 export function NavChevronLeft({
@@ -22,12 +23,14 @@ export function NavChevronLeft({
   return (
     <Link
       href={!isDisabled && !isBack && targetPathname ? targetPathname : ""}
-      className={`flex rounded-full bg-white/30 px-4 py-2 no-underline transition ${!isDisabled ? "hover:bg-white/60" : "cursor-not-allowed"}`}
+      className={`${isDisabled && "cursor-not-allowed"}`}
       prefetch={true}
       onClick={() => isBack && router.back()}
     >
-      <ChevronLeftIcon className="h-6 w-6" />
-      <span>{isBack ? t("nav.back") : label}</span>
+      <Button>
+        <ChevronLeftIcon className="h-5 w-5" />
+        <span>{isBack ? t("nav.back") : label}</span>
+      </Button>
     </Link>
   );
 }

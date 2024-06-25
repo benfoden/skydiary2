@@ -40,7 +40,7 @@ export default function EmailSubmission({ onSubmit }: Props) {
   }
 
   return (
-    <div className="m-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
+    <div className="m-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60">
       <form onSubmit={handleEmailSubmission}>
         <label className="text-base font-light">
           {t("auth.email")}

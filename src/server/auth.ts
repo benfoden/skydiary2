@@ -84,10 +84,10 @@ export const authOptions = (emailDetails: EmailDetails): NextAuthOptions => {
             from,
             subject,
             text,
-            html: `<body style="font-family: sans-serif; background: linear-gradient(to bottom, #cce3f1, #F3F6F6) no-repeat; background-size: cover; color: #424245; padding: 32px 16px; text-align: center;">
+            html: `<body style="font-family: sans-serif; background: linear-gradient(to bottom, #cce3f1, #F3F6F6) no-repeat; background-size: cover; color: #000; padding: 32px 16px; text-align: center;">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: rgba(255,255,255,0.4); max-width: 360px; min-height: 360px; margin: auto; border-radius: 10px; vertical-align: middle; padding: 32px 0px;">
                       <tr>
-                        <td align="center" style="font-size: 22px; color: #424245; font-weight: 300; padding-bottom: 16px;">${body}</td>
+                        <td align="center" style="font-size: 22px; color: #000; font-weight: 300; padding-bottom: 16px;">${body}</td>
                       </tr>
                       <tr>
                         <td align="center">
@@ -104,14 +104,14 @@ export const authOptions = (emailDetails: EmailDetails): NextAuthOptions => {
                             </tr>
                             <tr>
                               <td align="center" style="padding-top: 16px;">
-                                <p style="font-size: 16px; color: #424245;">${goBack}</p>
+                                <p style="font-size: 16px; color: #000;">${goBack}</p>
                               </td>
                             </tr>
                           </table>
                         </td>
                       </tr>
                       <tr>
-                        <td align="center" style="font-size: 16px; line-height: 22px; color: #424245; padding: 0px 16px; font-weight: 300;">
+                        <td align="center" style="font-size: 16px; line-height: 22px; color: #000; padding: 0px 16px; font-weight: 300;">
                         ${safelyIgnore}
                         </td>
                       </tr>

@@ -26,7 +26,7 @@ function SignoutPageContent() {
     <div className="relative flex h-full w-full overflow-hidden">
       <div className="z-20 flex h-dvh w-full items-center justify-center">
         <div className="flex w-80 flex-col items-center justify-center">
-          <div className="m-8 flex w-full flex-col items-center gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
+          <div className="m-8 flex w-full flex-col items-center gap-2 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60">
             <h1 className="mt-6 text-center text-xl font-light tracking-tight">
               {t("auth.sign out")}
             </h1>

@@ -3,11 +3,17 @@
 @tailwind utilities;
 
 @layer base {
-  html {
-    @apply text-[#424245;];
+  :root {
+    color-scheme: light;
   }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+  }
+
+  html,
   body {
-    @apply bg-[#FAFAFA] text-[#424245];
+    @apply bg-[#FAFAFA] dark:bg-[#1C1C1E];
   }
 
   h1,
@@ -17,5 +23,23 @@
   h5,
   h6 {
     @apply font-light;
+  }
+
+  .bg-primary {
+    @apply bg-white/50 dark:bg-white/[.12];
+  }
+
+  .text-primary {
+    @apply text-black dark:text-white;
+  }
+  .text-secondary {
+    @apply text-[#8D8C91] dark:text-[#9A999F];
+  }
+  .text-tertiary {
+    @apply text-[#86858B] dark:text-[#8E8D93];
+  }
+
+  .border-primary {
+    @apply border-black dark:border-white;
   }
 }

@@ -39,7 +39,7 @@ export default function OTPVerification({ email }: Props) {
   return (
     <>
       <form onSubmit={handleOTPVerification}>
-        <div className="my-8 flex w-full flex-col gap-4 rounded-lg bg-white/50 p-6 text-sm font-light shadow-lg">
+        <div className="my-8 flex w-full flex-col gap-4 rounded-lg bg-white/50 p-6 text-sm font-light shadow-lg dark:bg-black/60">
           <label>
             {t("auth.passcode")}
             <input
@@ -67,12 +67,12 @@ export default function OTPVerification({ email }: Props) {
           </FormButton>
         </div>
       </form>
-      <p className="mb-4 text-sm font-light text-[#424245] opacity-80">
+      <p className="mb-4 text-sm font-light opacity-80">
         <em>{t("form.or")}</em>
       </p>
       <Link
         href="#"
-        className="text-sm font-medium text-[#424245] opacity-80 hover:text-[#424245] hover:opacity-100"
+        className="text-sm font-medium opacity-80 hover:underline hover:opacity-100"
         onClick={() => {
           location.reload();
         }}
