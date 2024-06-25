@@ -67,12 +67,12 @@ export default function OTPVerification({ email }: Props) {
           </FormButton>
         </div>
       </form>
-      <p className="mb-4 text-sm font-light text-[#424245] opacity-80">
+      <p className="mb-4 text-sm font-light opacity-80">
         <em>{t("form.or")}</em>
       </p>
       <Link
         href="#"
-        className="text-sm font-medium text-[#424245] opacity-80 hover:text-[#424245] hover:opacity-100"
+        className="text-sm font-medium opacity-80 hover:underline hover:opacity-100"
         onClick={() => {
           location.reload();
         }}

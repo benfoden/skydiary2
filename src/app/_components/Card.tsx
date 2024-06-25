@@ -7,9 +7,16 @@ export function Card({
   isButton?: boolean;
   variant?: "default" | "narrow" | "wide";
 }) {
+  const sharedColors = " bg-white/30 dark:bg-white/[.08]";
+  const sharedHover =
+    "cursor-pointer transition hover:bg-white/60 hover:dark:bg-white/[.16]";
+
   const DefaultCard = () => (
     <div
-      className={`w-full min-w-64 rounded-xl bg-white/30 px-8 py-2 dark:bg-black/30 ${isButton && "transition hover:bg-white/60 active:bg-white/70 dark:hover:bg-black/60 dark:active:bg-black/70"}`}
+      className={
+        `w-full min-w-64 rounded-xl px-8 py-2 ${isButton && sharedHover}` +
+        sharedColors
+      }
     >
       <div className="flex items-center justify-between gap-2">{children}</div>
     </div>
@@ -22,7 +29,10 @@ export function Card({
     case "narrow":
       return (
         <div
-          className={`w-64 rounded-xl bg-white/30 px-4 py-2 ${isButton && "transition hover:bg-white/60 active:bg-white/70"}`}
+          className={
+            `w-64 rounded-xl  px-4 py-2 ${isButton && sharedHover}` +
+            sharedColors
+          }
         >
           <div className="flex items-center gap-2">{children}</div>
         </div>
@@ -30,7 +40,10 @@ export function Card({
     case "wide":
       return (
         <div
-          className={`w-full min-w-[512px] rounded-xl bg-white/30 px-8 py-2 ${isButton && "transition hover:bg-white/60 active:bg-white/70"}`}
+          className={
+            `w-full min-w-[512px] rounded-xl px-8 py-2 ${isButton && sharedHover}` +
+            sharedColors
+          }
         >
           <div className="flex items-center justify-between gap-2">
             {children}

@@ -8,7 +8,10 @@ import DropDownUser from "~/app/_components/DropDownUser";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
+import { type Locale } from "~/config";
+import { getUserLocale } from "~/i18n";
 import { api } from "~/trpc/server";
+import { formattedTimeStampToDate } from "~/utils/text";
 export const dynamic = "force-dynamic";
 
 const filterPostsByDateRange = (
@@ -33,24 +36,28 @@ const filterPostsByDateRange = (
   });
 };
 
-function PostCard({ post }: { post: Post }) {
+function PostCard({
+  post,
+  locale,
+}: {
+  post: Post;
+  locale: Locale;
+}): JSX.Element {
   return (
     <Card>
       <div className="flex flex-col items-start justify-between gap-2 py-2">
         <div className="text-xs">
-          {post.createdAt.toLocaleDateString("en-US", {
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-          })}
+          {formattedTimeStampToDate(post.createdAt, locale)}
         </div>
         {post.summary ?? post.content.slice(0, 70) + "..."}
       </div>
     </Card>
   );
 }
+
 export default async function Home() {
   const t = await getTranslations();
+  const locale = (await getUserLocale()) as Locale;
   const userPosts = await api.post.getByUser();
   const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const today = new Date().toLocaleDateString("en-US", {
@@ -91,7 +98,11 @@ export default async function Home() {
                   key={userPosts[0]?.id}
                   href={`/entry/${userPosts[0]?.id}`}
                 >
-                  <PostCard key={userPosts[0]?.id} post={userPosts[0]!} />
+                  <PostCard
+                    key={userPosts[0]?.id}
+                    post={userPosts[0]!}
+                    locale={locale}
+                  />
                 </Link>
               )}
               {filterPostsByDateRange(0, 6, userPosts).length > 0 && (
@@ -103,7 +114,7 @@ export default async function Home() {
                       href={`/entry/${post.id}`}
                       prefetch={true}
                     >
-                      <PostCard key={post.id} post={post} />
+                      <PostCard key={post.id} post={post} locale={locale} />
                     </Link>
                   ))}
                 </>
@@ -113,7 +124,7 @@ export default async function Home() {
                   {t("home.last30Days")}
                   {filterPostsByDateRange(8, 30, userPosts).map((post) => (
                     <Link key={post.id} href={`/entry/${post.id}`}>
-                      <PostCard key={post.id} post={post} />
+                      <PostCard key={post.id} post={post} locale={locale} />
                     </Link>
                   ))}
                 </>

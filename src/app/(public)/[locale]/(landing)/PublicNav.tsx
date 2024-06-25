@@ -4,12 +4,22 @@ import Button from "~/app/_components/Button";
 import { getServerAuthSession } from "~/server/auth";
 import PublicLocaleSwitcher from "./PublicLocaleSwitcher";
 
+import dynamic from "next/dynamic";
+
+const SetThemeButton = dynamic(
+  () => import("~/app/_components/ToggleTheme").then((mod) => mod.ThemeToggle),
+  {
+    ssr: false,
+    loading: () => <div className="h-4 w-4" />,
+  },
+);
+
 export async function PublicNav() {
   const session = await getServerAuthSession();
   const t = await getTranslations();
 
   return (
-    <nav className="flex w-full items-center justify-between bg-transparent p-4 text-[#424245]">
+    <nav className="flex w-full items-center justify-between bg-transparent p-4">
       <div className="flex items-center">
         <h1>
           <Link
@@ -45,6 +55,7 @@ export async function PublicNav() {
         </Link>
         <span> · </span>
         <PublicLocaleSwitcher />
+        <SetThemeButton />
       </div>
     </nav>
   );

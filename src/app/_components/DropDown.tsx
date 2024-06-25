@@ -50,7 +50,7 @@ const DropDownMenu = ({
         )}
       </button>
       {open && (
-        <div className="absolute z-10 mt-10 flex min-w-max flex-col rounded-md bg-white/60 shadow-lg">
+        <div className="absolute z-10 mt-10 flex min-w-max flex-col rounded-md bg-white/60 shadow-lg backdrop-blur-md">
           {children}
         </div>
       )}

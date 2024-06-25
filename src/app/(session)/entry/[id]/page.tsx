@@ -4,6 +4,7 @@ import {
   AvatarIcon,
   CircleIcon,
   FrameIcon,
+  GearIcon,
   PersonIcon,
 } from "@radix-ui/react-icons";
 import { getTranslations } from "next-intl/server";
@@ -69,6 +70,11 @@ export default async function Entry({
         <h1>{formattedTimeStampToDate(post.createdAt, locale)}</h1>
 
         <DropDownMenu>
+          <Link href={"/settings"}>
+            <Button variant="menuElement">
+              {t("nav.settings")} <GearIcon className="h-4 w-4" />
+            </Button>
+          </Link>
           <CopyTextButton text={post.content} />
           <form
             action={async () => {
@@ -322,14 +328,11 @@ export default async function Entry({
             </div>
 
             {comments && (
-              <ul className="w-[420px]">
+              <ul className="flex flex-col gap-4 pt-6">
                 {comments
                   .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
                   .map((comment) => (
-                    <li
-                      key={comment.id}
-                      className="flex flex-col rounded-lg p-4"
-                    >
+                    <li key={comment.id} className="flex flex-col rounded-lg">
                       <Card isButton={false}>
                         <div className="flex w-full flex-col gap-4 py-4">
                           <div className="flex w-full justify-between gap-4 text-xs">
@@ -341,12 +344,13 @@ export default async function Entry({
                               />
                             </div>
                             <div>
-                              {formattedTimeStampToDate(comment.createdAt)}
+                              {formattedTimeStampToDate(
+                                comment.createdAt,
+                                locale,
+                              )}
                             </div>
                           </div>
-                          <div className="max-w-md text-sm">
-                            {comment.content}
-                          </div>
+                          <div className="text-sm">{comment.content}</div>
                         </div>
                       </Card>
                     </li>

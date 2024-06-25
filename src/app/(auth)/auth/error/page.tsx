@@ -86,7 +86,7 @@ const ErrorPageContent = () => {
     <div className="flex h-full w-full items-center justify-center overflow-hidden">
       <div className="z-20 flex h-dvh flex-col items-center justify-center gap-4">
         <div className="flex w-96 flex-col gap-4 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60">
-          <h1 className="flex w-full items-center justify-center text-xl font-light text-[#424245]">
+          <h1 className="flex w-full items-center justify-center text-xl font-light">
             {heading}
           </h1>
           <div className="text-center">

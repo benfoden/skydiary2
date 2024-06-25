@@ -12,7 +12,7 @@ export default async function SignIn() {
       <div className="z-20 flex h-dvh w-full items-center justify-center">
         <div className="flex w-80 flex-col items-center justify-center text-xl">
           <h1>
-            <span className="text-xl font-light text-[#424245]">skydiary</span>
+            <span className="text-xl font-light">skydiary</span>
           </h1>
           <VerificationAlert />
           <SignInForm />

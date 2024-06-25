@@ -6,6 +6,7 @@ import DropDownMenu from "~/app/_components/DropDown";
 import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
+import { ThemeToggle } from "~/app/_components/ToggleTheme";
 import { setUserLocale } from "~/i18n";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
@@ -135,6 +136,12 @@ export default async function Settings() {
                   {t("settings.ja")}
                 </FormButton>
               </form>
+            </div>
+          </div>
+          <div className="flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60">
+            <h2>{t("settings.theme")}</h2>
+            <div>
+              <ThemeToggle isMenuButton />
             </div>
           </div>
         </div>
