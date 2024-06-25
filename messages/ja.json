@@ -121,6 +121,7 @@
     "update": "更新",
     "create": "作成",
     "delete": "削除",
+    "confirmDelete": "削除？",
     "optional": "任意",
     "or": "または",
     "try again": "再試行"

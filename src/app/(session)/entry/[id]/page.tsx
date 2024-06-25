@@ -343,11 +343,32 @@ export default async function Entry({
                                 coachVariant={comment.coachVariant ?? ""}
                               />
                             </div>
-                            <div>
+                            <div className="flex flex-row items-center gap-2">
                               {formattedTimeStampToDate(
                                 comment.createdAt,
                                 locale,
                               )}
+                              <form
+                                action={async () => {
+                                  "use server";
+                                  if (searchParams.s === "1") {
+                                    return;
+                                  }
+                                  try {
+                                    await api.comment.delete({
+                                      commentId: comment.id,
+                                    });
+                                    revalidatePath(`/entry/${params.id}`);
+                                  } catch (error) {
+                                    console.error(
+                                      "Error deleting comment:",
+                                      error,
+                                    );
+                                  }
+                                }}
+                              >
+                                <DeleteButton hasText={false} />
+                              </form>
                             </div>
                           </div>
                           <div className="text-sm">{comment.content}</div>
