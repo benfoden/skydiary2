@@ -7,7 +7,7 @@ export default function NotFound() {
   return (
     <div className="flex h-full w-full items-center justify-center overflow-hidden">
       <div className="z-20 flex h-dvh flex-col items-center justify-center gap-4">
-        <div className="flex w-full flex-col gap-4 rounded-lg bg-white/50 p-6 shadow-lg sm:w-96">
+        <div className="flex w-full flex-col gap-4 rounded-lg bg-white/50 p-6 shadow-lg sm:w-96 dark:bg-black/60">
           <h1 className="flex w-full items-center justify-center text-xl font-light text-[#424245]">
             {t("error.notfound.heading")}
           </h1>

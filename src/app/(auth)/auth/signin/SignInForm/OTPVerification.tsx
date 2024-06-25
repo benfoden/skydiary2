@@ -39,7 +39,7 @@ export default function OTPVerification({ email }: Props) {
   return (
     <>
       <form onSubmit={handleOTPVerification}>
-        <div className="my-8 flex w-full flex-col gap-4 rounded-lg bg-white/50 p-6 text-sm font-light shadow-lg">
+        <div className="my-8 flex w-full flex-col gap-4 rounded-lg bg-white/50 p-6 text-sm font-light shadow-lg dark:bg-black/60">
           <label>
             {t("auth.passcode")}
             <input

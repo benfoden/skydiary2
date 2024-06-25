@@ -3,11 +3,9 @@
 @tailwind utilities;
 
 @layer base {
-  html {
-    @apply text-[#424245;];
-  }
+  html,
   body {
-    @apply bg-[#FAFAFA] text-[#424245];
+    @apply bg-[#FAFAFA] text-[#424245] dark:bg-[#424245] dark:text-[#FAFAFA];
   }
 
   h1,

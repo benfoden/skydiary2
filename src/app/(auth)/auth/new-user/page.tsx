@@ -18,7 +18,7 @@ const NewUserPage: React.FC = async () => {
       <div className="z-20 flex h-dvh w-full items-center justify-center">
         <div className="flex w-80 flex-col items-center justify-center">
           <h1>{t("new-user.title")}</h1>
-          <div className="m-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
+          <div className="m-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60">
             <p className="text-sm opacity-60">{t("settings.description")}</p>
             <form
               className="flex flex-col gap-4"

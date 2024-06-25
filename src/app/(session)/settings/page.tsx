@@ -32,7 +32,7 @@ export default async function Settings() {
 
       <main className="flex min-h-screen w-full flex-col items-center justify-start">
         <div className="container flex w-80 flex-col items-center justify-start gap-12 px-4 py-16">
-          <div className="mt-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
+          <div className="mt-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60">
             <h2>{t("settings.personal")}</h2>
             <p className="text-sm opacity-60">{t("settings.description")}</p>
             <form
@@ -110,7 +110,7 @@ export default async function Settings() {
               <FormButton variant="submit">{t("form.save")}</FormButton>
             </form>
           </div>
-          <div className="flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg">
+          <div className="flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60">
             <h2>{t("settings.language")}</h2>
             <div className="flex flex-row gap-2">
               <form
