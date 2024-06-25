@@ -121,6 +121,7 @@
     "update": "update",
     "create": "create",
     "delete": "delete",
+    "confirmDelete": "delete?",
     "optional": "optional",
     "or": "or",
     "try again": "try again"
