@@ -76,7 +76,7 @@ export default function Input({
         <button
           type="button"
           onClick={clearText}
-          className="text-secondary absolute right-0 top-0 pr-4 pt-5"
+          className="absolute right-0 top-0 pr-4 pt-5"
           ref={clearButtonRef}
         >
           <Cross1Icon className="h-4 w-4" />
