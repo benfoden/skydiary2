@@ -43,7 +43,8 @@
     "signout": "sign out",
     "topics": "topics",
     "personas": "personas",
-    "copy all text": "copy all text",
+    "addPersonas": "add personas",
+    "copy all text": "copy text",
     "back": "back",
     "today": "today"
   },
@@ -109,6 +110,7 @@
     "theme": "theme",
     "description": "these details help to personalize your experience, privately.",
     "your name": "your name",
+    "placeholderName": "name",
     "your age": "your age",
     "your identities": "your identities",
     "placeholder identities": "woman, daughter, mother, etc.",

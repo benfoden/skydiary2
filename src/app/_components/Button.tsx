@@ -6,7 +6,15 @@ export default function Button({
   children,
   ...props
 }: {
-  variant?: "primary" | "text" | "menuElement" | "cta" | "chip" | "submit";
+  variant?:
+    | "primary"
+    | "text"
+    | "menuElement"
+    | "cta"
+    | "chip"
+    | "submit"
+    | "nav"
+    | "dropdownToggle";
   isServerSideForm?: boolean;
   children: React.ReactNode;
   disabled?: boolean;
@@ -45,6 +53,15 @@ export default function Button({
     case "submit":
       buttonClass +=
         " mt-2 flex h-12 w-full items-center justify-center space-x-2 rounded bg-white/80 px-4 transition text-decoration-none hover:bg-white/90 active:bg-white dark:bg-white/[.16] dark:hover:bg-white/[.32] dark:active:bg-white/[.35]";
+      break;
+    case "nav":
+      buttonClass +=
+        " flex px-6 py-3 sm:px-4 sm:py-2 items-center justify-between gap-2 rounded-full text-decoration-none transition font-light hover:bg-white/60 dark:hover:bg-white/[.16]";
+      break;
+    case "dropdownToggle":
+      buttonClass +=
+        " flex p-2 w-fit items-center justify-between rounded-full text-decoration-none transition text-xs" +
+        sharedColors;
       break;
     default:
       buttonClass += defaults + sharedColors;

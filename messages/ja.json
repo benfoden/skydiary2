@@ -43,7 +43,8 @@
     "signout": "サインアウト",
     "topics": "トピック",
     "personas": "人物",
-    "copy all text": "全てのテキストをコピー",
+    "addPersonas": "人物を追加",
+    "copy all text": "キストをコピー",
     "back": "戻る",
     "today": "今日"
   },
@@ -109,9 +110,10 @@
     "theme": "テーマ",
     "description": "これらの詳細は、プライベートに経験をパーソナライズするのに役立ちます。",
     "your name": "名前",
+    "placeholderName": "花子",
     "your age": "年齢",
     "your identities": "身分",
-    "placeholder identities": "女性、母親、妻、その他",
+    "placeholder identities": "女性、母親、妻",
     "en": "English(英語)",
     "ja": "日本語"
   },

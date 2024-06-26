@@ -32,11 +32,9 @@
   .text-primary {
     @apply text-black dark:text-white;
   }
+
   .text-secondary {
-    @apply text-[#8D8C91] dark:text-[#9A999F];
-  }
-  .text-tertiary {
-    @apply text-[#86858B] dark:text-[#8E8D93];
+    @apply text-[#818085] dark:text-[#a8a7ad];
   }
 
   .border-primary {

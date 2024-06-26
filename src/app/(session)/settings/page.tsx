@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Button from "~/app/_components/Button";
 import DropDownMenu from "~/app/_components/DropDown";
 import FormButton from "~/app/_components/FormButton";
+import Input from "~/app/_components/Input";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import { ThemeToggle } from "~/app/_components/ToggleTheme";
@@ -72,42 +73,33 @@ export default async function Settings() {
                 }
               }}
             >
-              <label className="text-base font-light" htmlFor="name">
-                {t("settings.your name")}
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                  required
-                  defaultValue={session?.user.name ?? ""}
-                  placeholder="name"
-                />
-              </label>
-              <label className="text-base font-light" htmlFor="age">
-                {t("settings.your age")}
-                <input
-                  type="number"
-                  id="age"
-                  name="age"
-                  className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                  required
-                  defaultValue={userPersona?.age ?? 0}
-                  placeholder="1"
-                />
-              </label>
-              <label className="text-base font-light" htmlFor="gender">
-                {t("settings.your identities")}
-                <input
-                  type="text"
-                  id="gender"
-                  name="gender"
-                  className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-                  required
-                  defaultValue={userPersona?.gender ?? ""}
-                  placeholder={t("settings.placeholder identities")}
-                />
-              </label>
+              <Input
+                id="name"
+                name="name"
+                placeholder={t("settings.placeholderName")}
+                required
+                labelText={t("settings.your name")}
+                defaultValue={session?.user.name ?? ""}
+              />
+              <Input
+                type="number"
+                id="age"
+                name="age"
+                required
+                placeholder="1"
+                defaultValue={userPersona?.age ?? 0}
+                labelText={t("settings.your age")}
+              />
+
+              <Input
+                id="gender"
+                name="gender"
+                required
+                placeholder={t("settings.placeholder identities")}
+                defaultValue={userPersona?.gender ?? ""}
+                labelText={t("settings.your identities")}
+              />
+
               <FormButton variant="submit">{t("form.save")}</FormButton>
             </form>
           </div>

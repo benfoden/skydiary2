@@ -4,8 +4,8 @@ import {
   AvatarIcon,
   CircleIcon,
   FrameIcon,
-  GearIcon,
   PersonIcon,
+  PlusIcon,
 } from "@radix-ui/react-icons";
 import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
@@ -17,6 +17,7 @@ import { Card } from "~/app/_components/Card";
 import CopyTextButton from "~/app/_components/CopyTextButton";
 import DeleteButton from "~/app/_components/DeleteButton";
 import DropDownMenu from "~/app/_components/DropDown";
+import DropDownUser from "~/app/_components/DropDownUser";
 import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { PersonaIcon } from "~/app/_components/PersonaIcon";
@@ -68,25 +69,7 @@ export default async function Entry({
           isDisabled={searchParams.s === "1"}
         />
         <h1>{formattedTimeStampToDate(post.createdAt, locale)}</h1>
-
-        <DropDownMenu>
-          <Link href={"/settings"}>
-            <Button variant="menuElement">
-              {t("nav.settings")} <GearIcon className="h-4 w-4" />
-            </Button>
-          </Link>
-          <CopyTextButton text={post.content} />
-          <form
-            action={async () => {
-              "use server";
-              await api.post.delete({ postId: post?.id });
-              revalidatePath("/home");
-              redirect("/home");
-            }}
-          >
-            <DeleteButton />
-          </form>
-        </DropDownMenu>
+        <DropDownUser />
       </SessionNav>
       <div className="flex h-full flex-col items-center px-2 pb-4 sm:px-8">
         <EntryBody post={post} />
@@ -185,6 +168,27 @@ export default async function Entry({
                 )}
               </li>
             </ul>
+            <div className="flex w-fit flex-row items-center justify-end gap-2">
+              <DropDownMenu>
+                <Link href="/persona/all">
+                  <Button variant="menuElement">
+                    <AvatarIcon className="h-5 w-5" />
+                    {t("nav.personas")}
+                  </Button>
+                </Link>
+                <CopyTextButton text={post.content} />
+                <form
+                  action={async () => {
+                    "use server";
+                    await api.post.delete({ postId: post?.id });
+                    revalidatePath("/home");
+                    redirect("/home");
+                  }}
+                >
+                  <DeleteButton />
+                </form>
+              </DropDownMenu>
+            </div>
           </div>
           <div className="flex h-full w-full flex-col items-center pb-4">
             <div className="flex w-full flex-row items-start justify-center gap-2">
@@ -245,7 +249,15 @@ export default async function Entry({
                     </div>
                   </FormButton>
                 </form>
-                {personas.map((persona: Persona) => (
+                {!personas?.length && (
+                  <Link href="/persona/all">
+                    <Button>
+                      <PlusIcon className="h-4 w-4" />
+                      <span className="text-xs">{t("nav.addPersonas")}</span>
+                    </Button>
+                  </Link>
+                )}
+                {personas?.map((persona: Persona) => (
                   <form
                     key={persona.id}
                     action={async () => {
@@ -315,16 +327,6 @@ export default async function Entry({
                   </form>
                 ))}
               </ul>
-              <div className="flex w-fit flex-row items-center justify-end gap-2">
-                <DropDownMenu>
-                  <Link href="/persona/all">
-                    <Button variant="menuElement">
-                      <AvatarIcon className="h-5 w-5" />
-                      personas
-                    </Button>
-                  </Link>
-                </DropDownMenu>
-              </div>
             </div>
 
             {comments && (

@@ -78,9 +78,7 @@ export default async function Home() {
   return (
     <>
       <SessionNav>
-        <div className="flex items-center gap-2">
-          <NavChevronLeft targetPathname={"/topics"} label={t("nav.topics")} />
-        </div>
+        <NavChevronLeft targetPathname={"/topics"} label={t("nav.topics")} />
         <h1>{t("nav.home")}</h1>
         <DropDownUser />
       </SessionNav>

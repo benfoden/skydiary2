@@ -16,8 +16,8 @@ export default function CopyTextButton({ text }: { text: string }) {
 
   return (
     <Button variant="menuElement" onClick={() => handleCopyText(text)}>
-      {t("nav.copy all text")}
       <ClipboardIcon className="h-5 w-5" />
+      {t("nav.copy all text")}
     </Button>
   );
 }
