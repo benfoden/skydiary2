@@ -79,7 +79,7 @@ export default function Input({
       ) : (
         <textarea
           {...(props as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
-          className={`w-full overflow-hidden rounded-md py-4 pl-5 pr-10 outline-none transition placeholder:text-sm placeholder:font-light ${isActive && "bg-white/80 dark:bg-white/[.18]"} bg-primary`}
+          className={`w-full rounded-md py-4 pl-5 pr-10 outline-none transition placeholder:text-sm placeholder:font-light ${isActive && "bg-white/80 dark:bg-white/[.18]"} bg-primary`}
           ref={ref as React.RefObject<HTMLTextAreaElement>}
           onFocus={handleFocus}
           onChange={handleChange}
