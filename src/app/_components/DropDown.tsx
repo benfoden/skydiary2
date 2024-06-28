@@ -1,15 +1,22 @@
 "use client";
-import { DotsVerticalIcon, PersonIcon } from "@radix-ui/react-icons";
+import {
+  AvatarIcon,
+  DotsHorizontalIcon,
+  DotsVerticalIcon,
+} from "@radix-ui/react-icons";
 import { useState } from "react";
 
 import { useEffect, useRef } from "react";
+import Button from "./Button";
 
 const DropDownMenu = ({
   children,
   isUserMenu = false,
+  isEntryMenu = false,
 }: {
   children: React.ReactNode;
   isUserMenu?: boolean;
+  isEntryMenu?: boolean;
 }) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -37,20 +44,17 @@ const DropDownMenu = ({
   return (
     <div
       ref={dropdownRef}
-      className={`dropdown relative flex flex-col items-end ${open ? "open" : ""}`}
+      className={`relative flex flex-col items-end ${open ? "open" : ""}`}
     >
-      <button
-        className="rounded-full p-2 transition hover:bg-white/30"
-        onClick={toggleDropdown}
-      >
-        {isUserMenu ? (
-          <PersonIcon className="h-5 w-5" />
-        ) : (
+      <Button variant="dropdownToggle" onClick={toggleDropdown}>
+        {isUserMenu && <AvatarIcon className="h-6 w-6" />}
+        {isEntryMenu && <DotsHorizontalIcon className="h-5 w-5" />}
+        {!isUserMenu && !isEntryMenu && (
           <DotsVerticalIcon className="h-5 w-5" />
         )}
-      </button>
+      </Button>
       {open && (
-        <div className="absolute z-10 mt-10 flex min-w-max flex-col rounded-md bg-white/60 shadow-lg backdrop-blur-md">
+        <div className="absolute z-10 mt-10 flex min-w-max flex-col rounded-md bg-white/20 shadow-lg backdrop-blur-md transition dark:bg-white/[.08]">
           {children}
         </div>
       )}

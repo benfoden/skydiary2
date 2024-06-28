@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useState } from "react";
 import Button from "~/app/_components/Button";
+import { Card } from "~/app/_components/Card";
 
 function SignoutPageContent() {
   const t = useTranslations();
@@ -26,20 +27,22 @@ function SignoutPageContent() {
     <div className="relative flex h-full w-full overflow-hidden">
       <div className="z-20 flex h-dvh w-full items-center justify-center">
         <div className="flex w-80 flex-col items-center justify-center">
-          <div className="m-8 flex w-full flex-col items-center gap-2 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60">
-            <h1 className="mt-6 text-center text-xl font-light tracking-tight">
-              {t("auth.sign out")}
-            </h1>
-            <div className="mt-4 flex flex-col gap-3 text-center">
+          <h1 className="mb-8 text-xl font-light">{t("auth.sign out")}</h1>
+          <Card variant="form">
+            <div className="mt-4 flex w-full flex-col gap-4 text-center">
               <Link href="/home">
-                <Button variant="cta">{t("auth.back to home")}</Button>
+                <Button variant="submit">{t("auth.back to home")}</Button>
               </Link>
               <div className="text-sm">{t("form.or")}</div>
             </div>
-            <Button onClick={handleSignout}>
+            <Button
+              variant="submit"
+              onClick={handleSignout}
+              disabled={isLoading}
+            >
               {isLoading ? t("auth.signing out") : t("auth.sign out")}
             </Button>
-          </div>
+          </Card>
         </div>
       </div>
     </div>

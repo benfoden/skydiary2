@@ -28,22 +28,31 @@ export default async function Topics() {
           <div className="flex flex-col items-start justify-center gap-4">
             <Link className="pb-4" href="/home">
               <Card>
-                <p>{t("topics.all")}</p>
-                <p>{userPosts.length}</p>
+                <div className="flex w-full flex-row items-center justify-between gap-2">
+                  <p>{t("topics.all")}</p>
+                  <p>{userPosts.length}</p>
+                </div>
               </Card>
             </Link>
-            {tagsAndCounts?.map(
-              (tag) =>
-                tag && (
-                  <Link key={tag.id} href={`/topics/${tag.content}/${tag.id}`}>
-                    <Card>
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      <p>{t(`topics.${tag.content}` as any)}</p>
-                      <p>{tag.count}</p>
-                    </Card>
-                  </Link>
-                ),
-            )}
+            {tagsAndCounts
+              ?.sort((a, b) => b.count - a.count)
+              .map(
+                (tag) =>
+                  tag && (
+                    <Link
+                      key={tag.id}
+                      href={`/topics/${tag.content}/${tag.id}`}
+                    >
+                      <Card>
+                        <div className="flex w-full flex-row items-center justify-between gap-2">
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                          <p>{t(`topics.${tag.content}` as any)}</p>
+                          <p>{tag.count}</p>
+                        </div>
+                      </Card>
+                    </Link>
+                  ),
+              )}
           </div>
         </div>
       </main>

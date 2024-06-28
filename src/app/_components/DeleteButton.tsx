@@ -52,7 +52,7 @@ export default function DeleteButton({
         </>
       ) : (
         <>
-          {hasText && t("form.delete")} <Cross1Icon className="h-5 w-5" />
+          <Cross1Icon className="h-5 w-5" /> {hasText && t("form.delete")}
         </>
       )}
     </Button>

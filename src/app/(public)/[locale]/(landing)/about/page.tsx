@@ -1,27 +1,30 @@
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import Button from "~/app/_components/Button";
+import { Card } from "~/app/_components/Card";
 
 export default async function About() {
   const t = await getTranslations();
   return (
     <>
       <main className="mt-[-72px] flex min-h-screen flex-col items-center justify-center">
-        <div className="container flex flex-col items-center justify-center px-4 py-8">
-          <div className="flex flex-col gap-4">
-            <p className="text-xl">{t("about.title")}</p>
-            <p>{t("about.description 0")}</p>
-            <p>{t("about.description 1")}</p>
-            <p>{t("about.description 2")}</p>
-            <p>{t("about.description 3")}</p>
-            <p>{t("about.description 4")}</p>
-            <p>{t("about.description 5")}</p>
-            <div className="pt-8">
-              <Link href="/auth/signin">
-                <Button variant="cta">{t("about.try it")}</Button>
-              </Link>
+        <div className="mb-8 flex w-full max-w-xl flex-col items-center justify-center gap-2">
+          <h1 className="mb-8 text-xl font-light">{t("about.title")}</h1>
+          <Card variant="wide" isButton={false}>
+            <div className="flex flex-col items-start justify-start gap-2 px-4 py-8">
+              <p>{t("about.description 0")}</p>
+              <p>{t("about.description 1")}</p>
+              <p>{t("about.description 2")}</p>
+              <p>{t("about.description 3")}</p>
+              <p>{t("about.description 4")}</p>
+              <p>{t("about.description 5")}</p>
+              <div className="flex w-full flex-col items-center pt-8">
+                <Link href="/auth/signin">
+                  <Button variant="cta">{t("about.try it")}</Button>
+                </Link>
+              </div>
             </div>
-          </div>
+          </Card>
         </div>
       </main>
     </>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import FormButton from "~/app/_components/FormButton";
+import Input from "~/app/_components/Input";
 
 interface Props {
   email: string;
@@ -40,21 +41,14 @@ export default function OTPVerification({ email }: Props) {
     <>
       <form onSubmit={handleOTPVerification}>
         <div className="my-8 flex w-full flex-col gap-4 rounded-lg bg-white/50 p-6 text-sm font-light shadow-lg dark:bg-black/60">
-          <label>
-            {t("auth.passcode")}
-            <input
-              id="code"
-              name="code"
-              type="number"
-              minLength={6}
-              maxLength={6}
-              required
-              className="block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm"
-              placeholder="one time passcode"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-            />
-          </label>
+          <Input
+            label={t("auth.passcode")}
+            name="code"
+            id="code"
+            required
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+          />
 
           <p>{t("auth.check your email")}</p>
           <p>{t("auth.passcode expires")}</p>

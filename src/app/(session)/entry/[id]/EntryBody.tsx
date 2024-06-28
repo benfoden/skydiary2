@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type SetStateAction } from "react";
 import ButtonSpinner from "~/app/_components/ButtonSpinner";
+import { cardColors } from "~/app/_components/Card";
 import { api } from "~/trpc/react";
 
 export default function EntryBody({ post }: { post: Post }) {
@@ -82,7 +83,7 @@ export default function EntryBody({ post }: { post: Post }) {
             ? t("status.loading")
             : t("entry.today")
         }
-        className="min-h-full w-full resize-none rounded-xl border-none bg-white/20 px-8 py-6 focus:outline-none sm:max-w-5xl sm:rounded-3xl sm:px-16 sm:py-12 dark:bg-black/20 dark:text-[#DCDCDC]"
+        className={`min-h-full w-full resize-none rounded-xl border-none px-8 py-6 focus:outline-none sm:max-w-5xl sm:rounded-3xl sm:px-16 sm:py-12 dark:text-[#DCDCDC] ${cardColors("default")}`}
         autoFocus
         style={{ height: "auto", overflow: "hidden", paddingBottom: "16px" }}
         onInput={adjustTextareaHeight}

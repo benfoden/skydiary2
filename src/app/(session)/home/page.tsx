@@ -49,7 +49,7 @@ function PostCard({
         <div className="text-xs">
           {formattedTimeStampToDate(post.createdAt, locale)}
         </div>
-        {post.summary ?? post.content.slice(0, 70) + "..."}
+        {post.content.slice(0, 140) + "..."}
       </div>
     </Card>
   );
@@ -70,17 +70,10 @@ export default async function Home() {
     timeZone: userTimezone,
   });
 
-  await api.post
-    .checkAndSummarizeLastPost({ userTimezone, today })
-    .catch((error) =>
-      console.error("Error summarizing the last entry:", error),
-    );
   return (
     <>
       <SessionNav>
-        <div className="flex items-center gap-2">
-          <NavChevronLeft targetPathname={"/topics"} label={t("nav.topics")} />
-        </div>
+        <NavChevronLeft targetPathname={"/topics"} label={t("nav.topics")} />
         <h1>{t("nav.home")}</h1>
         <DropDownUser />
       </SessionNav>

@@ -1,7 +1,6 @@
-import { PersonIcon, PlusIcon } from "@radix-ui/react-icons";
+import { PlusIcon } from "@radix-ui/react-icons";
 import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import Button from "~/app/_components/Button";
@@ -10,6 +9,7 @@ import DropDownUser from "~/app/_components/DropDownUser";
 import FormButton from "~/app/_components/FormButton";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import PersonaFormFields from "~/app/_components/PersonaFormFields";
+import { PersonaIcon } from "~/app/_components/PersonaIcon";
 import { SessionNav } from "~/app/_components/SessionNav";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
@@ -43,20 +43,12 @@ export default async function Persona() {
                 <>
                   {personas?.map((persona) => (
                     <Link key={persona.id} href={`/persona/${persona.id}`}>
-                      <Card variant="narrow">
-                        {persona.image ? (
-                          <Image
-                            alt={persona.name}
-                            src={persona.image}
-                            width="32"
-                            height="32"
-                            className="rounded-full"
-                          />
-                        ) : (
-                          <PersonIcon className="h-8 w-8" />
-                        )}
-                        {persona.name}
-                      </Card>
+                      <Button variant="listItem">
+                        <PersonaIcon
+                          personaId={persona.id}
+                          personas={personas}
+                        />
+                      </Button>
                     </Link>
                   ))}
                 </>
@@ -64,59 +56,66 @@ export default async function Persona() {
             </div>
             <div
               id="newPersona"
-              className="mb-4 flex flex-col items-start justify-center gap-4"
+              className="mb-4 flex flex-col items-start justify-center gap-4 sm:w-full"
             >
-              {t("personas.new persona")}
-              <form
-                className="flex flex-col items-start justify-center gap-4"
-                action={async (formData) => {
-                  "use server";
-                  const name: string = formData.get("name") as string;
-                  const traits: string = formData.get("traits") as string;
-                  const description: string = formData.get(
-                    "description",
-                  ) as string;
-                  const image: string = formData.get("image") as string;
-                  const age = Number(formData.get("age"));
-                  const gender: string = formData.get("gender") as string;
-                  const relationship: string = formData.get(
-                    "relationship",
-                  ) as string;
-                  const occupation: string = formData.get(
-                    "occupation",
-                  ) as string;
-                  const communicationStyle: string = formData.get(
-                    "communicationStyle",
-                  ) as string;
-                  const communicationSample: string = formData.get(
-                    "communicationSample",
-                  ) as string;
+              <Card variant="form">
+                <h2 className="mb-2 text-lg font-medium">
+                  {t("personas.new persona")}
+                </h2>
+                <p className="text-sm opacity-60">
+                  {t("personas.newDescription")}
+                </p>
+                <form
+                  className="flex flex-col items-start justify-center gap-4"
+                  action={async (formData) => {
+                    "use server";
+                    const name: string = formData.get("name") as string;
+                    const traits: string = formData.get("traits") as string;
+                    const description: string = formData.get(
+                      "description",
+                    ) as string;
+                    const image: string = formData.get("image") as string;
+                    const age = Number(formData.get("age"));
+                    const gender: string = formData.get("gender") as string;
+                    const relationship: string = formData.get(
+                      "relationship",
+                    ) as string;
+                    const occupation: string = formData.get(
+                      "occupation",
+                    ) as string;
+                    const communicationStyle: string = formData.get(
+                      "communicationStyle",
+                    ) as string;
+                    const communicationSample: string = formData.get(
+                      "communicationSample",
+                    ) as string;
 
-                  if (name && traits) {
-                    try {
-                      await api.persona.create({
-                        name,
-                        traits,
-                        description,
-                        image,
-                        age,
-                        gender,
-                        relationship,
-                        occupation,
-                        communicationStyle,
-                        communicationSample,
-                      });
-                    } catch (error) {
-                      console.error("Error updating persona:", error);
+                    if (name && traits) {
+                      try {
+                        await api.persona.create({
+                          name,
+                          traits,
+                          description,
+                          image,
+                          age,
+                          gender,
+                          relationship,
+                          occupation,
+                          communicationStyle,
+                          communicationSample,
+                        });
+                      } catch (error) {
+                        console.error("Error updating persona:", error);
+                      }
+                      revalidatePath("/persona/all");
+                      redirect("/persona/all");
                     }
-                    revalidatePath("/persona/all");
-                    redirect("/persona/all");
-                  }
-                }}
-              >
-                <PersonaFormFields />
-                <FormButton variant="submit">{t("form.create")}</FormButton>
-              </form>
+                  }}
+                >
+                  <PersonaFormFields />
+                  <FormButton variant="submit">{t("form.create")}</FormButton>
+                </form>
+              </Card>
             </div>
           </div>
         </div>

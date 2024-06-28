@@ -27,7 +27,7 @@ export function NavChevronLeft({
       prefetch={true}
       onClick={() => isBack && router.back()}
     >
-      <Button>
+      <Button variant="nav">
         <ChevronLeftIcon className="h-5 w-5" />
         <span>{isBack ? t("nav.back") : label}</span>
       </Button>

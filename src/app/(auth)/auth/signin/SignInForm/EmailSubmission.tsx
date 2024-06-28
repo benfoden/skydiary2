@@ -4,7 +4,9 @@ import { signIn } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Card } from "~/app/_components/Card";
 import FormButton from "~/app/_components/FormButton";
+import Input from "~/app/_components/Input";
 
 interface Props {
   onSubmit: (email: string) => void;
@@ -40,25 +42,23 @@ export default function EmailSubmission({ onSubmit }: Props) {
   }
 
   return (
-    <div className="m-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60">
-      <form onSubmit={handleEmailSubmission}>
-        <label className="text-base font-light">
-          {t("auth.email")}
-          <input
-            className={`block w-full flex-1 rounded-md px-4 py-3 font-normal transition placeholder:font-light placeholder:text-zinc-400 focus:border-zinc-500 focus:ring-zinc-500 sm:text-sm ${isSubmitting && "opacity-50"}`}
-            required
-            placeholder="email@example.com"
-            autoComplete="email"
-            name="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </label>
+    <Card variant="form">
+      <form onSubmit={handleEmailSubmission} className="flex flex-col gap-2">
+        <Input
+          label={t("auth.email")}
+          type="email"
+          placeholder="email@example.com"
+          name="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+
         <FormButton variant="submit" isDisabled={isSubmitting || !email}>
           {isSubmitting ? t("auth.signing in") : t("auth.sign in")}
         </FormButton>
       </form>
-    </div>
+    </Card>
   );
 }
