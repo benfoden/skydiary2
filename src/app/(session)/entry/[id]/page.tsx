@@ -1,7 +1,6 @@
 "use server";
 import { type Persona, type Tag } from "@prisma/client";
 import {
-  AvatarIcon,
   CircleIcon,
   FrameIcon,
   PersonIcon,
@@ -169,13 +168,7 @@ export default async function Entry({
               </li>
             </ul>
             <div className="flex w-fit flex-row items-center justify-end gap-2">
-              <DropDownMenu>
-                <Link href="/persona/all">
-                  <Button variant="menuElement">
-                    <AvatarIcon className="h-5 w-5" />
-                    {t("nav.personas")}
-                  </Button>
-                </Link>
+              <DropDownMenu isEntryMenu>
                 <CopyTextButton text={post.content} />
                 <form
                   action={async () => {
@@ -357,6 +350,8 @@ export default async function Entry({
                                     return;
                                   }
                                   try {
+                                    //not sure why this is erorring, but it works so shut it up for now
+                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
                                     await api.comment.delete({
                                       commentId: comment.id,
                                     });

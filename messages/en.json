@@ -91,6 +91,7 @@
   },
   "personas": {
     "new persona": "new persona",
+    "newDescription": "create a persona you want to get comments from on your daily entries",
     "add new": "add new",
     "name": "name",
     "namePlaceholder": "John Smith, Jane Doe...",

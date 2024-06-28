@@ -1,23 +1,25 @@
-import { AvatarIcon, ExitIcon, GearIcon } from "@radix-ui/react-icons";
+import { ExitIcon, GearIcon, PersonIcon } from "@radix-ui/react-icons";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import Button from "./Button";
 import DropDownMenu from "./DropDown";
+import { ThemeToggle } from "./ToggleTheme";
 
 export default async function DropDownUser() {
   const t = await getTranslations();
   return (
     <DropDownMenu isUserMenu>
-      <Link href={"/persona/all"}>
-        <Button variant="menuElement">
-          {t("nav.personas")} <AvatarIcon className="h-4 w-4" />
-        </Button>
-      </Link>
       <Link href={"/settings"}>
         <Button variant="menuElement">
           {t("nav.settings")} <GearIcon className="h-4 w-4" />
         </Button>
       </Link>
+      <Link href={"/persona/all"}>
+        <Button variant="menuElement">
+          {t("nav.personas")} <PersonIcon className="h-4 w-4" />
+        </Button>
+      </Link>
+      <ThemeToggle isMenuButton />
       <Link href={"/auth/signout"}>
         <Button variant="menuElement">
           {t("nav.signout")}

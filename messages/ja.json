@@ -25,7 +25,7 @@
     "title": "skydiaryとは",
     "description 0": "日記を毎日書くだけで完了です。AIの友達、コーチ、メンターと一緒に完全なプライバシーで要約とアドバイスを受け取れます。",
     "description 1": "日記の書き方は独立したものです。",
-    "description 2": "AIの人物と一緒に日記を書き、自分の職業や生活を説明してください。",
+    "description 2": "AIのパーソナと一緒に日記を書き、自分の職業や生活を説明してください。",
     "description 3": "日記の書き方は簡単です。日記を書くだけです。",
     "description 4": "日記を書くだけで、自分の日記を自動的にタグ付け、週の要約、お願いやフィードバックを受け取ることができます。",
     "description 5": "話したい誰かについてのキャラクターを作成し、想像もしなかった新しいことを学ぶことができます",
@@ -42,8 +42,8 @@
     "settings": "設定",
     "signout": "サインアウト",
     "topics": "トピック",
-    "personas": "人物",
-    "addPersonas": "人物を追加",
+    "personas": "パーソナ",
+    "addPersonas": "パーソナを追加",
     "copy all text": "キストをコピー",
     "back": "戻る",
     "today": "今日"
@@ -90,7 +90,8 @@
     "self-improvement": "自身向上"
   },
   "personas": {
-    "new persona": "新しい人物",
+    "new persona": "新しいパーソナ",
+    "newDescription": "日常のエントリにコメントを受け取るためのパーソナを作成",
     "add new": "追加",
     "name": "名前",
     "namePlaceholder": "山田太郎、田中花子...",

@@ -1,8 +1,8 @@
 import { getTranslations } from "next-intl/server";
-import DropDownMenu from "~/app/_components/DropDown";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import Spinner from "~/app/_components/Spinner";
+import DropDownUser from "./DropDownUser";
 
 export default async function LoadingPageBody() {
   const t = await getTranslations();
@@ -14,9 +14,7 @@ export default async function LoadingPageBody() {
             <NavChevronLeft targetPathname={"/home"} label={t("nav.home")} />
           </div>
           <h1>{t("status.loading")}</h1>
-          <DropDownMenu>
-            <div></div>
-          </DropDownMenu>
+          <DropDownUser />
         </div>
       </SessionNav>
       <div className="flex h-full flex-col items-center gap-12 px-4 py-32">

@@ -14,7 +14,8 @@ export default function Button({
     | "chip"
     | "submit"
     | "nav"
-    | "dropdownToggle";
+    | "dropdownToggle"
+    | "listItem";
   isServerSideForm?: boolean;
   children: React.ReactNode;
   disabled?: boolean;
@@ -29,7 +30,7 @@ export default function Button({
   const defaults =
     "flex items-center justify-between px-4 py-2 gap-4 rounded-full text-decoration-none transition ";
   const sharedColors =
-    "bg-white/40 dark:bg-white/[.12] hover:bg-white/80 hover:dark:bg-white/[.24]";
+    " bg-white/40 dark:bg-white/[.12] hover:bg-white/80 hover:dark:bg-white/[.24] ";
 
   switch (variant) {
     case "primary":
@@ -56,12 +57,16 @@ export default function Button({
       break;
     case "nav":
       buttonClass +=
-        " flex px-6 py-3 sm:px-4 sm:py-2 items-center justify-between gap-2 rounded-full text-decoration-none transition font-light hover:bg-white/60 dark:hover:bg-white/[.16]";
+        " flex px-6 py-3 sm:px-4 sm:py-2 items-center justify-between gap-2 rounded-full text-decoration-none transition hover:bg-white/60 dark:hover:bg-white/[.16]";
       break;
     case "dropdownToggle":
       buttonClass +=
-        " flex p-2 w-fit items-center justify-between rounded-full text-decoration-none transition text-xs" +
-        sharedColors;
+        " flex p-2 w-fit items-center justify-between rounded-full text-decoration-none transition text-xs hover:bg-white/80 hover:dark:bg-white/[.24] ";
+      break;
+    case "listItem":
+      buttonClass +=
+        sharedColors +
+        " flex py-2 px-4 w-48 gap-2 flex-row wrap:no-wrap items-center justify-start rounded-lg text-sm";
       break;
     default:
       buttonClass += defaults + sharedColors;

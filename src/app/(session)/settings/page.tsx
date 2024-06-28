@@ -1,11 +1,11 @@
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
+import { Card } from "~/app/_components/Card";
 import DropDownUser from "~/app/_components/DropDownUser";
 import FormButton from "~/app/_components/FormButton";
 import Input from "~/app/_components/Input";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
-import { ThemeToggle } from "~/app/_components/ToggleTheme";
 import { setUserLocale } from "~/i18n";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
@@ -28,13 +28,7 @@ export default async function Settings() {
 
       <main className="flex min-h-screen w-full flex-col items-center justify-start">
         <div className="container flex flex-col items-center justify-start gap-12 sm:w-96">
-          <div className="mt-6 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60 dark:shadow-black">
-            <h2>{t("settings.theme")}</h2>
-            <div>
-              <ThemeToggle isMenuButton />
-            </div>
-          </div>
-          <div className="flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60">
+          <Card variant="form">
             <h2>{t("settings.personal")}</h2>
             <p className="text-sm opacity-60">{t("settings.description")}</p>
             <form
@@ -102,9 +96,9 @@ export default async function Settings() {
 
               <FormButton variant="submit">{t("form.save")}</FormButton>
             </form>
-          </div>
+          </Card>
 
-          <div className="flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60">
+          <Card variant="form">
             <h2>{t("settings.language")}</h2>
             <form
               action={async (formData) => {
@@ -122,7 +116,7 @@ export default async function Settings() {
                 {t("settings.ja")}
               </FormButton>
             </form>
-          </div>
+          </Card>
         </div>
       </main>
     </>

@@ -1,8 +1,8 @@
 "use client";
 import {
+  AvatarIcon,
   DotsHorizontalIcon,
   DotsVerticalIcon,
-  PersonIcon,
 } from "@radix-ui/react-icons";
 import { useState } from "react";
 
@@ -47,14 +47,14 @@ const DropDownMenu = ({
       className={`relative flex flex-col items-end ${open ? "open" : ""}`}
     >
       <Button variant="dropdownToggle" onClick={toggleDropdown}>
-        {isUserMenu && <PersonIcon className="h-5 w-5" />}{" "}
+        {isUserMenu && <AvatarIcon className="h-6 w-6" />}
         {isEntryMenu && <DotsHorizontalIcon className="h-5 w-5" />}
         {!isUserMenu && !isEntryMenu && (
           <DotsVerticalIcon className="h-5 w-5" />
         )}
       </Button>
       {open && (
-        <div className="absolute z-10 mt-10 flex min-w-max flex-col rounded-md bg-white/30 shadow-lg backdrop-blur-md dark:bg-white/[.08]">
+        <div className="absolute z-10 mt-10 flex min-w-max flex-col rounded-md bg-white/20 shadow-lg backdrop-blur-md transition dark:bg-white/[.08]">
           {children}
         </div>
       )}
