@@ -5,9 +5,11 @@ export function Card({
 }: {
   children: React.ReactNode;
   isButton?: boolean;
-  variant?: "default" | "narrow" | "wide";
+  variant?: "default" | "narrow" | "wide" | "form";
 }) {
-  const sharedColors = " bg-white/30 dark:bg-white/[.08]";
+  if (variant === "form") isButton = false;
+
+  const sharedColors = ` bg-white/30 dark:bg-white/[.08] ${variant === "form" && "shadow-lg dark:shadow-black/10"}`;
   const sharedHover =
     "cursor-pointer transition hover:bg-white/60 hover:dark:bg-white/[.16]";
 
@@ -18,7 +20,9 @@ export function Card({
         sharedColors
       }
     >
-      <div className="flex items-center justify-between gap-2">{children}</div>
+      <div className="flex flex-col items-center justify-between gap-2">
+        {children}
+      </div>
     </div>
   );
 
@@ -34,7 +38,7 @@ export function Card({
             sharedColors
           }
         >
-          <div className="flex items-center gap-2">{children}</div>
+          <div className="flex flex-col items-center gap-2">{children}</div>
         </div>
       );
     case "wide":
@@ -45,11 +49,26 @@ export function Card({
             sharedColors
           }
         >
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex flex-col items-center justify-between gap-2">
             {children}
           </div>
         </div>
       );
+
+    case "form":
+      return (
+        <div
+          className={
+            `flex w-full flex-col gap-2 rounded-xl bg-white/50 p-6 shadow-lg dark:bg-black/60 ${isButton && sharedHover}` +
+            sharedColors
+          }
+        >
+          <div className="flex flex-col items-center justify-between gap-2">
+            {children}
+          </div>
+        </div>
+      );
+
     default:
       return <DefaultCard />;
   }

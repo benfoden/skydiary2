@@ -33,10 +33,10 @@ export default async function Persona({ params }: { params: { id: string } }) {
 
       <main className="flex min-h-screen w-full flex-col items-center justify-start">
         <div className="container flex flex-col items-center justify-start gap-12 px-4 py-16 ">
-          <div className="flex flex-row gap-4">
-            <div className="flex flex-col items-start justify-center gap-4">
+          <div className="flex w-full flex-row gap-4">
+            <div className="flex w-full flex-col items-center justify-center gap-4">
               <form
-                className="flex flex-col items-start justify-center gap-4"
+                className="flex w-full max-w-lg flex-col items-center justify-center gap-4"
                 action={async (formData) => {
                   "use server";
                   const name: string = formData.get("name") as string;
@@ -82,7 +82,7 @@ export default async function Persona({ params }: { params: { id: string } }) {
                   }
                 }}
               >
-                <div className="flex w-full flex-row items-center justify-center">
+                <div className="flex w-full flex-row items-center justify-center pb-8">
                   {persona.image ? (
                     <Image
                       alt={persona.name}

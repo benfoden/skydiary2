@@ -1,8 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import Button from "~/app/_components/Button";
-import DropDownMenu from "~/app/_components/DropDown";
+import DropDownUser from "~/app/_components/DropDownUser";
 import FormButton from "~/app/_components/FormButton";
 import Input from "~/app/_components/Input";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
@@ -25,16 +23,18 @@ export default async function Settings() {
         </div>
         <h1>{t("nav.settings")}</h1>
 
-        <DropDownMenu>
-          <Link href={"/auth/signout"}>
-            <Button variant="menuElement">{t("nav.signout")}</Button>
-          </Link>
-        </DropDownMenu>
+        <DropDownUser />
       </SessionNav>
 
       <main className="flex min-h-screen w-full flex-col items-center justify-start">
-        <div className="container flex w-80 flex-col items-center justify-start gap-12 px-4 py-16">
-          <div className="mt-8 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60">
+        <div className="container flex flex-col items-center justify-start gap-12 sm:w-96">
+          <div className="mt-6 flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60 dark:shadow-black">
+            <h2>{t("settings.theme")}</h2>
+            <div>
+              <ThemeToggle isMenuButton />
+            </div>
+          </div>
+          <div className="flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60">
             <h2>{t("settings.personal")}</h2>
             <p className="text-sm opacity-60">{t("settings.description")}</p>
             <form
@@ -78,7 +78,7 @@ export default async function Settings() {
                 name="name"
                 placeholder={t("settings.placeholderName")}
                 required
-                labelText={t("settings.your name")}
+                label={t("settings.your name")}
                 defaultValue={session?.user.name ?? ""}
               />
               <Input
@@ -88,7 +88,7 @@ export default async function Settings() {
                 required
                 placeholder="1"
                 defaultValue={userPersona?.age ?? 0}
-                labelText={t("settings.your age")}
+                label={t("settings.your age")}
               />
 
               <Input
@@ -97,44 +97,31 @@ export default async function Settings() {
                 required
                 placeholder={t("settings.placeholder identities")}
                 defaultValue={userPersona?.gender ?? ""}
-                labelText={t("settings.your identities")}
+                label={t("settings.your identities")}
               />
 
               <FormButton variant="submit">{t("form.save")}</FormButton>
             </form>
           </div>
+
           <div className="flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60">
             <h2>{t("settings.language")}</h2>
-            <div className="flex flex-row gap-2">
-              <form
-                action={async () => {
-                  "use server";
-                  await setUserLocale("en");
-                  redirect("/settings");
-                }}
-              >
-                <FormButton variant="menuElement">
-                  {t("settings.en")}
-                </FormButton>
-              </form>
-              <form
-                action={async () => {
-                  "use server";
-                  await setUserLocale("ja");
-                  redirect("/settings");
-                }}
-              >
-                <FormButton variant="menuElement">
-                  {t("settings.ja")}
-                </FormButton>
-              </form>
-            </div>
-          </div>
-          <div className="flex w-full flex-col gap-2 rounded-lg bg-white/50 p-6 shadow-lg dark:bg-black/60">
-            <h2>{t("settings.theme")}</h2>
-            <div>
-              <ThemeToggle isMenuButton />
-            </div>
+            <form
+              action={async (formData) => {
+                "use server";
+                const locale: string = formData.get("data-locale") as string;
+                await setUserLocale(locale);
+                redirect("/settings");
+              }}
+              className="flex flex-row gap-2"
+            >
+              <FormButton variant="menuElement" data-locale="en">
+                {t("settings.en")}
+              </FormButton>
+              <FormButton variant="menuElement" data-locale="ja">
+                {t("settings.ja")}
+              </FormButton>
+            </form>
           </div>
         </div>
       </main>

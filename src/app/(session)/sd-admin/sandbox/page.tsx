@@ -45,6 +45,7 @@ export default function Sandbox() {
             <Card isButton={false} variant="wide">
               wide, not a button
             </Card>
+            <Card variant="form">form</Card>
           </div>
         </div>
       </div>

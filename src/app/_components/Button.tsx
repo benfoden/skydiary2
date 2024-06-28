@@ -52,7 +52,7 @@ export default function Button({
       break;
     case "submit":
       buttonClass +=
-        " mt-2 flex h-12 w-full items-center justify-center space-x-2 rounded bg-white/80 px-4 transition text-decoration-none hover:bg-white/90 active:bg-white dark:bg-white/[.16] dark:hover:bg-white/[.32] dark:active:bg-white/[.35]";
+        " mt-2 flex h-12 w-full text-base items-center justify-center space-x-2 rounded-lg bg-white/80 px-4 transition text-decoration-none hover:bg-white/90 active:bg-white dark:bg-white/[.16] dark:hover:bg-white/[.32] dark:active:bg-white/[.35]";
       break;
     case "nav":
       buttonClass +=
@@ -69,7 +69,7 @@ export default function Button({
   }
 
   if (isDisabled) {
-    buttonClass += " animate-pulse opacity-60";
+    buttonClass += " animate-pulse opacity-50 transition cursor-not-allowed";
   }
 
   return (

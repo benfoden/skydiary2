@@ -120,7 +120,7 @@ export const summarizeText = (content: string): string =>
   "Only respond with a summary of the text. " +
   "Always return a response of 80 words or less." +
   "Do not mention the author or the writer of the text. The summary should be absolutely as concise as possible." +
-  "Return your response in the same language as the majority of the words in the text." +
+  "Return your response in the same language as the majority of the words in the text. When in doubt, use English or Japanese, if the text has more English or Japanese words." +
   "If there is no text, return nothing." +
   "Text: " +
   content;
