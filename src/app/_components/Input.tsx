@@ -52,7 +52,7 @@ export default function Input({
 
   return (
     <div
-      className={`relative flex w-full flex-row items-center rounded-md ${isActive ? "bg-white/60 dark:bg-white/[.16]" : "bg-primary"}`}
+      className={`relative flex w-full flex-row items-center rounded-md ${isActive && "bg-white/50 dark:bg-white/[.18]"} bg-primary`}
     >
       <label
         className="text-secondary absolute left-0 top-0 text-nowrap bg-transparent bg-none px-4 text-sm"
