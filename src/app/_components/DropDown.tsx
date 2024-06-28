@@ -58,6 +58,7 @@ const DropDownMenu = ({
           className="absolute z-10 mt-10 flex min-w-max flex-col rounded-md bg-white/20 shadow-lg transition dark:bg-white/[.08]"
           style={{
             backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
             WebkitBackfaceVisibility: "hidden",
             MozBackfaceVisibility: "hidden",
             WebkitTransform: "translate3d(0, 0, 0)",
