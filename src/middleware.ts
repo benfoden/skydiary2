@@ -13,6 +13,9 @@ export default function middleware(request: NextRequest) {
     "/settings",
     "/auth",
     "/api/auth",
+    "/api/cron/summarize",
+    "/api/cron/post-tags",
+    "/api/cron/user-persona",
     "/sd-admin",
   ];
   const isAppRoute = appRoutes.some((route) => pathname.startsWith(route));

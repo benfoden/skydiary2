@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 export const personaRouter = createTRPCRouter({
   create: protectedProcedure
@@ -72,11 +76,16 @@ export const personaRouter = createTRPCRouter({
         },
       });
     }),
-
   getAllByUserId: protectedProcedure.query(({ ctx }) => {
     return ctx.db.persona.findMany({
       where: { createdBy: { id: ctx.session.user.id }, isUser: false },
       orderBy: { createdAt: "desc" },
+    });
+  }),
+  getAllUserPersonas: publicProcedure.query(({ ctx }) => {
+    return ctx.db.persona.findMany({
+      where: { isUser: true },
+      orderBy: { createdAt: "asc" },
     });
   }),
   getById: protectedProcedure
