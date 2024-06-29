@@ -83,6 +83,7 @@ export default function Input({
           ref={ref as React.RefObject<HTMLTextAreaElement>}
           onFocus={handleFocus}
           onChange={handleChange}
+          rows={7}
         />
       )}
     </div>
