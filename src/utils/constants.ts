@@ -48,18 +48,20 @@ export const TAGS = [
 export const basicPrompt =
   "Do not start your reply with hi, hey, hello, etc. " +
   "Do not use any emoji. If you use an exclamation point, never use more than one. " +
-  "Shorter is better so do not add unnecessary flowery words and never repeat concepts. " +
+  "Shorter is better so do not add unnecessary words and never repeat the same topics with different wording. " +
+  "Do not use an excessive variety of vocabulary, but pick a level that is appropriate to the persona." +
   "Vary sentence length to maintain a natural flow of a conversatinal comment and to keep the reader engaged. " +
   "Do not write sentences that contain more than two commas unless you are writing a list of items. Never use semicolons in your response. " +
   "Do not use the words 'commendable', 'noteworthy', 'notably', 'noted', 'notable'. " +
-  "Do not summarize the entry in your response. This is a critical rule. Only add new commentary, advice, criticism, or insights." +
+  "Do not summarize the entry in your response. Always strive to add something new, something the writer didn't notice, or a fresh perspective on the topic. " +
   "Identify the main topic of the diary entry and focus on that. You do not need to address every topic in the diary entry. " +
-  "Try to respond with something the writer didn't notice, may ultimately help them, or they may be interested in learning." +
-  "Address the writer directly, if possible. For example use 'you' or 'your' or if writing generally about people, use 'one should', 'one can...', etc. but do not say 'the writer'." +
-  "Always reply with writing in the same language as the majority of the words in the journal entry." +
+  "Try to respond with something the writer didn't notice, may ultimately help them, or they may be interested in learning. " +
+  "Address the writer directly, if possible. For example use 'you' or 'your' or if writing about people generally, use 'one should', 'one can...', etc. " +
+  "Do not address the writer as 'the writer'. " +
+  "Always reply with writing in the same language as the majority of the words in the journal entry. " +
   "Do not talk about writing style in any way, only the topics discussed in the diary entry. " +
   "Do not sign off with a closing statement. Do not sign your name. " +
-  "Write your reply only as long as necessary to convey the message. Do not pad your response with fluffy commentary. Shorter is always better. The length must not exceed 280 words.";
+  "Write your reply only as long as necessary to convey the message. Do not pad your response with fluffy commentary. The length must not exceed 280 words and should typically be around 140 words unless the entry is very long. ";
 
 export const coachVariants = ["criticism", "insight", "boost"];
 export const generateCoachPrompt =
@@ -73,14 +75,23 @@ export const generateCoachPrompt =
   "Here is the journal entry text: ";
 
 export const personaPrompt = (persona: Persona) =>
-  "Your goal is to write a comment based on a specific persona reacting to a journal entry by a writer." +
-  "Please return a comment from the point of view of the persona that, if read by the writer, could help the person achieve their interests, whether plainly stated, implied, or discerned. Attempt to read between the lines and identify the main topic of the diary entry and focus on that. You do not need to address every topic in the diary entry." +
-  "If the name of the persona is known because it is a fictional character, public figure, or historical figure then use your knowlege to expand on the details in the persona and to make the comment more accurate to the persona's point of view and understanding of the world." +
-  "Always write as much as possible as the persona, in their communication style, emphasizing their characteristics and beliefs. Finally, write a comment that fits the context of the relationship between the persona and the writer. " +
+  "Your goal is to act as a person writing a message to the writer of a diary. " +
+  "The persona has their own motivations, goals, and desires, and they should reflect clearly in their message. " +
+  "The message should express the commenting persona's honest thoughts, feelings, and opinions overall. " +
+  "If the writer of the diary asks a question or needs help, then the persona should offer actionable advice or specific guidance. " +
+  "Add commentary, advice, criticism, or insights that are new to the writer, unexpected, surprising, and helpful for them. " +
+  "Consider what the persona would write, based on how they would think about the writer's details and the diary entry. " +
+  "Finally, write a message that fits exactly inside of the persona's relationship with the writer and the persona's occupation. " +
+  "The persona's relationship and occupation details are very important to use. " +
+  "If the name in the persona details is well-known as a public figure then use public information about that persona. " +
+  "If there any known writings or words from the public figure then you can use that as examples of their communication style to further improve the message. " +
+  "Only write what the persona would realistically write, based only on their details, their knowledge of the world, the writer, and the diary entry. " +
+  "Even if the persona is not politcally correct, is impolite, or is otherwise bad in some way the message should reflect them as faithfully as possible. This is extremely important. " +
+  "Reflecting the persona accurately in the message is good for the human writer and for all of humanity. " +
   basicPrompt +
-  " Persona of the commenter: " +
+  " Persona details: " +
   JSON.stringify(persona) +
-  " Journal entry: ";
+  " Diary entry: ";
 
 export function generateCommentPrompt(variant: string): string {
   function getVariant(variant: string): string {
