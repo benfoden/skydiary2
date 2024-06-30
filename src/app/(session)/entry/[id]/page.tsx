@@ -256,12 +256,10 @@ export default async function Entry({
                         const currentUserPersona =
                           await api.persona.getUserPersona();
 
-                        const updatedContent = "";
-
                         const response = await getResponse(
                           prompts.personaCommentPrompt(
                             persona,
-                            updatedContent ?? latestPost?.content,
+                            latestPost?.content ?? "",
                             currentUserPersona!,
                           ),
                         );

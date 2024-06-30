@@ -2,22 +2,13 @@
 import { useTranslations } from "next-intl";
 import Button from "~/app/_components/Button";
 import { Card } from "~/app/_components/Card";
-import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
-import { SessionNav } from "~/app/_components/SessionNav";
 import { ThemeToggle } from "~/app/_components/ToggleTheme";
 
 export default function Sandbox() {
   const t = useTranslations();
   return (
     <>
-      <SessionNav>
-        <div className="flex items-center gap-2">
-          <NavChevronLeft targetPathname={"/home"} label={t("nav.home")} />
-        </div>
-        <h1>sandbox</h1>
-        nice work
-      </SessionNav>
-      <div className="flex h-full w-full flex-col items-center justify-center gap-12 px-4 py-16">
+      <div className="flex h-full w-full flex-col items-start justify-center gap-12 px-4 py-16">
         <ThemeToggle />
 
         <div className="flex flex-col items-start gap-4 p-4">

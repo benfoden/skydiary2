@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import Button from "~/app/_components/Button";
-import DropDownMenu from "~/app/_components/DropDown";
+import DropDownUser from "~/app/_components/DropDownUser";
 import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { SessionNav } from "~/app/_components/SessionNav";
 import { getServerAuthSession } from "~/server/auth";
@@ -22,11 +21,7 @@ export default async function AdminLayout({
         </div>
         <h1>admin zone</h1>
 
-        <DropDownMenu>
-          <Link href={"/auth/signout"}>
-            <Button variant="menuElement">Sign out {session.user?.name}</Button>
-          </Link>
-        </DropDownMenu>
+        <DropDownUser />
       </SessionNav>
 
       <div className="flex min-h-screen w-full flex-col items-center justify-start">
