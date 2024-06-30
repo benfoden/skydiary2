@@ -89,10 +89,10 @@ export const personaRouter = createTRPCRouter({
     });
   }),
   getById: protectedProcedure
-    .input(z.object({ personaId: z.string(), isUser: z.boolean() }))
+    .input(z.object({ personaId: z.string() }))
     .query(({ ctx, input }) => {
       return ctx.db.persona.findUnique({
-        where: { id: input.personaId, isUser: input.isUser },
+        where: { id: input.personaId },
       });
     }),
   getUserPersona: protectedProcedure.query(({ ctx }) => {

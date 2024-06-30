@@ -19,11 +19,7 @@ import { SessionNav } from "~/app/_components/SessionNav";
 import { getUserLocale } from "~/i18n";
 import { getResponse } from "~/server/api/ai";
 import { api } from "~/trpc/server";
-import {
-  generateCoachPrompt,
-  generateCommentPrompt,
-  personaPrompt,
-} from "~/utils/constants";
+import { prompts } from "~/utils/prompts";
 import { formattedTimeStampToDate } from "~/utils/text";
 import EntryBody from "./EntryBody";
 
@@ -65,18 +61,21 @@ export default async function Entry({
         <EntryBody post={post} />
         <div className="flex w-full max-w-5xl flex-col items-center gap-4">
           <div className="flex w-full flex-row items-center justify-center gap-4">
-            <ul className="flex w-full flex-row flex-wrap items-center justify-start gap-2">
-              {tags?.map((tag: Tag) => (
-                <li key={tag.id}>
-                  <Link href={`/topics/${tag.content}/${tag.id}`}>
-                    <Button variant="text">
-                      <span className="text-xs font-medium">{tag.content}</span>
-                    </Button>
-                  </Link>
-                </li>
-              ))}
-              <li></li>
-            </ul>
+            {tags && (
+              <ul className="flex w-full flex-row flex-wrap items-center justify-start gap-2">
+                {tags?.map((tag: Tag) => (
+                  <li key={tag.id}>
+                    <Link href={`/topics/${tag.content}/${tag.id}`}>
+                      <Button variant="text">
+                        <span className="text-xs font-medium">
+                          {tag.content}
+                        </span>
+                      </Button>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
             <div className="flex w-fit flex-row items-center justify-end gap-2">
               <DropDownMenu isEntryMenu>
                 <CopyTextButton text={post.content} />
@@ -109,20 +108,18 @@ export default async function Entry({
                       if (!latestPost?.content) {
                         return;
                       }
-                      let updatedContent = "";
-                      if (userPersona) {
-                        updatedContent =
-                          latestPost?.content +
-                          "End of journal entry. When writing your response, also consider that this journal entry was written by the following person: " +
-                          JSON.stringify(userPersona);
-                      }
+
+                      const currentUserPersona =
+                        await api.persona.getUserPersona();
 
                       const coachVariant = await getResponse(
-                        generateCoachPrompt + latestPost?.content,
+                        prompts.generateCoachPrompt(latestPost?.content),
                       );
-                      const prompt =
-                        generateCommentPrompt(coachVariant!) + updatedContent ??
-                        latestPost?.content;
+                      const prompt = prompts.skyCommentPrompt(
+                        coachVariant!,
+                        latestPost?.content,
+                        currentUserPersona!,
+                      );
 
                       const response = await getResponse(prompt);
                       if (response) {
@@ -173,17 +170,12 @@ export default async function Entry({
                         const currentUserPersona =
                           await api.persona.getUserPersona();
 
-                        let updatedContent = "";
-                        if (currentUserPersona) {
-                          updatedContent =
-                            latestPost?.content +
-                            "End of journal entry. When writing your response, also consider that this journal entry was written by the following person: " +
-                            JSON.stringify(currentUserPersona);
-                        }
-
                         const response = await getResponse(
-                          personaPrompt(persona) + updatedContent ??
-                            latestPost?.content,
+                          prompts.personaCommentPrompt(
+                            persona,
+                            latestPost?.content ?? "",
+                            currentUserPersona!,
+                          ),
                         );
                         if (response) {
                           await api.comment.create({

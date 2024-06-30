@@ -15,7 +15,7 @@ export default async function Persona({ params }: { params: { id: string } }) {
   const session = await getServerAuthSession();
   if (!session?.user) return redirect("/auth/signin");
   const personaId = params.id;
-  const persona = await api.persona.getById({ isUser: false, personaId });
+  const persona = await api.persona.getById({ personaId });
   if (!persona) return null;
   const t = await getTranslations();
 

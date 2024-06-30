@@ -1,11 +1,13 @@
 import { ExitIcon, GearIcon, PersonIcon } from "@radix-ui/react-icons";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
+import { getServerAuthSession } from "~/server/auth";
 import Button from "./Button";
 import DropDownMenu from "./DropDown";
 import { ThemeToggle } from "./ToggleTheme";
 
 export default async function DropDownUser() {
+  const session = await getServerAuthSession();
   const t = await getTranslations();
   return (
     <DropDownMenu isUserMenu>
@@ -19,6 +21,11 @@ export default async function DropDownUser() {
           {t("nav.personas")} <PersonIcon className="h-4 w-4" />
         </Button>
       </Link>
+      {session?.user.email === "ben.foden@gmail.com" && (
+        <Link href={"/sd-admin"}>
+          <Button variant="menuElement">webmaster zone</Button>
+        </Link>
+      )}
       <ThemeToggle isMenuButton />
       <Link href={"/auth/signout"}>
         <Button variant="menuElement">
