@@ -13,7 +13,7 @@ export default async function Secret() {
   return (
     <>
       <Card variant="form">
-        <div className="flex w-[512px] flex-col items-center gap-4">
+        <div className="flex w-full flex-col items-center gap-4 sm:w-[512px]">
           <h2>Current persona</h2>
           <form
             className="flex w-full flex-col gap-4"

@@ -1,5 +1,7 @@
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import Button from "~/app/_components/Button";
 import { Card } from "~/app/_components/Card";
 import DropDownUser from "~/app/_components/DropDownUser";
 import FormButton from "~/app/_components/FormButton";
@@ -15,6 +17,7 @@ export default async function Settings() {
 
   const userPersona = await api.persona.getUserPersona();
   const t = await getTranslations();
+
   return (
     <>
       <SessionNav>
@@ -22,12 +25,16 @@ export default async function Settings() {
           <NavChevronLeft targetPathname={"/home"} label={t("nav.home")} />
         </div>
         <h1>{t("nav.settings")}</h1>
-
         <DropDownUser />
       </SessionNav>
 
       <main className="flex min-h-screen w-full flex-col items-center justify-start">
         <div className="container flex flex-col items-center justify-start gap-12 sm:w-96">
+          {session?.user.email === "ben.foden@gmail.com" && (
+            <Link href={"/sd-admin"}>
+              <Button>webmaster zone</Button>
+            </Link>
+          )}
           <Card variant="form">
             <h2>{t("settings.personal")}</h2>
             <p className="text-sm opacity-60">{t("settings.description")}</p>
