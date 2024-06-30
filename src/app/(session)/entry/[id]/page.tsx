@@ -1,11 +1,6 @@
 "use server";
 import { type Persona, type Tag } from "@prisma/client";
-import {
-  CircleIcon,
-  FrameIcon,
-  PersonIcon,
-  PlusIcon,
-} from "@radix-ui/react-icons";
+import { CircleIcon, PersonIcon, PlusIcon } from "@radix-ui/react-icons";
 import { getTranslations } from "next-intl/server";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
@@ -22,9 +17,8 @@ import { NavChevronLeft } from "~/app/_components/NavChevronLeft";
 import { PersonaIcon } from "~/app/_components/PersonaIcon";
 import { SessionNav } from "~/app/_components/SessionNav";
 import { getUserLocale } from "~/i18n";
-import { getResponse, getResponseJSON } from "~/server/api/ai";
+import { getResponse } from "~/server/api/ai";
 import { api } from "~/trpc/server";
-import { NEWPERSONAUSER, TAGS } from "~/utils/constants";
 import { prompts } from "~/utils/prompts";
 import { formattedTimeStampToDate } from "~/utils/text";
 import EntryBody from "./EntryBody";
@@ -36,16 +30,14 @@ export default async function Entry({
   params: { id: string };
   searchParams: { s: string };
 }) {
-  const [t, locale, post, comments, tags, personas, userPersona] =
-    await Promise.all([
-      getTranslations(),
-      getUserLocale(),
-      api.post.getByPostId({ postId: params.id }),
-      api.comment.getCommentsByPostId({ postId: params.id }),
-      api.tag.getByPostId({ postId: params.id }),
-      api.persona.getAllByUserId(),
-      api.persona.getUserPersona(),
-    ]);
+  const [t, locale, post, comments, tags, personas] = await Promise.all([
+    getTranslations(),
+    getUserLocale(),
+    api.post.getByPostId({ postId: params.id }),
+    api.comment.getCommentsByPostId({ postId: params.id }),
+    api.tag.getByPostId({ postId: params.id }),
+    api.persona.getAllByUserId(),
+  ]);
 
   if (!post) {
     console.error("Failed to get post.");
@@ -67,101 +59,21 @@ export default async function Entry({
         <EntryBody post={post} />
         <div className="flex w-full max-w-5xl flex-col items-center gap-4">
           <div className="flex w-full flex-row items-center justify-center gap-4">
-            <ul className="flex w-full flex-row flex-wrap items-center justify-start gap-2">
-              {tags?.map((tag: Tag) => (
-                <li key={tag.id}>
-                  <Link href={`/topics/${tag.content}/${tag.id}`}>
-                    <Button variant="text">
-                      <span className="text-xs font-medium">{tag.content}</span>
-                    </Button>
-                  </Link>
-                </li>
-              ))}
-              <li>
-                {!tags.length && (
-                  <form
-                    action={async () => {
-                      "use server";
-                      if (searchParams.s === "1") {
-                        return;
-                      }
-                      try {
-                        const latestPost = await api.post.getByPostId({
-                          postId: params.id,
-                        });
-                        if (!latestPost?.content) {
-                          return;
-                        }
-                        const newTags = await getResponse(
-                          prompts.generateTagsPrompt(latestPost?.content),
-                        );
-
-                        if (newTags) {
-                          const tagContents = newTags
-                            ?.split(",")
-                            .map((tag) => tag.trim());
-
-                          const tagIds = tagContents
-                            ?.map((content) => {
-                              const tag = TAGS.find(
-                                (tag) => tag.content === content,
-                              );
-                              return tag?.id ?? undefined;
-                            })
-                            .filter((tag): tag is string => tag !== undefined);
-                          if (tagIds?.length) {
-                            await api.post.addTags({
-                              postId: params?.id,
-                              tagIds: tagIds,
-                            });
-                          }
-                        } else {
-                          console.error("Failed to tag.");
-                        }
-                        const generatedPersona = await getResponseJSON(
-                          prompts.generateUserPersonaPrompt(
-                            userPersona ?? NEWPERSONAUSER,
-                            latestPost?.content,
-                          ),
-                        );
-
-                        if (
-                          generatedPersona &&
-                          typeof generatedPersona === "string"
-                        ) {
-                          const personaObject = JSON.parse(
-                            generatedPersona,
-                          ) as Persona;
-                          await api.persona.update({
-                            personaId: userPersona?.id ?? "",
-                            name: userPersona?.name ?? "",
-                            description: personaObject?.description ?? "",
-                            image: userPersona?.image ?? "",
-                            age: personaObject?.age ?? 0,
-                            gender: personaObject?.gender ?? "",
-                            relationship: personaObject?.relationship ?? "",
-                            occupation: personaObject?.occupation ?? "",
-                            traits: personaObject?.traits ?? "",
-                            communicationStyle:
-                              personaObject?.communicationStyle ?? "",
-                            communicationSample:
-                              personaObject?.communicationSample ?? "",
-                          });
-                        }
-                      } catch (error) {
-                        console.error("Error creating tags:", error);
-                      } finally {
-                        redirect(`/entry/${params.id}`);
-                      }
-                    }}
-                  >
-                    <FormButton isDisabled={searchParams.s === "1"}>
-                      <FrameIcon className="h-5 w-5" />
-                    </FormButton>
-                  </form>
-                )}
-              </li>
-            </ul>
+            {tags && (
+              <ul className="flex w-full flex-row flex-wrap items-center justify-start gap-2">
+                {tags?.map((tag: Tag) => (
+                  <li key={tag.id}>
+                    <Link href={`/topics/${tag.content}/${tag.id}`}>
+                      <Button variant="text">
+                        <span className="text-xs font-medium">
+                          {tag.content}
+                        </span>
+                      </Button>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
             <div className="flex w-fit flex-row items-center justify-end gap-2">
               <DropDownMenu isEntryMenu>
                 <CopyTextButton text={post.content} />

@@ -69,6 +69,14 @@ export const postRouter = createTRPCRouter({
       where: { createdBy: { id: ctx.session.user.id } },
     });
   }),
+  getLatestByInputUserId: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.post.findFirst({
+        orderBy: { createdAt: "desc" },
+        where: { createdBy: { id: input.userId } },
+      });
+    }),
 
   getTagsAndCounts: protectedProcedure.query(async ({ ctx }) => {
     const posts = await ctx.db.post.findMany({
@@ -142,30 +150,32 @@ export const postRouter = createTRPCRouter({
       });
     }),
 
-  summarizeAllPostsNotFromToday: protectedProcedure
-    .input(z.object({ userTimezone: z.string(), today: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      const posts = await ctx.db.post.findMany({
-        where: { createdBy: { id: ctx.session.user.id } },
-      });
+  summarizeAllPostsOlderThanToday: publicProcedure.mutation(async ({ ctx }) => {
+    const today = new Date().setHours(0, 0, 0, 0);
 
-      const postsNotFromToday = posts.filter((post) => {
-        const postDate = new Date(post.createdAt).toLocaleDateString("en-US", {
-          timeZone: input.userTimezone,
-        });
-        return postDate !== input.today && !post.summary && post.content.length;
-      });
+    const postsNotFromToday = await ctx.db.post.findMany({
+      where: {
+        createdAt: {
+          lt: new Date(today),
+        },
+        summary: null,
+        content: {
+          not: "",
+        },
+      },
+    });
 
-      for (const post of postsNotFromToday) {
-        const summary = await getResponse(prompts.summarizeText(post.content));
-        if (summary) {
-          await ctx.db.post.update({
-            where: { id: post.id },
-            data: { summary },
-          });
-        }
+    for (const post of postsNotFromToday) {
+      const summary = await getResponse(prompts.summarizeText(post.content));
+      if (summary) {
+        continue;
       }
-    }),
+      await ctx.db.post.update({
+        where: { id: post.id },
+        data: { summary },
+      });
+    }
+  }),
 
   checkAndSummarizeLastPost: protectedProcedure
     .input(z.object({ userTimezone: z.string(), today: z.string() }))

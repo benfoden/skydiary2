@@ -1,7 +1,11 @@
 {
   "crons": [
     {
-      "path": "/api/cron",
+      "path": "/api/cron/post-tags",
+      "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/cron/user-persona",
       "schedule": "0 5 * * *"
     }
   ]

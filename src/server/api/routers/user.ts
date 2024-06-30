@@ -22,7 +22,6 @@ export const userRouter = createTRPCRouter({
         },
       });
     }),
-
   // getUser is via getServerAuthSession
 
   deleteUser: protectedProcedure.mutation(async ({ ctx }) => {
