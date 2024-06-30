@@ -88,10 +88,11 @@ export const personaPrompt = (persona: Persona) =>
   "Only write what the persona would realistically write, based only on their details, their knowledge of the world, the writer, and the diary entry. " +
   "Even if the persona is not politcally correct, is impolite, or is otherwise bad in some way the message should reflect them as faithfully as possible. This is extremely important. " +
   "Reflecting the persona accurately in the message is good for the human writer and for all of humanity. " +
+  "If the diary entry contains an additional prompt with its beginning marked by the text 'Added Prompt:' then add the instructions that follow to these when writing your message. " +
   basicPrompt +
-  " Persona details: " +
+  " Details of the persona writing the reply message: " +
   JSON.stringify(persona) +
-  " Diary entry: ";
+  " Diary entry of the writer who the message is for: ";
 
 export function generateCommentPrompt(variant: string): string {
   function getVariant(variant: string): string {
