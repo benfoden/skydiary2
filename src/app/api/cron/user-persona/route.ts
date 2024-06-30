@@ -1,9 +1,18 @@
 import { type Persona } from "@prisma/client";
+import { type NextRequest } from "next/server";
 import { getResponseJSON } from "~/server/api/ai";
 import { api } from "~/trpc/server";
-import { NEWPERSONAUSER, generatePersonaPrompt } from "~/utils/constants";
+import { NEWPERSONAUSER } from "~/utils/constants";
+import { prompts } from "~/utils/prompts";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get("authorization");
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response("Unauthorized", {
+      status: 401,
+    });
+  }
+
   try {
     const userPersonas = await api.persona.getAllUserPersonas();
 
@@ -15,8 +24,10 @@ export async function GET() {
         continue;
       }
       const generatedPersona = await getResponseJSON(
-        generatePersonaPrompt(userPersona ?? NEWPERSONAUSER) +
+        prompts.generateUserPersonaPrompt(
+          userPersona ?? NEWPERSONAUSER,
           latestPost?.content,
+        ),
       );
 
       if (!generatedPersona) {

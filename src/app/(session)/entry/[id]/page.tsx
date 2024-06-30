@@ -30,16 +30,14 @@ export default async function Entry({
   params: { id: string };
   searchParams: { s: string };
 }) {
-  const [t, locale, post, comments, tags, personas, userPersona] =
-    await Promise.all([
-      getTranslations(),
-      getUserLocale(),
-      api.post.getByPostId({ postId: params.id }),
-      api.comment.getCommentsByPostId({ postId: params.id }),
-      api.tag.getByPostId({ postId: params.id }),
-      api.persona.getAllByUserId(),
-      api.persona.getUserPersona(),
-    ]);
+  const [t, locale, post, comments, tags, personas] = await Promise.all([
+    getTranslations(),
+    getUserLocale(),
+    api.post.getByPostId({ postId: params.id }),
+    api.comment.getCommentsByPostId({ postId: params.id }),
+    api.tag.getByPostId({ postId: params.id }),
+    api.persona.getAllByUserId(),
+  ]);
 
   if (!post) {
     console.error("Failed to get post.");

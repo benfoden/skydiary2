@@ -1,11 +1,9 @@
 "use client";
-import { useTranslations } from "next-intl";
 import Button from "~/app/_components/Button";
 import { Card } from "~/app/_components/Card";
 import { ThemeToggle } from "~/app/_components/ToggleTheme";
 
 export default function Sandbox() {
-  const t = useTranslations();
   return (
     <>
       <div className="flex h-full w-full flex-col items-start justify-center gap-12 px-4 py-16">

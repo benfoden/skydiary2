@@ -13,11 +13,18 @@ export default function middleware(request: NextRequest) {
     "/settings",
     "/auth",
     "/api/auth",
+    "/sd-admin",
+  ];
+
+  const cronRoutes = [
     "/api/cron/summarize",
     "/api/cron/post-tags",
     "/api/cron/user-persona",
-    "/sd-admin",
   ];
+
+  if (cronRoutes.some((route) => pathname.startsWith(route))) {
+    return NextResponse.next();
+  }
   const isAppRoute = appRoutes.some((route) => pathname.startsWith(route));
 
   const intlMiddleware = createMiddleware({

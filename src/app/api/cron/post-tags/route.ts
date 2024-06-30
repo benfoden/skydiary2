@@ -1,8 +1,16 @@
+import { type NextRequest } from "next/server";
 import { getResponse } from "~/server/api/ai";
 import { api } from "~/trpc/server";
-import { generateTagsPrompt, TAGS } from "~/utils/constants";
+import { TAGS } from "~/utils/constants";
+import { prompts } from "~/utils/prompts";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get("authorization");
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response("Unauthorized", {
+      status: 401,
+    });
+  }
   try {
     const userPersonas = await api.persona.getAllUserPersonas();
 
@@ -14,7 +22,7 @@ export async function GET() {
         continue; // Changed from return to continue to ensure all userPersonas are processed
       }
       const newTags = await getResponse(
-        generateTagsPrompt + latestPost?.content,
+        prompts.generateTagsPrompt(latestPost?.content),
       );
       if (!newTags) {
         continue; // Changed from return to continue to ensure all userPersonas are processed

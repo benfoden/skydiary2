@@ -1,6 +1,13 @@
+import { type NextRequest } from "next/server";
 import { api } from "~/trpc/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get("authorization");
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response("Unauthorized", {
+      status: 401,
+    });
+  }
   try {
     await api.post.summarizeAllPostsOlderThanToday();
     return Response.json({ message: "Posts summarized successfully." });
