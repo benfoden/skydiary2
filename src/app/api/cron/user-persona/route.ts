@@ -6,6 +6,13 @@ import { NEWPERSONAUSER } from "~/utils/constants";
 import { prompts } from "~/utils/prompts";
 
 export async function GET(request: NextRequest) {
+  setTimeout(() => {
+    console.error("Cron job timed out after 9999 milliseconds");
+    return Response.json(
+      { error: "Cron job timed out after 9999 milliseconds" },
+      { status: 504 },
+    );
+  }, 9999);
   const authHeader = request.headers.get("authorization");
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return new Response("Unauthorized", {
