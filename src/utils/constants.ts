@@ -90,7 +90,7 @@ export const personaPrompt = (persona: Persona) =>
   "Reflecting the persona accurately in the message is good for the human writer and for all of humanity. " +
   "If the diary entry contains an additional prompt with its beginning marked by the text 'Added Prompt:' then add the instructions that follow to these when writing your message. " +
   basicPrompt +
-  " Details of the person writing the message: " +
+  " Details of the persona writing the reply message: " +
   JSON.stringify(persona) +
   " Diary entry of the writer who the message is for: ";
 
