@@ -24,15 +24,8 @@ import { SessionNav } from "~/app/_components/SessionNav";
 import { getUserLocale } from "~/i18n";
 import { getResponse, getResponseJSON } from "~/server/api/ai";
 import { api } from "~/trpc/server";
-import {
-  NEWPERSONAUSER,
-  TAGS,
-  generateCoachPrompt,
-  generateCommentPrompt,
-  generatePersonaPrompt,
-  generateTagsPrompt,
-  personaPrompt,
-} from "~/utils/constants";
+import { NEWPERSONAUSER, TAGS } from "~/utils/constants";
+import { prompts } from "~/utils/prompts";
 import { formattedTimeStampToDate } from "~/utils/text";
 import EntryBody from "./EntryBody";
 
@@ -100,7 +93,7 @@ export default async function Entry({
                           return;
                         }
                         const newTags = await getResponse(
-                          generateTagsPrompt + latestPost?.content,
+                          prompts.generateTagsPrompt(latestPost?.content),
                         );
 
                         if (newTags) {
@@ -126,8 +119,10 @@ export default async function Entry({
                           console.error("Failed to tag.");
                         }
                         const generatedPersona = await getResponseJSON(
-                          generatePersonaPrompt(userPersona ?? NEWPERSONAUSER) +
+                          prompts.generateUserPersonaPrompt(
+                            userPersona ?? NEWPERSONAUSER,
                             latestPost?.content,
+                          ),
                         );
 
                         if (
@@ -202,20 +197,15 @@ export default async function Entry({
 
                       const currentUserPersona =
                         await api.persona.getUserPersona();
-                      let updatedContent = "";
-                      if (currentUserPersona) {
-                        updatedContent =
-                          latestPost?.content +
-                          "End of journal entry. When writing your response, also consider that this journal entry was written by the following person: " +
-                          JSON.stringify(currentUserPersona);
-                      }
 
                       const coachVariant = await getResponse(
-                        generateCoachPrompt + latestPost?.content,
+                        prompts.generateCoachPrompt(latestPost?.content),
                       );
-                      const prompt =
-                        generateCommentPrompt(coachVariant!) + updatedContent ??
-                        latestPost?.content;
+                      const prompt = prompts.skyCommentPrompt(
+                        coachVariant!,
+                        latestPost?.content,
+                        currentUserPersona!,
+                      );
 
                       const response = await getResponse(prompt);
                       if (response) {
@@ -266,17 +256,14 @@ export default async function Entry({
                         const currentUserPersona =
                           await api.persona.getUserPersona();
 
-                        let updatedContent = "";
-                        if (currentUserPersona) {
-                          updatedContent =
-                            latestPost?.content +
-                            "End of journal entry. When writing your response, also consider that this journal entry was written by the following person: " +
-                            JSON.stringify(currentUserPersona);
-                        }
+                        const updatedContent = "";
 
                         const response = await getResponse(
-                          personaPrompt(persona) + updatedContent ??
-                            latestPost?.content,
+                          prompts.personaCommentPrompt(
+                            persona,
+                            updatedContent ?? latestPost?.content,
+                            currentUserPersona!,
+                          ),
                         );
                         if (response) {
                           await api.comment.create({

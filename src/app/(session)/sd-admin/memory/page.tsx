@@ -22,29 +22,36 @@ export default async function Secret() {
               const name: string = formData.get("name") as string;
               const age = Number(formData.get("age"));
               const gender: string = formData.get("gender") as string;
+              const traits: string = formData.get("traits") as string;
+              const description: string = formData.get("description") as string;
+              const relationship: string = formData.get(
+                "relationship",
+              ) as string;
+              const occupation: string = formData.get("occupation") as string;
+              const communicationStyle: string = formData.get(
+                "communicationStyle",
+              ) as string;
+              const communicationSample: string = formData.get(
+                "communicationSample",
+              ) as string;
               const isUser = true;
 
-              if (name) {
+              if (name && userPersona) {
                 try {
                   await api.user.updateUser({ name });
-                  if (!userPersona) {
-                    await api.persona.create({
-                      name,
-                      age,
-                      gender,
-                      traits: "",
-                      isUser,
-                    });
-                  } else {
-                    await api.persona.update({
-                      personaId: userPersona?.id,
-                      name,
-                      age,
-                      gender,
-                      traits: "",
-                      isUser,
-                    });
-                  }
+                  await api.persona.update({
+                    personaId: userPersona?.id,
+                    name,
+                    age,
+                    gender,
+                    traits,
+                    description,
+                    relationship,
+                    occupation,
+                    communicationStyle,
+                    communicationSample,
+                    isUser,
+                  });
                 } catch (error) {
                   console.error("Error updating user:", error);
                 }
@@ -56,7 +63,7 @@ export default async function Secret() {
               name="name"
               placeholder={t("settings.placeholderName")}
               required
-              label={t("settings.your name")}
+              label={t("personas.name")}
               defaultValue={session?.user.name ?? ""}
             />
             <Input
@@ -66,7 +73,7 @@ export default async function Secret() {
               required
               placeholder="1"
               defaultValue={userPersona?.age ?? 0}
-              label={t("settings.your age")}
+              label={t("personas.age")}
             />
             <Input
               id="gender"
@@ -74,45 +81,45 @@ export default async function Secret() {
               required
               placeholder={t("settings.placeholder identities")}
               defaultValue={userPersona?.gender ?? ""}
-              label={t("settings.your identities")}
+              label={t("personas.identities")}
             />
             <Input
               type="textarea"
               id="traits"
               name="traits"
-              label={t("settings.your traits")}
+              label={t("personas.traits")}
               defaultValue={userPersona?.traits ?? ""}
             />
             <Input
               type="textarea"
               id="description"
               name="description"
-              label={t("settings.your description")}
+              label={t("personas.description")}
               defaultValue={userPersona?.description ?? ""}
             />
             <Input
               type="textarea"
               id="relationship"
               name="relationship"
-              label={t("settings.your relationship")}
+              label={t("personas.relationship")}
               defaultValue={userPersona?.relationship ?? ""}
             />
             <Input
               id="occupation"
               name="occupation"
-              label={t("settings.your occupation")}
+              label={t("personas.occupation")}
               defaultValue={userPersona?.occupation ?? ""}
             />
             <Input
               id="communicationStyle"
               name="communicationStyle"
-              label={t("settings.your communication style")}
+              label={t("personas.communication style")}
               defaultValue={userPersona?.communicationStyle ?? ""}
             />
             <Input
               id="communicationSample"
               name="communicationSample"
-              label={t("settings.your communication sample")}
+              label={t("personas.communication sample")}
               defaultValue={userPersona?.communicationSample ?? ""}
             />
 
