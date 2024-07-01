@@ -5,7 +5,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { randomBytes, randomInt, randomUUID } from "crypto";
 import {
   getServerSession,
-  type DefaultUser,
+  type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
@@ -24,10 +24,14 @@ import { type EmailDetails } from "~/utils/types";
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module "next-auth" {
-  interface Session {
-    user?: User;
+  interface Session extends DefaultSession {
+    user: {
+      id: string;
+      stripeCustomerId: string;
+      isSubscriber: boolean;
+    } & DefaultSession["user"];
   }
-  interface User extends DefaultUser {
+  interface User {
     stripeCustomerId: string;
     isSubscriber: boolean;
   }
