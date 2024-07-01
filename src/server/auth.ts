@@ -25,11 +25,7 @@ import { type EmailDetails } from "~/utils/types";
  */
 declare module "next-auth" {
   interface Session {
-    user?: DefaultUser & {
-      id: string;
-      stripeCustomerId: string;
-      isSubscriber: boolean;
-    };
+    user?: User;
   }
   interface User extends DefaultUser {
     stripeCustomerId: string;
