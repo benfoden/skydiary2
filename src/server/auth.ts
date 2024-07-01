@@ -5,12 +5,13 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { randomBytes, randomInt, randomUUID } from "crypto";
 import {
   getServerSession,
-  type DefaultSession,
+  type DefaultUser,
   type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import EmailProvider from "next-auth/providers/email";
 import { createTransport } from "nodemailer";
+import Stripe from "stripe";
 import { env } from "~/env";
 
 import { db } from "~/server/db";
@@ -23,18 +24,17 @@ import { type EmailDetails } from "~/utils/types";
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module "next-auth" {
-  interface Session extends DefaultSession {
-    user: {
+  interface Session {
+    user?: DefaultUser & {
       id: string;
-      // ...other properties
-      // role: UserRole;
-    } & DefaultSession["user"];
+      stripeCustomerId: string;
+      isSubscriber: boolean;
+    };
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User extends DefaultUser {
+    stripeCustomerId: string;
+    isSubscriber: boolean;
+  }
 }
 
 export const authOptions = (emailDetails: EmailDetails): NextAuthOptions => {
@@ -51,11 +51,33 @@ export const authOptions = (emailDetails: EmailDetails): NextAuthOptions => {
         user: {
           ...session.user,
           id: user.id,
+          stripeCustomerId: user.stripeCustomerId,
+          isSubscriber: user.isSubscriber,
         },
         generateSessionToken: () => {
           return randomUUID?.() ?? randomBytes(32).toString("hex");
         },
       }),
+    },
+    events: {
+      createUser: async ({ user }) => {
+        const stripe = new Stripe(env.STRIPE_SECRET_KEY_TEST, {
+          apiVersion: "2024-06-20",
+        });
+        await stripe.customers
+          .create({
+            email: user.email!,
+            name: user.name!,
+          })
+          .then(async (customer) => {
+            return db.user.update({
+              where: { id: user.id },
+              data: {
+                stripeCustomerId: customer.id,
+              },
+            });
+          });
+      },
     },
     adapter: PrismaAdapter(db) as Adapter,
     providers: [
