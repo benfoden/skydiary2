@@ -1,87 +1,90 @@
-import { NextResponse, type NextRequest } from "next/server";
-import Stripe from "stripe";
-import { db } from "~/server/db";
+import type Stripe from "stripe";
+import { env } from "~/env";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  // https://github.com/stripe/stripe-node#configuration
-  apiVersion: "2024-06-20",
-});
+const relevantEvents = new Set([
+  "product.created",
+  "product.updated",
+  "product.deleted",
+  "price.created",
+  "price.updated",
+  "price.deleted",
+  "checkout.session.completed",
+  "customer.subscription.created",
+  "customer.subscription.updated",
+  "customer.subscription.deleted",
+]);
 
-const webhookSecret: string = process.env.STRIPE_WEBHOOK_SECRET!;
+export async function POST(req: Request) {
+  const body = await req.text();
+  const sig = req.headers.get("stripe-signature")!;
+  const webhookSecret = env.STRIPE_WEBHOOK_SECRET;
+  let event: Stripe.Event;
 
-const webhookHandler = async (req: NextRequest) => {
   try {
-    const buf = await req.text();
-    const sig = req.headers.get("stripe-signature")!;
+    if (!sig || !webhookSecret)
+      return new Response("Webhook secret not found.", { status: 400 });
+    event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
+    console.log(`🔔  Webhook received: ${event.type}`);
+  } catch (err: any) {
+    console.log(`❌ Error message: ${err.message}`);
+    return new Response(`Webhook Error: ${err.message}`, { status: 400 });
+  }
 
-    let event: Stripe.Event;
-
+  if (relevantEvents.has(event.type)) {
     try {
-      event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Unknown error";
-      // On error, log and return the error message.
-      if (err! instanceof Error) console.log(err);
-      console.log(`❌ Error message: ${errorMessage}`);
-
-      return NextResponse.json(
+      switch (event.type) {
+        case "product.created":
+        case "product.updated":
+          // TODO: add relevant logic based on trpc
+          // await upsertProductRecord(event.data.object);
+          break;
+        case "price.created":
+        case "price.updated":
+          await upsertPriceRecord(event.data.object);
+          break;
+        case "price.deleted":
+          await deletePriceRecord(event.data.object);
+          break;
+        case "product.deleted":
+          await deleteProductRecord(event.data.object);
+          break;
+        case "customer.subscription.created":
+        case "customer.subscription.updated":
+        case "customer.subscription.deleted":
+          const subscription = event.data.object;
+          await manageSubscriptionStatusChange(
+            subscription.id,
+            subscription.customer as string,
+            event.type === "customer.subscription.created",
+          );
+          break;
+        case "checkout.session.completed":
+          const checkoutSession = event.data.object;
+          if (checkoutSession.mode === "subscription") {
+            const subscriptionId = checkoutSession.subscription;
+            await manageSubscriptionStatusChange(
+              subscriptionId as string,
+              checkoutSession.customer as string,
+              true,
+            );
+          }
+          break;
+        default:
+          throw new Error("Unhandled relevant event!");
+      }
+    } catch (error) {
+      console.log(error);
+      return new Response(
+        "Webhook handler failed. View your Next.js function logs.",
         {
-          error: {
-            message: `Webhook Error: ${errorMessage}`,
-          },
+          status: 400,
         },
-        { status: 400 },
       );
     }
-
-    // Successfully constructed event.
-    console.log("✅ Success:", event.id);
-
-    // getting to the data we want from the event
-    const subscription = event.data.object as Stripe.Subscription;
-
-    switch (event.type) {
-      case "customer.subscription.created":
-        await db.user.update({
-          // Find the customer in our database with the Stripe customer ID linked to this purchase
-          where: {
-            stripeCustomerId: subscription.customer as string,
-          },
-          // Update that customer so their status is now active
-          data: {
-            isSubscriber: true,
-          },
-        });
-        break;
-      case "customer.subscription.deleted":
-        await db.user.update({
-          // Find the customer in our database with the Stripe customer ID linked to this purchase
-          where: {
-            stripeCustomerId: subscription.customer as string,
-          },
-          // Update that customer so their status is now active
-          data: {
-            isSubscriber: false,
-          },
-        });
-        break;
-      default:
-        console.warn(`❌ Unhandled event type: ${event.type}`);
-        break;
-    }
-
-    // Return a response to acknowledge receipt of the event.
-    return NextResponse.json({ received: true });
-  } catch {
-    return NextResponse.json(
-      {
-        error: {
-          message: `Method Not Allowed`,
-        },
-      },
-      { status: 405 },
-    ).headers.set("Allow", "POST");
+  } else {
+    return new Response(`Unsupported event type: ${event.type}`, {
+      status: 400,
+    });
   }
-};
-
-export { webhookHandler as POST };
+  return new Response(JSON.stringify({ received: true }));
+}

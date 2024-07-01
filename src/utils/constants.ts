@@ -11,12 +11,18 @@ export function pathHelper(pathname: string): string {
   }
 }
 
-const environmentUrl =
-  process.env.NEXT_PUBLIC_BYPASS_URL ?? process.env.NEXT_PUBLIC_VERCEL_URL;
-
-export const baseUrl = environmentUrl
-  ? `https://${environmentUrl}`
-  : `http://localhost:3000`;
+export const baseURL = (): string => {
+  const url =
+    process?.env?.LOCAL_DEV_URL && process.env.LOCAL_DEV_URL !== ""
+      ? process.env.LOCAL_DEV_URL
+      : process?.env?.NEXT_PUBLIC_WEBSITE_URL &&
+          process.env.NEXT_PUBLIC_WEBSITE_URL !== ""
+        ? process.env.NEXT_PUBLIC_WEBSITE_URL
+        : process?.env?.VERCEL_URL && process.env.VERCEL_URL !== ""
+          ? process.env.VERCEL_URL
+          : "";
+  return url.includes("http") ? url : `https://${url}`;
+};
 
 export const TAGS = [
   { content: "career", id: "clwg3mpgd0001vsr5m46ocag5" },

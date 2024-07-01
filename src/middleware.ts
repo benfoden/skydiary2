@@ -14,17 +14,19 @@ export default function middleware(request: NextRequest) {
     "/auth",
     "/api/auth",
     "/sd-admin",
+    "/checkout",
   ];
 
-  const cronRoutes = [
-    "/api/cron/summarize",
-    "/api/cron/post-tags",
-    "/api/cron/user-persona",
-  ];
+  const unTranslatedAPIRoutes = ["/api/cron", "/api/stripe/checkout-session"];
 
-  if (cronRoutes.some((route) => pathname.startsWith(route))) {
+  const isUntranslatedAPIRoute = unTranslatedAPIRoutes.some((route) =>
+    pathname.startsWith(route),
+  );
+
+  if (isUntranslatedAPIRoute) {
     return NextResponse.next();
   }
+
   const isAppRoute = appRoutes.some((route) => pathname.startsWith(route));
 
   const intlMiddleware = createMiddleware({
