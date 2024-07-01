@@ -1,7 +1,6 @@
-import { getServerSession } from "next-auth";
 import { NextResponse, type NextRequest } from "next/server";
 import Stripe from "stripe";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { getServerAuthSession } from "~/server/auth";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -11,7 +10,7 @@ export async function POST(req: NextRequest) {
     apiVersion: "2022-11-15",
   });
 
-  const session = await getServerSession(authOptions);
+  const session = await getServerAuthSession();
 
   if (!session?.user) {
     return NextResponse.json(

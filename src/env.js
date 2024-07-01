@@ -30,6 +30,10 @@ export const env = createEnv({
     EMAIL_SERVER_USER: z.string(),
     EMAIL_SERVER_PASSWORD: z.string(),
     OPENAI_API_KEY: z.string(),
+    STRIPE_SECRET_KEY: z.string(),
+    STRIPE_SECRET_KEY_TEST: z.string(),
+    STRIPE_PUBLISHABLE_KEY: z.string(),
+    STRIPE_PUBLISHABLE_KEY_TEST: z.string(),
   },
 
   /**
@@ -58,6 +62,10 @@ export const env = createEnv({
     EMAIL_SERVER_USER: process.env.EMAIL_SERVER_USER,
     EMAIL_SERVER_PASSWORD: process.env.EMAIL_SERVER_PASSWORD,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    STRIPE_SECRET_KEY_TEST: process.env.STRIPE_SECRET_KEY_TEST,
+    STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
+    STRIPE_PUBLISHABLE_KEY_TEST: process.env.STRIPE_PUBLISHABLE_KEY_TEST,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

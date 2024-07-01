@@ -82,6 +82,8 @@ model User {
   image         String?
   isAdmin       Boolean   @default(false)
   isSpecial     Boolean   @default(false)
+  isSubscriber  Boolean   @default(false)
+  stripeCustomerId String? @unique
   accounts      Account[]
   personas      Persona[]
   posts         Post[]
