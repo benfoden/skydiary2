@@ -1,45 +1,57 @@
-import { redirect } from "next/navigation";
+"use client";
+import { useRouter } from "next/navigation";
+import Button from "~/app/_components/Button";
 import { Card } from "~/app/_components/Card";
-import FormButton from "~/app/_components/FormButton";
-import { env } from "~/env";
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/react";
 
-export default async function Upgrade() {
+export default function Upgrade() {
+  const { mutateAsync: createCheckoutSession } =
+    api.stripe.createCheckoutSession.useMutation();
+  const router = useRouter();
+
   return (
     <div>
       Checkout
       <Card variant="form">
         <form
-          action={async (formData) => {
-            "use server";
-            const monthly: string = formData.get("monthly") as string;
-            const yearly: string = formData.get("yearly") as string;
+          onSubmit={async (event) => {
+            event.preventDefault(); // Prevent the default form submission
 
-            let priceId: string;
-            if (monthly) {
-              priceId =
-                env.PRICE_ID_BASE_MONTHLY_TEST ?? env.PRICE_ID_BASE_MONTHLY;
-            } else if (yearly) {
-              priceId =
-                env.PRICE_ID_BASE_YEARLY_TEST ?? env.PRICE_ID_BASE_YEARLY;
-            } else {
-              throw new Error("Invalid product");
-            }
-
+            console.log(event.target);
             try {
-              const { checkoutUrl } = await api.stripe.createCheckoutSession({
-                priceId,
+              let period: "monthly" | "yearly" | undefined;
+              const target = event.nativeEvent as SubmitEvent;
+              const submitter = target.submitter as HTMLButtonElement;
+              if (submitter?.id === "monthly") {
+                period = "monthly";
+              } else if (submitter?.id === "yearly") {
+                period = "yearly";
+              }
+              if (!period) {
+                console.error("Payment period is not defined");
+                throw new Error("Payment period is not defined");
+              }
+
+              const { checkoutUrl } = await createCheckoutSession({
+                period,
               });
 
+              console.log(checkoutUrl);
+
               if (checkoutUrl) {
-                void redirect(checkoutUrl);
+                void router.push(checkoutUrl);
               }
             } catch (error) {
               console.error(error);
             }
           }}
         >
-          <FormButton>Get monthly</FormButton>
+          <Button type="submit" id="monthly">
+            Get monthly
+          </Button>
+          <Button type="submit" id="yearly">
+            Get yearly
+          </Button>
         </form>
       </Card>
     </div>
