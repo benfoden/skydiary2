@@ -9,6 +9,7 @@ export const userRouter = createTRPCRouter({
         name: z.string().optional(),
         email: z.string().email().optional(),
         image: z.string().url().optional(),
+        stripeCustomerId: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -19,6 +20,7 @@ export const userRouter = createTRPCRouter({
           name: input.name,
           email: input.email,
           image: input.image,
+          stripeCustomerId: input.stripeCustomerId,
         },
       });
     }),

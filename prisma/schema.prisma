@@ -83,6 +83,8 @@ model User {
   isAdmin       Boolean   @default(false)
   isSpecial     Boolean   @default(false)
   isSubscriber  Boolean   @default(false)
+  stripeSubscriptionId String?
+  stripeSubscriptionStatus String?
   stripeCustomerId String? @unique
   accounts      Account[]
   personas      Persona[]
