@@ -50,33 +50,33 @@ export const getOrCreateStripeCustomerIdForUser = async ({
   }
 };
 
-export const handleInvoicePaid = async ({
-  event,
-  stripe,
-  db,
-}: {
-  event: Stripe.Event;
-  stripe: Stripe;
-  db: PrismaClient;
-}) => {
-  const invoice = event.data.object as Stripe.Invoice;
-  const subscriptionId = invoice.subscription;
-  const subscription = await stripe.subscriptions.retrieve(
-    subscriptionId as string,
-  );
-  const userId = subscription.metadata.userId;
+// export const handleInvoicePaid = async ({
+//   event,
+//   stripe,
+//   db,
+// }: {
+//   event: Stripe.Event;
+//   stripe: Stripe;
+//   db: PrismaClient;
+// }) => {
+//   const invoice = event.data.object as Stripe.Invoice;
+//   const subscriptionId = invoice.subscription;
+//   const subscription = await stripe.subscriptions.retrieve(
+//     subscriptionId as string,
+//   );
+//   const userId = subscription.metadata.userId;
 
-  // update user with subscription data
-  await db.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      stripeSubscriptionId: subscription.id,
-      stripeSubscriptionStatus: subscription.status,
-    },
-  });
-};
+//   // update user with subscription data
+//   await db.user.update({
+//     where: {
+//       id: userId,
+//     },
+//     data: {
+//       stripeSubscriptionId: subscription.id,
+//       stripeSubscriptionStatus: subscription.status,
+//     },
+//   });
+// };
 
 export const handleSubscriptionCreatedOrUpdated = async ({
   event,
@@ -96,6 +96,35 @@ export const handleSubscriptionCreatedOrUpdated = async ({
     data: {
       stripeSubscriptionId: subscription.id,
       stripeSubscriptionStatus: subscription.status,
+    },
+  });
+
+  event.data.object;
+  await db.subscription.update({
+    where: {
+      id: subscription.id,
+    },
+    data: {
+      status: subscription.status,
+      metadata: JSON.stringify(subscription.metadata),
+      cancelAtPeriodEnd: subscription.cancel_at_period_end,
+      currentPeriodStart: new Date(subscription.current_period_start * 1000),
+      currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+      endedAt: subscription.ended_at
+        ? new Date(subscription.ended_at * 1000)
+        : null,
+      cancelAt: subscription.cancel_at
+        ? new Date(subscription.cancel_at * 1000)
+        : null,
+      canceledAt: subscription.canceled_at
+        ? new Date(subscription.canceled_at * 1000)
+        : null,
+      trialStart: subscription.trial_start
+        ? new Date(subscription.trial_start * 1000)
+        : null,
+      trialEnd: subscription.trial_end
+        ? new Date(subscription.trial_end * 1000)
+        : null,
     },
   });
 };

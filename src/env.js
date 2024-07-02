@@ -35,6 +35,12 @@ export const env = createEnv({
     STRIPE_PUBLISHABLE_KEY: z.string(),
     STRIPE_PUBLISHABLE_KEY_TEST: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),
+    PRODUCT_ID_BASE_TEST: z.string(),
+    PRICE_ID_BASE_MONTHLY_TEST: z.string(),
+    PRICE_ID_BASE_YEARLY_TEST: z.string(),
+    PRODUCT_ID_BASE: z.string(),
+    PRICE_ID_BASE_MONTHLY: z.string(),
+    PRICE_ID_BASE_YEARLY: z.string(),
   },
 
   /**
@@ -68,6 +74,12 @@ export const env = createEnv({
     STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
     STRIPE_PUBLISHABLE_KEY_TEST: process.env.STRIPE_PUBLISHABLE_KEY_TEST,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    PRODUCT_ID_BASE_TEST: process.env.PRODUCT_ID_BASE_TEST,
+    PRICE_ID_BASE_MONTHLY_TEST: process.env.PRICE_ID_BASE_MONTHLY_TEST,
+    PRICE_ID_BASE_YEARLY_TEST: process.env.PRICE_ID_BASE_YEARLY_TEST,
+    PRODUCT_ID_BASE: process.env.PRODUCT_ID_BASE,
+    PRICE_ID_BASE_MONTHLY: process.env.PRICE_ID_BASE_MONTHLY,
+    PRICE_ID_BASE_YEARLY: process.env.PRICE_ID_BASE_YEARLY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

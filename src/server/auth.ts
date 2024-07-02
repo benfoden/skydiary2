@@ -28,6 +28,8 @@ declare module "next-auth" {
     user: {
       id: string;
       stripeCustomerId: string;
+      stripeSubscriptionId: string;
+      stripeSubscriptionStatus: string;
       isSubscriber: boolean;
     } & DefaultSession["user"];
   }
